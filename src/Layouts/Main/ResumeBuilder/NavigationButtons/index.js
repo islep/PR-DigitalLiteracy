@@ -26,7 +26,6 @@ const NavigationButtons = ({ resumeData, dataFromFirebase }) => {
   const [isResumeBtnClicked, setResumeBtnClicked] = useState(false);
 
   const generatePdf = () => {
-    saveData();
     setResumeBtnClicked(true);
   };
 

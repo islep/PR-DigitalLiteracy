@@ -279,6 +279,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
           </Grid>
 
           {/* Start Date*/}
+          {/* Start Date*/}
           <Grid item md={6} sm={6} xs={12} order={{ xs: 2 }}>
             <Box
               component="form"
@@ -288,7 +289,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
               autoComplete="off"
               id={`startDate-${index}`}
             >
-              <Grid container spacing={2}>
+              <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
                   <Box
                     sx={{
@@ -324,7 +325,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
               }}
               autoComplete="off"
             >
-              <Grid container spacing={2}>
+              <Grid container spacing={2} alignItems="center">
                 <Grid item xs={3}>
                   <Box
                     sx={{
@@ -341,7 +342,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                 </Grid>
                 <Grid item xs={9}>
                   {input.currentlyEnrolled ?
-                    <div style={{ height: '38px' }} /> : // Adjust the height as needed
+                    <div style={{ height: '54px' }} /> : // Adjust the height as needed
                     <ReactDatePicker
                       selected={input.endDate}
                       onChange={(date) => handleFormChange(index, date, "endDate")}

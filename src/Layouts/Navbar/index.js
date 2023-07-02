@@ -61,6 +61,9 @@ const Navbar = () => {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+  const handleLearnOpen = (event) => {
+    setanchorElLearn(event.currentTarget);
+  };
 
   //TODO: Add similar things for mobile phone
   const handleCloseLearn = (index) => {

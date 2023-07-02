@@ -12,7 +12,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Timestamp, doc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { updateData } from "../../../../firebase/firebaseReadWrite";
 import { db } from "../../../../firebase/firebase";
 
@@ -49,15 +49,38 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
         }
       }
 
-      dataFromKeySkillsBlock({
-        technicalSkills: technicalSkills,
-        personalSkills: personalSkills,
-        otherSkills: otherSkills
+      const unsubscribe = onSnapshot(docRef, (doc) => {
+        const data = doc.data();
+        if (data !== undefined) {
+          const skillFirebase = data.skills_info;
+
+          if (skillFirebase !== undefined) {
+            setOtherSkills(skillFirebase.otherSkills);
+            setPersonalSkills(skillFirebase.personalSkills);
+            setTechnicalSkills(skillFirebase.technicalSkills);
+          }
+        }
       });
+
+      return unsubscribe; // Clean up function to remove the listener
     }
 
     // eslint-disable-next-line
-  }, [technicalSkills, personalSkills, otherSkills, dataFromFirebase]);
+  }, [docRef]);
+  useEffect(() => {
+    if (currentUser !== null) {
+      updateDoc(docRef, {
+        skills_info: {
+          technicalSkills: technicalSkills,
+          personalSkills: personalSkills,
+          otherSkills: otherSkills
+        }
+      }).catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+    }
+    // eslint-disable-next-line
+  }, [technicalSkills, personalSkills, otherSkills, currentUser]);
 
   const onAddTechnicalSkillBtnClick = (e) => {
     if (technicalSkillValue !== "") {
@@ -109,7 +132,6 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
 
       updateData(docRef, {
         KeySkillsHelp: true,
-        lastHelpRequestDate: Timestamp.fromDate(new Date())
       });
     };
     return (

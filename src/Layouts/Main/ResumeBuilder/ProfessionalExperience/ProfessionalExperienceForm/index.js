@@ -23,11 +23,14 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Timestamp, doc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ProfessionalExperienceForm = ({
   dataFromProfessionalExperienceInfo,
   dataFromFirebase
 }) => {
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   let docRef;
   if (currentUser !== null) {
@@ -52,29 +55,36 @@ const ProfessionalExperienceForm = ({
     }
   ]);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
   useEffect(() => {
-    if (count < 1) {
-      if (currentUser !== null) {
-        if (dataFromFirebase !== undefined) {
-          const professionalExperienceFirebaseData =
-            dataFromFirebase.professional_experience_info;
-          if (
-            professionalExperienceFirebaseData !== undefined &&
-            professionalExperienceFirebaseData !== null
-          ) {
-            setInputList(professionalExperienceFirebaseData);
+    const fetchData = async () => {
+      console.log("Fetching professional experience info from firebase")
+      try {
+        console.log(currentUser);
+        if (currentUser !== null) {
+          console.log(dataFromFirebase);
+          if (dataFromFirebase) {
+            console.log(dataFromFirebase.professionalExperience);
+            const professionalExperience = dataFromFirebase.professionalExperience;
+            if (professionalExperience) {
+              const updatedInputList = professionalExperience.map((item) => ({
+                ...item,
+                startDate: item.startDate ? item.startDate.toDate() : null,
+                endDate: item.endDate ? item.endDate.toDate() : null
+              }));
+              setInputList(updatedInputList);
+              console.log("updated input list: ", updatedInputList);
+            }
           }
         }
+      } catch (err) {
+        console.error("Failed to fetch data from firebase: ", err);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      dataFromProfessionalExperienceInfo(inputList);
-    }
-
+    };
+    fetchData();
     // eslint-disable-next-line
-  }, [dataFromFirebase, count]);
+  }, [dataFromFirebase, currentUser]);
 
   const onAddBtnClick = () => {
     let newField = {
@@ -96,18 +106,45 @@ const ProfessionalExperienceForm = ({
     setCount(count + 1);
   };
 
-  const handleFormChange = (index, event) => {
-    const data = [...inputList];
-    if (event.target.name !== "currentlyEnrolled") {
-      data[index][event.target.name] = event.target.value;
-    } else {
-      if (event.target.checked === true) {
-        data[index]["endDate"] = "";
+  const handleFormChange = async (index, value, name) => {
+    try {
+      const data = [...inputList];
+
+      if (name === "currentlyEnrolled") {
+        data[index].endDate = value ? null : data[index].endDate;
+        data[index].currentlyEnrolled = value;
+      } else if (name === "startDate" || name === "endDate") {
+        if (value === null) {
+          data[index][name] = null;
+        } else {
+          data[index][name] = value.valueOf();
+        }
+      } else {
+        data[index][name] = value;
       }
-      data[index][event.target.name] = event.target.checked;
+      setInputList(data);
+
+      //autosave
+      if (currentUser) {
+        setLoading(true);
+        const updatedData = {
+          professionalExperience: data.map((item) => {
+            const { startDate, endDate, ...rest } = item;
+            return {
+              ...rest,
+              startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+              endDate: endDate ? Timestamp.fromMillis(endDate) : null
+            };
+          })
+        };
+        await updateData(docRef, updatedData);
+        console.log("Updated data: ", updatedData);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Failed to update data: ", err);
     }
-    setInputList(data);
-    setCount(count + 1);
+
   };
 
   const experienceFormFunction = inputList.map((input, index) => {
@@ -177,7 +214,7 @@ const ProfessionalExperienceForm = ({
                 value={input.position}
                 name="position"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "position");
                 }}
                 InputProps={{
                   disableUnderline: true
@@ -211,22 +248,12 @@ const ProfessionalExperienceForm = ({
                   </Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={inputStyle}
-                      views={["year", "month"]}
-                      onChange={(date) => {
-                        setStartDate(date);
-                        input.startDate = new Date(date).toLocaleDateString(
-                          undefined,
-                          date_options
-                        );
-                        setCount(count + 1);
-                      }}
-                      format="MMM-YYYY"
-                      startDate={startDate}
-                    />
-                  </LocalizationProvider>
+                  <ReactDatePicker
+                    selected={input.startDate}
+                    onChange={(date) => handleFormChange(index, date, "startDate")}
+                    dateFormat="MMMM-yyyy"
+                    showMonthYearPicker
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -248,7 +275,7 @@ const ProfessionalExperienceForm = ({
                 value={input.companyName}
                 name="companyName"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "companyName");
                 }}
                 focused
                 InputProps={{
@@ -283,28 +310,15 @@ const ProfessionalExperienceForm = ({
                   </Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={inputStyle}
-                      views={["year", "month"]}
-                      disabled={
-                        input.currentlyEnrolled !== null &&
-                        input.currentlyEnrolled !== undefined
-                          ? input.currentlyEnrolled
-                          : false
-                      }
-                      onChange={(date) => {
-                        setEndDate(date);
-                        input.endDate = new Date(date).toLocaleDateString(
-                          undefined,
-                          date_options
-                        );
-                        setCount(count + 1);
-                      }}
-                      format="MMM-YYYY"
-                      startDate={endDate}
+                  {input.currentlyEnrolled ?
+                    <div style={{ height: '54px' }} /> : // Adjust the height as needed
+                    <ReactDatePicker
+                      selected={input.endDate}
+                      onChange={(date) => handleFormChange(index, date, "endDate")}
+                      dateFormat="MMMM-yyyy"
+                      showMonthYearPicker
                     />
-                  </LocalizationProvider>
+                  }
                 </Grid>
               </Grid>
             </Box>
@@ -328,12 +342,12 @@ const ProfessionalExperienceForm = ({
                     name="currentlyEnrolled"
                     checked={
                       input.currentlyEnrolled !== null &&
-                      input.currentlyEnrolled !== undefined
+                        input.currentlyEnrolled !== undefined
                         ? input.currentlyEnrolled
                         : false
                     }
                     onChange={(e) => {
-                      handleFormChange(index, e);
+                      handleFormChange(index, e.target.checked, "currentlyEnrolled");
                     }}
                   />
                 }
@@ -363,7 +377,7 @@ const ProfessionalExperienceForm = ({
                   value={input.description}
                   name="description"
                   onChange={(e) => {
-                    handleFormChange(index, e);
+                    handleFormChange(index, e.target.value, "description");
                   }}
                   rows={4}
                 />

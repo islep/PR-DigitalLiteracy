@@ -46,23 +46,11 @@ const cardHeadingList = [
 const HomeMain = () => {
   return (
     <div id="#homeMain">
-      <Box
-        sx={{
-          marginTop: { md: "12rem", xs: "4rem" },
-          fontFamily: "Inria Sans",
-          fontSize: "2rem",
-          color: Colors.primaryColor,
-          marginLeft: { md: "6rem", sm: "8rem", xs: "1rem" }
-        }}
-      >
-        Begin your journey here!
-      </Box>
 
       <Box
         sx={{
           margin: "auto",
           width: "70%",
-          marginTop: "2rem"
         }}
       >
         <Grid

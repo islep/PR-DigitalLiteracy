@@ -14,7 +14,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Timestamp, doc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
 
 const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
@@ -29,8 +29,8 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
   const [inputList, setInputList] = useState([
     {
       position: "",
-      date: "",
       managerName: "",
+      // date: "",
       companyName: "",
       description: ""
     }
@@ -41,32 +41,41 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
     month: "short"
   };
 
-  const [date, setDate] = useState(new Date());
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (count < 1) {
-      if (currentUser !== null) {
-        if (dataFromFirebase !== undefined) {
-          const referencesFirebaseData = dataFromFirebase.references_info;
-          if (
-            referencesFirebaseData !== undefined &&
-            referencesFirebaseData !== null
-          ) {
-            setInputList(referencesFirebaseData);
+    const fetchData = async () => {
+      console.log("Fetching data from Firebase...");
+      try {
+        console.log("Current user:", currentUser);
+        if (currentUser !== null) {
+          console.log(dataFromFirebase);
+          if (dataFromFirebase) {
+            console.log("Data from Firebase:", dataFromFirebase);
+            const referenceFromFirebase = dataFromFirebase.references;
+            if (referenceFromFirebase) {
+              console.log("Data from Firebase:", referenceFromFirebase);
+              const updatedInputList = referenceFromFirebase.map((item) => ({
+                ...item,
+              }));
+              setInputList(updatedInputList);
+              console.log("Updated state:", updatedInputList);
+            }
           }
         }
+      } catch (err) {
+        console.error("Failed to fetch data from Firebase:", err);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      datafromReferencesInfo(inputList);
-    }
+    };
 
-    // eslint-disable-next-line
-  }, [dataFromFirebase, count]);
+    fetchData();
+  }, [dataFromFirebase, currentUser]);
 
   const onAddBtnClick = () => {
     let newField = {
       position: "",
-      date: "",
+      // date: "",
       managerName: "",
       companyName: "",
       description: ""
@@ -82,13 +91,28 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
     setCount(count + 1);
   };
 
-  const handleFormChange = (index, event) => {
-    const data = [...inputList];
+  const handleFormChange = async (index, value, name) => {
+    try {
+      const data = [...inputList];
+      data[index][name] = value; // updating the specific field
+      setInputList(data);
 
-    data[index][event.target.name] = event.target.value;
-
-    setInputList(data);
-    setCount(count + 1);
+      //autosave
+      if (currentUser) {
+        setLoading(true);
+        const updatedData = {
+          references: data.map((item) => {
+            const { companyName, position, managerName, description } = item;
+            return { position, managerName, companyName, description };
+          })
+        };
+        await updateDoc(docRef, updatedData);
+        console.log("Data saved to Firebase", updatedData);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Failed to save data to Firebase", err);
+    }
   };
 
   const showHelpModal = () => {
@@ -102,7 +126,6 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
 
       updateData(docRef, {
         referencesHelp: true,
-        lastHelpRequestDate: Timestamp.fromDate(new Date())
       });
     };
     return (
@@ -196,7 +219,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
                 value={input.companyName}
                 name="companyName"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "companyName");
                 }}
                 InputProps={{
                   disableUnderline: true
@@ -221,7 +244,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
                 value={input.managerName}
                 name="managerName"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "managerName");
                 }}
                 InputProps={{
                   disableUnderline: true
@@ -231,7 +254,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
           </Grid>
 
           {/* Position  */}
-          <Grid item md={6} sm={6} xs={12}>
+          <Grid item md={12} sm={12} xs={12} style={{ width: "100%" }}>
             <Box
               component="form"
               sx={{
@@ -247,7 +270,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
                 value={input.position}
                 name="position"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "position");
                 }}
                 InputProps={{
                   disableUnderline: true
@@ -256,7 +279,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
             </Box>
           </Grid>
           {/* Date*/}
-          <Grid item md={6} sm={6} xs={12}>
+          {/* <Grid item md={6} sm={6} xs={12}>
             <Box
               component="form"
               sx={{
@@ -299,7 +322,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
                 </Grid>
               </Grid>
             </Box>
-          </Grid>
+          </Grid> */}
 
           {/* Description row */}
           <Grid item xs={12}>
@@ -322,7 +345,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
                   value={input.description}
                   name="description"
                   onChange={(e) => {
-                    handleFormChange(index, e);
+                    handleFormChange(index, e.target.value, "description");
                   }}
                   rows={4}
                 />
