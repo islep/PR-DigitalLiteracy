@@ -1,0 +1,19 @@
+.rti--container {
+    --rti-bg: #ffffff;
+    --rti-main: #ffffff;
+    --rti-border: #ffffff;
+    --rti-radius: 0;
+    --rti-tag: #edf2f7;
+    --rti-tag-remove: #e53e3e;
+    --rti-tag-padding: .15rem .25rem;
+    align-items: center;
+    }
+  
+.rti--input {
+      background: #ffffff;
+      border: 0;
+      outline: 0;
+      font-size: inherit;
+      line-height: inherit;
+      width: 100% !important;
+}

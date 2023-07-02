@@ -1,0 +1,100 @@
+.my-popup-class .swal2-popup {
+  font-size: 1.6rem;
+  width: 50rem;
+  height: 40rem;
+}
+
+.my-popup-class .swal2-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .my-popup-class .swal2-popup {
+    max-width: 90%;
+    max-height: 90%;
+    padding: 1rem;
+  }
+}
+
+.my-popup-class .swal2-title {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.my-popup-class .swal2-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.my-popup-class .swal2-cancel,
+.my-popup-class .swal2-deny,
+.my-popup-class .swal2-confirm,
+.my-popup-class .fourthButton {
+  background-color: #3085d6;
+  color: #fff;
+  border-radius: 3rem;
+  padding: 1rem 2rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.my-popup-class .swal2-cancel:hover,
+.my-popup-class .swal2-deny:hover,
+.my-popup-class .swal2-confirm:hover,
+.my-popup-class .fourthButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.my-popup-class .swal2-deny {
+  background-color: #097c8b;
+}
+
+.my-popup-class .swal2-cancel{
+  background-color: #3085d6;
+  margin-right: 2rem;
+}
+
+
+.my-popup-class .swal2-confirm {
+  background-color: #29a645;
+}
+
+.my-popup-class .fourthButton {
+  background-color: #800020;
+}
+
+.my-popup-class .custom-message-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 1rem; /* Add margin to create space between the text and the buttons */
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.loading-indicator {
+  color: #fff;
+  font-size: 1.5rem;
+}
