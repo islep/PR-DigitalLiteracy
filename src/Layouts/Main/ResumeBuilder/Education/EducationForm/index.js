@@ -31,6 +31,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
 import { updateData } from "../../../../../firebase/firebaseReadWrite";
+import dayjs from 'dayjs';
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
   const { currentUser } = useAuth();
@@ -59,21 +62,26 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
     year: "numeric",
     month: "short"
   };
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [openHelp, setOpenHelp] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Fetching data from Firebase...");
       try {
+        console.log("Current user:", currentUser);
         if (currentUser !== null) {
-          if (dataFromFirebase !== undefined) {
-            const educationInfoFromFirebase = dataFromFirebase.education_info[0]; // Access the first (and only) object in the education_info object
-            if (educationInfoFromFirebase !== undefined) {
+          console.log(dataFromFirebase);
+          if (dataFromFirebase) {
+            console.log("Data from Firebase:", dataFromFirebase);
+            const educationInfoFromFirebase = dataFromFirebase.education_info;
+            if (educationInfoFromFirebase) {
               console.log("Data from Firebase:", educationInfoFromFirebase);
-              setInputList([educationInfoFromFirebase]); // Wrap the fetched object in an array
-              console.log("Updated state:", inputList);
+              const updatedInputList = educationInfoFromFirebase.map((item) => ({
+                ...item,
+                startDate: item.startDate ? item.startDate.toDate() : null,
+                endDate: item.endDate ? item.endDate.toDate() : null
+              }));
+              setInputList(updatedInputList);
+              console.log("Updated state:", updatedInputList);
             }
           }
         }
@@ -85,8 +93,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
     };
 
     fetchData();
-    // eslint-disable-next-line
-  }, [dataFromFirebase, count]);
+  }, [dataFromFirebase, currentUser]);
 
   // eslint-disable-next-line
 
@@ -149,49 +156,47 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
     setCount(count + 1);
   };
 
-  const handleFormChange = async (index, event) => {
-    const data = [...inputList];
-    if (event.target.name !== "currentlyEnrolled") {
-      data[index][event.target.name] = event.target.value;
-    } else {
-      if (event.target.checked === true) {
-        data[index]["endDate"] = "";
+  const handleFormChange = async (index, value, name) => {
+    try {
+      const data = [...inputList];
+
+      if (name === "currentlyEnrolled") {
+        data[index].endDate = value ? null : data[index].endDate;
+        data[index].currentlyEnrolled = value;
+      } else if (name === "startDate" || name === "endDate") {
+        if (value === null) {
+          data[index][name] = null;
+        } else {
+          data[index][name] = value.valueOf();
+        }
+      } else {
+        data[index][name] = value;
       }
-      data[index][event.target.name] = event.target.checked;
+
+      setInputList(data);
+
+      // Autosave to Firebase
+      if (currentUser) {
+        setLoading(true);
+        const updatedData = {
+          education_info: data.map((item) => {
+            const { startDate, endDate, ...rest } = item;
+            return {
+              ...rest,
+              startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+              endDate: endDate ? Timestamp.fromMillis(endDate) : null
+            };
+          })
+        };
+        await updateDoc(docRef, updatedData);
+        console.log("Data saved to Firebase:", updatedData);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error in handleFormChange:", error);
     }
-
-    setInputList(data);
-
-    // Autosave to Firebase
-    if (currentUser !== null) {
-      setLoading(true);
-      const updatedData = { education_info: [...data] }; // Wrap the updated data in an array
-      await updateDoc(docRef, updatedData);
-      console.log("Data saved to Firebase:", updatedData);
-      setLoading(false);
-    }
-
-    setCount(count + 1);
-  };
-  const handleStartDateChange = (date, index) => {
-    const data = [...inputList];
-    data[index].startDate = new Date(date).toLocaleDateString(
-      undefined,
-      date_options
-    );
-    setInputList(data);
-    setCount(count + 1);
   };
 
-  const handleEndDateChange = (date, index) => {
-    const data = [...inputList];
-    data[index].endDate = new Date(date).toLocaleDateString(
-      undefined,
-      date_options
-    );
-    setInputList(data);
-    setCount(count + 1);
-  };
 
   const educationFormFunction = inputList.map((input, index) => {
     return (
@@ -264,7 +269,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                 name="schoolName"
                 focused
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "schoolName");
                 }}
                 InputProps={{
                   disableUnderline: true
@@ -299,17 +304,12 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                   </Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={inputStyle}
-                      views={["year", "month"]}
-                      onChange={(e) => {
-                        handleFormChange(index, e);
-                      }}
-                      format="MMM-YYYY"
-                      startDate={startDate}
-                    />
-                  </LocalizationProvider>
+                  <ReactDatePicker
+                    selected={input.startDate}
+                    onChange={(date) => handleFormChange(index, date, "startDate")}
+                    dateFormat="MMMM-yyyy"
+                    showMonthYearPicker
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -340,33 +340,19 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                   </Box>
                 </Grid>
                 <Grid item xs={9}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      disabled={
-                        input.currentlyEnrolled !== null &&
-                          input.currentlyEnrolled !== undefined
-                          ? input.currentlyEnrolled
-                          : false
-                      }
-                      sx={inputStyle}
-                      views={["year", "month"]}
-                      onChange={(date) => {
-                        setEndDate(date);
-                        input.endDate = new Date(date).toLocaleDateString(
-                          undefined,
-                          date_options
-                        );
-                        setCount(count + 1);
-                      }}
-                      format="MMM-YYYY"
-                      startDate={endDate}
+                  {input.currentlyEnrolled ?
+                    <div style={{ height: '38px' }} /> : // Adjust the height as needed
+                    <ReactDatePicker
+                      selected={input.endDate}
+                      onChange={(date) => handleFormChange(index, date, "endDate")}
+                      dateFormat="MMMM-yyyy"
+                      showMonthYearPicker
                     />
-                  </LocalizationProvider>
+                  }
                 </Grid>
               </Grid>
             </Box>
           </Grid>
-
           {/* School Location */}
           <Grid item md={6} sm={6} xs={12} order={{ xs: 3 }}>
             <Box
@@ -384,7 +370,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                 focused
                 name="schoolLocation"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "schoolLocation");
                 }}
                 id={`schoolLocation-${index}`}
                 InputProps={{
@@ -414,7 +400,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                 value={input.degree}
                 name="degree"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "degree");
                 }}
                 id={`fieldOfStudy-${index}`}
                 InputProps={{
@@ -447,7 +433,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                         : false
                     }
                     onChange={(e) => {
-                      handleFormChange(index, e);
+                      handleFormChange(index, e.target.checked, "currentlyEnrolled");
                     }}
                   />
                 }
@@ -473,7 +459,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
                 value={input.fieldOfStudy}
                 name="fieldOfStudy"
                 onChange={(e) => {
-                  handleFormChange(index, e);
+                  handleFormChange(index, e.target.value, "fieldOfStudy");
                 }}
                 id={`fieldOfStudy-${index}`}
                 InputProps={{
