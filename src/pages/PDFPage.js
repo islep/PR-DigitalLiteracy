@@ -100,19 +100,36 @@ const styles = StyleSheet.create({
 });
 
 const MyDoc = (data) => {
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const [resumeData] = useState(data);
+  const navigate = useNavigate();
+  const [resumeData, setResumeData] = useState(data);
   let count = 0;
 
   useEffect(() => {
-    if (currentUser) {
-      console.log("resume doc area ", data);
-    } else {
+    console.log(resumeData);
+  }, [resumeData]);
+
+  useEffect(() => {
+    if (!currentUser) {
       navigate("/login");
+    } else {
+      console.log("resume doc area ", data);
+      setResumeData(data);
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [currentUser, data, navigate]);
+
+  if (!resumeData) {
+    return <Document><Page></Page></Document>;
+  }
+
+  const {
+    personal_info = {},  // Add fallback empty object
+    education_info = [],
+    professionalExperience = [],
+    objective = '',
+    skills_info = [],
+    references = [],
+  } = resumeData;
 
   return (
     <Document>
@@ -122,9 +139,7 @@ const MyDoc = (data) => {
             <Text style={styles.name}>
               {resumeData.personal_info !== undefined &&
                 resumeData.personal_info !== null ? (
-                resumeData.personal_info.firstName +
-                " " +
-                resumeData.personal_info.lastName
+                personal_info.firstName + " " + personal_info.lastName
               ) : (
                 <Text></Text>
               )}
@@ -155,7 +170,7 @@ const MyDoc = (data) => {
                 <Text style={styles.heading}>Objective</Text>
                 <Text style={styles.line} />
                 <Text style={styles.summary}>
-                  {resumeData.objective.objective}
+                  {resumeData.objective}
                 </Text>
               </View>
             ) : (
@@ -194,9 +209,9 @@ const MyDoc = (data) => {
             {/* experience */}
             <Text style={styles.heading}>Experience</Text>
             <Text style={styles.line} />
-            {resumeData.professional_experience_info !== undefined &&
-              resumeData.professional_experience_info !== null ? (
-              resumeData.professional_experience_info.map((e, index) => {
+            {resumeData.professionalExperience !== undefined &&
+              resumeData.professionalExperience !== null ? (
+              resumeData.professionalExperience.map((e, index) => {
                 return (
                   <View style={styles.viewContainer} key={index}>
                     <View styles={styles.educationContainer}>
@@ -224,7 +239,7 @@ const MyDoc = (data) => {
             <Text style={styles.heading}>Skills</Text>
             <Text style={styles.line} />
 
-            {resumeData.skills_info.technicalSkills.length > 0 ? (
+            {resumeData.skills_info?.technicalSkills?.length > 0 ? (
               <View style={{ display: "flex", flexDirection: "row" }}>
                 <Text style={styles.title}>Technical Skills: </Text>
                 {resumeData.skills_info.technicalSkills.map((e, index) => {
@@ -250,7 +265,7 @@ const MyDoc = (data) => {
               <Text></Text>
             )}
 
-            {resumeData.skills_info.personalSkills.length > 0 ? (
+            {resumeData.skills_info?.personalSkills?.length > 0 ? (
               <View
                 style={{
                   display: "flex",
@@ -282,7 +297,7 @@ const MyDoc = (data) => {
               <Text></Text>
             )}
 
-            {resumeData.skills_info.otherSkills.length > 0 ? (
+            {resumeData.skills_info?.otherSkills?.length > 0 ? (
               <View
                 style={{
                   display: "flex",
@@ -311,11 +326,11 @@ const MyDoc = (data) => {
               <Text></Text>
             )}
 
-            {resumeData.references_info !== null &&
-              resumeData.references_info !== undefined &&
-              resumeData.references_info.length > 0 ? (
+            {resumeData.references !== null &&
+              resumeData.references !== undefined &&
+              resumeData.references.length > 0 ? (
               <View style={{ marginTop: "13" }}>
-                {resumeData.references_info.map((e, index) => {
+                {resumeData.references.map((e, index) => {
                   let flag = true;
                   if (
                     e.position === "" &&
@@ -338,7 +353,6 @@ const MyDoc = (data) => {
                           <View style={styles.viewContainer} key={index}>
                             <View styles={styles.educationContainer}>
                               <Text style={styles.title}>{e.companyName}</Text>
-                              <Text style={styles.rightInfo}>{e.date}</Text>
                             </View>
 
                             <View styles={styles.educationContainer}>

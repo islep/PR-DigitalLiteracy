@@ -72,7 +72,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
           console.log(dataFromFirebase);
           if (dataFromFirebase) {
             console.log("Data from Firebase:", dataFromFirebase);
-            const educationInfoFromFirebase = dataFromFirebase.education_info;
+            const educationInfoFromFirebase = dataFromFirebase.resumeData.education_info;
             if (educationInfoFromFirebase) {
               console.log("Data from Firebase:", educationInfoFromFirebase);
               const updatedInputList = educationInfoFromFirebase.map((item) => ({
@@ -178,17 +178,15 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
       // Autosave to Firebase
       if (currentUser) {
         setLoading(true);
-        const updatedData = {
-          education_info: data.map((item) => {
-            const { startDate, endDate, ...rest } = item;
-            return {
-              ...rest,
-              startDate: startDate ? Timestamp.fromMillis(startDate) : null,
-              endDate: endDate ? Timestamp.fromMillis(endDate) : null
-            };
-          })
-        };
-        await updateDoc(docRef, updatedData);
+        const updatedData = data.map((item) => {
+          const { startDate, endDate, ...rest } = item;
+          return {
+            ...rest,
+            startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+            endDate: endDate ? Timestamp.fromMillis(endDate) : null
+          };
+        });
+        await updateDoc(docRef, { "resumeData.education_info": updatedData });
         console.log("Data saved to Firebase:", updatedData);
         setLoading(false);
       }
@@ -196,6 +194,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
       console.error("Error in handleFormChange:", error);
     }
   };
+
 
 
   const educationFormFunction = inputList.map((input, index) => {

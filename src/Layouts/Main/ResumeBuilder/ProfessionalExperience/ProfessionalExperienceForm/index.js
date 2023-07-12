@@ -21,7 +21,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Timestamp, doc } from "firebase/firestore";
+import { Timestamp, doc, getDoc, updatedoc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -63,8 +63,8 @@ const ProfessionalExperienceForm = ({
         if (currentUser !== null) {
           console.log(dataFromFirebase);
           if (dataFromFirebase) {
-            console.log(dataFromFirebase.professionalExperience);
-            const professionalExperience = dataFromFirebase.professionalExperience;
+            console.log(dataFromFirebase.resumeData.professionalExperience);
+            const professionalExperience = dataFromFirebase.resumeData.professionalExperience;
             if (professionalExperience) {
               const updatedInputList = professionalExperience.map((item) => ({
                 ...item,
@@ -127,20 +127,27 @@ const ProfessionalExperienceForm = ({
       //autosave
       if (currentUser) {
         setLoading(true);
-        const updatedData = {
-          professionalExperience: data.map((item) => {
-            const { startDate, endDate, ...rest } = item;
-            return {
-              ...rest,
-              startDate: startDate ? Timestamp.fromMillis(startDate) : null,
-              endDate: endDate ? Timestamp.fromMillis(endDate) : null
-            };
-          })
-        };
-        await updateData(docRef, updatedData);
-        console.log("Updated data: ", updatedData);
-        setLoading(false);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const existingData = docSnap.data().resumeData;
+          const updatedData = {
+            ...existingData,
+            professionalExperience: data.map((item) => {
+              const { startDate, endDate, ...rest } = item;
+              return {
+                ...rest,
+                startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+                endDate: endDate ? Timestamp.fromMillis(endDate) : null
+              };
+            })
+          };
+          const newData = { ...existingData, professionalExperience: updatedData.professionalExperience };
+          await updateData(docRef, { resumeData: newData });
+          console.log("Updated data: ", newData);
+          setLoading(false);
+        }
       }
+
     } catch (err) {
       console.error("Failed to update data: ", err);
     }

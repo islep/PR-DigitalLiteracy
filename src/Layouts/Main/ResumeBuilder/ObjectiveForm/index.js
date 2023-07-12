@@ -14,7 +14,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Timestamp, doc, setDoc, getDoc } from "firebase/firestore"; // Added setDoc here
+import { Timestamp, doc, setDoc, getDoc, updateDoc } from "firebase/firestore"; // Added setDoc here
 import { db } from "../../../../firebase/firebase";
 import { updateData } from "../../../../firebase/firebaseReadWrite";
 const ObjectiveForm = ({ dataFromObjective, dataFromFirebase }) => {
@@ -46,7 +46,12 @@ const ObjectiveForm = ({ dataFromObjective, dataFromFirebase }) => {
   const saveData = async (value) => {
     if (currentUser) {
       const docRef = doc(db, "users", currentUser.uid);
-      await setDoc(docRef, { resumeData: { objective: value } });
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const existingData = docSnap.data().resumeData;
+        const newData = { ...existingData, objective: value };
+        await updateDoc(docRef, { resumeData: newData });
+      }
     }
   };
 

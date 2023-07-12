@@ -14,8 +14,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
+import debounce from 'lodash.debounce';
+
 
 const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
   const { currentUser } = useAuth();
@@ -41,7 +43,6 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
     month: "short"
   };
 
-  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       console.log("Fetching data from Firebase...");
@@ -65,7 +66,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
       } catch (err) {
         console.error("Failed to fetch data from Firebase:", err);
       } finally {
-        setLoading(false);
+        console.log("Finished fetching data from Firebase.");
       }
     };
 
@@ -90,6 +91,27 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
     setInputList(data);
     setCount(count + 1);
   };
+  const saveToFirestore = debounce(async (data) => {
+    if (currentUser) {
+      const docRef = doc(db, "users", currentUser.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const existingData = docSnap.data().resumeData;
+        const updatedData = {
+          ...existingData,
+          references: data.map((item) => {
+            const { companyName, position, managerName, description } = item;
+            return { position, managerName, companyName, description };
+          })
+        };
+        await updateDoc(docRef, { resumeData: updatedData });
+        console.log("Data saved to Firebase", updatedData);
+      }
+    }
+  }, 1000);
+
+  // delay in milliseconds
 
   const handleFormChange = async (index, value, name) => {
     try {
@@ -98,18 +120,7 @@ const ReferencesForm = ({ dataFromFirebase, datafromReferencesInfo }) => {
       setInputList(data);
 
       //autosave
-      if (currentUser) {
-        setLoading(true);
-        const updatedData = {
-          references: data.map((item) => {
-            const { companyName, position, managerName, description } = item;
-            return { position, managerName, companyName, description };
-          })
-        };
-        await updateDoc(docRef, updatedData);
-        console.log("Data saved to Firebase", updatedData);
-        setLoading(false);
-      }
+      saveToFirestore(data);
     } catch (err) {
       console.error("Failed to save data to Firebase", err);
     }

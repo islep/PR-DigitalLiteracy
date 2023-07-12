@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, } from "react";
 import { Box, Grid, Icon, TextField, Typography, Fab } from "@mui/material";
 import { formBackground, inputStyleAutoComplete } from "../styles";
 import { Colors } from "../../../../constants/Colors";
@@ -12,9 +12,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, setDoc } from "firebase/firestore";
 import { updateData } from "../../../../firebase/firebaseReadWrite";
 import { db } from "../../../../firebase/firebase";
+import { debounce } from 'lodash';
 
 const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   const [technicalSkillValue, setTechnicalSkillValue] = useState("");
@@ -39,7 +40,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
     if (currentUser !== null) {
       if (valueChanged < 1) {
         if (dataFromFirebase !== undefined) {
-          const skillFirebase = dataFromFirebase.skills_info;
+          const skillFirebase = dataFromFirebase.resumeData.skills_info;
 
           if (skillFirebase !== undefined) {
             setOtherSkills(skillFirebase.otherSkills);
@@ -52,7 +53,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
       const unsubscribe = onSnapshot(docRef, (doc) => {
         const data = doc.data();
         if (data !== undefined) {
-          const skillFirebase = data.skills_info;
+          const skillFirebase = data.resumeData.skills_info;
 
           if (skillFirebase !== undefined) {
             setOtherSkills(skillFirebase.otherSkills);
@@ -67,59 +68,123 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
 
     // eslint-disable-next-line
   }, [docRef]);
+
   useEffect(() => {
+    // Use this effect hook to listen for currentUser changes, and set up a snapshot listener on their document
     if (currentUser !== null) {
-      updateDoc(docRef, {
-        skills_info: {
-          technicalSkills: technicalSkills,
-          personalSkills: personalSkills,
-          otherSkills: otherSkills
+      docRef = doc(db, "users", currentUser.uid);
+
+      // Set the initial state values from Firebase, only if it's the first render
+      onSnapshot(docRef, (doc) => {
+        const data = doc.data();
+        if (data !== undefined) {
+          const skillFirebase = data.resumeData.skills_info;
+
+          if (skillFirebase !== undefined) {
+            setOtherSkills(skillFirebase.otherSkills);
+            setPersonalSkills(skillFirebase.personalSkills);
+            setTechnicalSkills(skillFirebase.technicalSkills);
+          }
         }
-      }).catch((error) => {
-        console.error("Error updating document: ", error);
       });
     }
-    // eslint-disable-next-line
-  }, [technicalSkills, personalSkills, otherSkills, currentUser]);
-
-  const onAddTechnicalSkillBtnClick = (e) => {
+  }, [currentUser]);
+  const onAddTechnicalSkillBtnClick = async (e) => {
     if (technicalSkillValue !== "") {
-      setTechnicalSkills([...technicalSkills, technicalSkillValue]);
+      let updatedTechnicalSkills = [...technicalSkills, technicalSkillValue];
+      setTechnicalSkills(updatedTechnicalSkills);
       setTechnicalSkillValue("");
       setValueChanged(valueChanged + 1);
+
+      // Write to Firestore here
+      if (currentUser !== null) {
+        await updateDoc(docRef, {
+          "resumeData.skills_info.technicalSkills": updatedTechnicalSkills
+        });
+        ;
+      }
     }
   };
 
-  const onRemoveTechnicalSkillBtnClick = (index) => {
-    setTechnicalSkills(technicalSkills.filter((_, id) => id !== index));
+  const onRemoveTechnicalSkillBtnClick = async (index) => {
+    let updatedTechnicalSkills = technicalSkills.filter((_, id) => id !== index);
+    setTechnicalSkills(updatedTechnicalSkills);
     setValueChanged(valueChanged + 1);
+
+    // Write to Firestore here
+    if (currentUser !== null) {
+      await updateDoc(docRef, {
+        "skills_info": {
+          technicalSkills: updatedTechnicalSkills,
+          personalSkills: personalSkills,
+          otherSkills: otherSkills,
+        },
+      });
+    }
   };
 
-  const onAddPersonalSkillBtnClick = (e) => {
+  const onAddPersonalSkillBtnClick = async (e) => {
     if (personalSkillValue !== "") {
-      setPersonalSkills([...personalSkills, personalSkillValue]);
+      let updatedPersonalSkills = [...personalSkills, personalSkillValue];
+      setPersonalSkillValue(updatedPersonalSkills);
       setPersonalSkillValue("");
       setValueChanged(valueChanged + 1);
+      // Saving to Firebase
+      // Write to Firestore here
+      if (currentUser !== null) {
+        await updateDoc(docRef, {
+          "resumeData.skills_info.personalSkills": updatedPersonalSkills
+        });
+        ;
+      }
     }
   };
 
-  const onRemovePersonalSkillBtnClick = (index) => {
-    setPersonalSkills(personalSkills.filter((_, id) => id !== index));
+  const onRemovePersonalSkillBtnClick = async (index) => {
+    let updatedPersonaSkills = (personalSkills.filter((_, id) => id !== index));
     setValueChanged(valueChanged + 1);
+    if (currentUser !== null) {
+      await updateDoc(docRef, {
+        "skills_info": {
+          technicalSkills: technicalSkills,
+          personalSkills: updatedPersonaSkills,
+          otherSkills: otherSkills,
+        },
+      });
+    }
   };
 
-  const onAddOtherSkillBtnClick = (e) => {
+  const onAddOtherSkillBtnClick = async (e) => {
     if (otherSkillValue !== "") {
-      setOtherSkills([...otherSkills, otherSkillValue]);
+      let updatedOtherSkills = ([...otherSkills, otherSkillValue]);
+      setOtherSkills(updatedOtherSkills);
       setOtherSkillValue("");
       setValueChanged(valueChanged + 1);
+      // Saving to Firebase
+      // Write to Firestore here
+      if (currentUser !== null) {
+        await updateDoc(docRef, {
+          "resumeData.skills_info.otherSkills": updatedOtherSkills
+        });
+        ;
+      }
     }
   };
 
-  const onRemoveOtherSkillBtnClick = (index) => {
-    setOtherSkills(otherSkills.filter((_, id) => id !== index));
+  const onRemoveOtherSkillBtnClick = async (index) => {
+    let updatedTechnicalSkills = (otherSkills.filter((_, id) => id !== index));
     setValueChanged(valueChanged + 1);
+    if (currentUser !== null) {
+      await updateDoc(docRef, {
+        "skills_info": {
+          technicalSkills: technicalSkills,
+          personalSkills: personalSkills,
+          otherSkills: updatedTechnicalSkills,
+        },
+      });
+    }
   };
+
 
   const showHelpModal = () => {
     const handleClose = () => {
@@ -134,6 +199,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
         KeySkillsHelp: true,
       });
     };
+
     return (
       <Dialog
         open={openHelp}
