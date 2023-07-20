@@ -7,16 +7,17 @@ import SendIcon from "@mui/icons-material/Send";
 import { Link } from "react-scroll";
 import HomeMain from "../HomeMain";
 import { Home } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 const HomeIntro = () => {
   return (
     <Box sx={styles.homeContainer}>
       <Grid container spacing={2}>
         <Grid item md={7} xs={12}>
-          <Box sx={styles.titleContainer} sx={{ maxWidth: "100%" }}>
+          <Box sx={{ ...styles.titleContainer, maxWidth: "100%" }}>
             <Box
               sx={{
                 marginTop: "2rem",
-                textAlign: "center",
+                textAlign: "left",
                 marginLeft: { md: "8rem", sm: "8rem", xs: "1rem" },
                 maxWidth: "100%"
               }}
@@ -54,24 +55,45 @@ const HomeIntro = () => {
             </Box>
           </Box>
         </Grid>
-        {/* <Grid item md={5} xs={12}>
+        <Grid item md={5} xs={12}>
           <Box
-            component="img"
             sx={{
-              display: { xs: "flex" },
-              mr: 1,
-              margin: "auto",
-              width: { md: "60%", xs: "50%" }, // Reduced the width here
-
-              marginTop: { xs: "2rem" }
+              marginTop: "2rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "left",
+              alignItems: "center",
+              fontFamily: "Inria Sans",
+              color: Colors.primaryColor,
+              fontWeight: "700",
+              textAlign: "left",
+              fontSize: { md: "1.5rem", xs: "1.2rem" },
+              maxWidth: "100%",
+              marginBottom: "2rem"
             }}
-            alt="project-rebound-logo"
-            src={HomeIntroImage}
-          />
-        </Grid> */}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                marginTop: "3rem",
+                marginRight: "13rem",
+                backgroundColor: Colors.primaryColor,
+                color: Colors.white,
+                "&:hover": {
+                  backgroundColor: Colors.primaryColorDark
+                }
+              }}
+              onClick={useNavigate('/quiz')}
+            >
+              Click here to take our quiz!
+            </Button>
+          </Box>
+        </Grid>
       </Grid>
     </Box>
   );
 };
+
+
 
 export default HomeIntro;

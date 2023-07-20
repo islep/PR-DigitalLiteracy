@@ -91,7 +91,12 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   }, [currentUser]);
   const onAddTechnicalSkillBtnClick = async (e) => {
     if (technicalSkillValue !== "") {
-      let updatedTechnicalSkills = [...technicalSkills, technicalSkillValue];
+      let updatedTechnicalSkills = null;
+      if (technicalSkills != null && technicalSkills.length > 0) {
+        updatedTechnicalSkills = [...technicalSkills, technicalSkillValue];
+      } else {
+        updatedTechnicalSkills = [technicalSkillValue];
+      }
       setTechnicalSkills(updatedTechnicalSkills);
       setTechnicalSkillValue("");
       setValueChanged(valueChanged + 1);
@@ -107,26 +112,33 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   };
 
   const onRemoveTechnicalSkillBtnClick = async (index) => {
-    let updatedTechnicalSkills = technicalSkills.filter((_, id) => id !== index);
-    setTechnicalSkills(updatedTechnicalSkills);
-    setValueChanged(valueChanged + 1);
+    let updatedTechnicalSkills = null;
+    if (technicalSkills.length === 1) {
+      setTechnicalSkills(null);
+    } else {
+      updatedTechnicalSkills = technicalSkills.filter((_, id) => id !== index);
+      setTechnicalSkills(updatedTechnicalSkills);
+      setValueChanged(valueChanged + 1);
+    }
 
     // Write to Firestore here
     if (currentUser !== null) {
       await updateDoc(docRef, {
-        "skills_info": {
-          technicalSkills: updatedTechnicalSkills,
-          personalSkills: personalSkills,
-          otherSkills: otherSkills,
-        },
+        "resumeData.skills_info.technicalSkills": updatedTechnicalSkills
       });
+      ;
     }
   };
 
   const onAddPersonalSkillBtnClick = async (e) => {
     if (personalSkillValue !== "") {
-      let updatedPersonalSkills = [...personalSkills, personalSkillValue];
-      setPersonalSkillValue(updatedPersonalSkills);
+      let updatedPersonalSkills = null;
+      if (personalSkills != null && personalSkills.length > 0) {
+        updatedPersonalSkills = [...personalSkills, personalSkillValue];
+      } else {
+        updatedPersonalSkills = [personalSkillValue];
+      }
+      setPersonalSkills(updatedPersonalSkills);
       setPersonalSkillValue("");
       setValueChanged(valueChanged + 1);
       // Saving to Firebase
@@ -141,22 +153,33 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   };
 
   const onRemovePersonalSkillBtnClick = async (index) => {
-    let updatedPersonaSkills = (personalSkills.filter((_, id) => id !== index));
-    setValueChanged(valueChanged + 1);
+    let updatedPersonalSkills = null;
+    if (personalSkills.length === 1) {
+      setPersonalSkills(null);
+    } else {
+      updatedPersonalSkills = personalSkills.filter((_, id) => id !== index);
+      setPersonalSkills(updatedPersonalSkills);
+      setValueChanged(valueChanged + 1);
+    }
+
+    // Write to Firestore here
     if (currentUser !== null) {
       await updateDoc(docRef, {
-        "skills_info": {
-          technicalSkills: technicalSkills,
-          personalSkills: updatedPersonaSkills,
-          otherSkills: otherSkills,
-        },
+        "resumeData.skills_info.personalSkills": updatedPersonalSkills
       });
+      ;
     }
   };
 
   const onAddOtherSkillBtnClick = async (e) => {
     if (otherSkillValue !== "") {
-      let updatedOtherSkills = ([...otherSkills, otherSkillValue]);
+
+      let updatedOtherSkills;
+      if (otherSkills != null && otherSkills.length > 0) {
+        updatedOtherSkills = [...otherSkills, otherSkillValue];
+      } else {
+        updatedOtherSkills = [otherSkillValue];
+      }
       setOtherSkills(updatedOtherSkills);
       setOtherSkillValue("");
       setValueChanged(valueChanged + 1);
@@ -172,16 +195,21 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   };
 
   const onRemoveOtherSkillBtnClick = async (index) => {
-    let updatedTechnicalSkills = (otherSkills.filter((_, id) => id !== index));
-    setValueChanged(valueChanged + 1);
+    let updatedOtherSkills = null;
+    if (otherSkills.length === 1) {
+      setOtherSkills(null);
+    } else {
+      updatedOtherSkills = otherSkills.filter((_, id) => id !== index);
+      setOtherSkills(updatedOtherSkills);
+      setValueChanged(valueChanged + 1);
+    }
+
+    // Write to Firestore here
     if (currentUser !== null) {
       await updateDoc(docRef, {
-        "skills_info": {
-          technicalSkills: technicalSkills,
-          personalSkills: personalSkills,
-          otherSkills: updatedTechnicalSkills,
-        },
+        "resumeData.skills_info.otherSkills": updatedOtherSkills
       });
+      ;
     }
   };
 
@@ -383,7 +411,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
               }}
             >
               {/* viewing skills component here */}
-              {technicalSkills !== undefined ? (
+              {technicalSkills && technicalSkills.length > 0 ? (
                 technicalSkills.map((e, index) => {
                   return (
                     <Box
@@ -502,7 +530,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
               }}
             >
               {/* viewing skills component here */}
-              {personalSkills !== undefined ? (
+              {personalSkills && personalSkills.length > 0 ? (
                 personalSkills.map((e, index) => {
                   return (
                     <Box
@@ -541,7 +569,17 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
                   );
                 })
               ) : (
-                <Box></Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontFamily: "Inria Sans",
+                      fontSize: "1.3rem",
+                      fontColor: Colors.primaryColor
+                    }}
+                  >
+                    No Personal Attributes Added
+                  </Typography>
+                </Box>
               )}
             </Grid>
           </Grid>
@@ -621,7 +659,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
               }}
             >
               {/* viewing skills component here */}
-              {otherSkills !== undefined ? (
+              {otherSkills && otherSkills.length > 0 ? (
                 otherSkills.map((e, index) => {
                   return (
                     <Box

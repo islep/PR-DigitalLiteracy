@@ -14,6 +14,7 @@ import FinanceAndManagement from "./pages/FinancaAndManagement";
 import ForgotPassword from "./pages/ForgotPassword";
 import AddYoutubeVideos from "./pages/AddYoutubeVideos";
 import HelpManager from "./pages/HelpManager";
+import Quiz from "./pages/Quiz";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             path="/financeAndManagement"
             element={<FinanceAndManagement />}
           />
+          <Route path="/quiz" element={<Quiz />} />
 
           {/* protected routes */}
           <Route path="/jobSupport" element={<JobSupport />} />
