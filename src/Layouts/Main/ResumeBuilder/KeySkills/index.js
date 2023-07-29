@@ -39,7 +39,7 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
   useEffect(() => {
     if (currentUser !== null) {
       if (valueChanged < 1) {
-        if (dataFromFirebase !== undefined) {
+        if (dataFromFirebase !== undefined && dataFromFirebase.resumeData !== undefined) {
           const skillFirebase = dataFromFirebase.resumeData.skills_info;
 
           if (skillFirebase !== undefined) {
@@ -48,17 +48,18 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
             setTechnicalSkills(skillFirebase.technicalSkills);
           }
         }
+
       }
 
       const unsubscribe = onSnapshot(docRef, (doc) => {
         const data = doc.data();
-        if (data !== undefined) {
+        if (data !== undefined && data.resumeData !== undefined) {
           const skillFirebase = data.resumeData.skills_info;
 
           if (skillFirebase !== undefined) {
-            setOtherSkills(skillFirebase.otherSkills);
-            setPersonalSkills(skillFirebase.personalSkills);
-            setTechnicalSkills(skillFirebase.technicalSkills);
+            setOtherSkills(skillFirebase.otherSkills || []);
+            setPersonalSkills(skillFirebase.personalSkills || []);
+            setTechnicalSkills(skillFirebase.technicalSkills || []);
           }
         }
       });
@@ -78,12 +79,12 @@ const KeySkillBlock = ({ dataFromKeySkillsBlock, dataFromFirebase }) => {
       onSnapshot(docRef, (doc) => {
         const data = doc.data();
         if (data !== undefined) {
-          const skillFirebase = data.resumeData.skills_info;
+          const skillFirebase = data?.resumeData?.skills_info;
 
           if (skillFirebase !== undefined) {
-            setOtherSkills(skillFirebase.otherSkills);
-            setPersonalSkills(skillFirebase.personalSkills);
-            setTechnicalSkills(skillFirebase.technicalSkills);
+            setOtherSkills(skillFirebase.otherSkills || []);
+            setPersonalSkills(skillFirebase.personalSkills || []);
+            setTechnicalSkills(skillFirebase.technicalSkills || []);
           }
         }
       });

@@ -11,6 +11,8 @@ import {
 } from "@react-pdf/renderer";
 import { Button, Box, Grid } from "@mui/material";
 import { Colors } from "../constants/Colors";
+import moment from 'moment';
+
 
 const styles = StyleSheet.create({
   section: {
@@ -98,6 +100,23 @@ const styles = StyleSheet.create({
     marginTop: "5"
   }
 });
+const formatDate = (dateObj) => {
+  if (dateObj) {
+    // Convert seconds to milliseconds by multiplying by 1000
+    // Add nanoseconds converted to milliseconds
+    // This results in a Unix timestamp in milliseconds
+    const timestamp = dateObj.seconds * 1000 + dateObj.nanoseconds / 1000;
+
+    // Create a new JavaScript Date object from the timestamp
+    const date = new Date(timestamp);
+
+    // Pass the JavaScript Date object to moment.js for formatting
+    const momentDate = moment(date);
+    return momentDate.format('MMMM YYYY');
+  } else {
+    return "Present";
+  }
+};
 
 const MyDoc = (data) => {
   const { currentUser } = useAuth();
@@ -194,9 +213,7 @@ const MyDoc = (data) => {
                         {e.degree + ", " + e.fieldOfStudy}
                       </Text>
                       <Text style={styles.lowerRightInfo}>
-                        {e.endDate === ""
-                          ? e.startDate + " - Present"
-                          : e.startDate + " - " + e.endDate}
+                        {formatDate(e.startDate) + " - " + formatDate(e.endDate)}
                       </Text>
                     </View>
                   </View>
@@ -207,6 +224,7 @@ const MyDoc = (data) => {
             )}
 
             {/* experience */}
+            {/* experience */}
             <Text style={styles.heading}>Experience</Text>
             <Text style={styles.line} />
             {resumeData.professionalExperience !== undefined &&
@@ -216,23 +234,26 @@ const MyDoc = (data) => {
                   <View style={styles.viewContainer} key={index}>
                     <View styles={styles.educationContainer}>
                       <Text style={styles.title}>{e.companyName}</Text>
-                      <Text style={styles.rightInfo}>
-                        {e.endDate === ""
-                          ? e.startDate + " - Present"
-                          : e.startDate + " - " + e.endDate}
-                      </Text>
+                      <Text style={styles.rightInfo}>{e.location}</Text>
                     </View>
 
                     <View styles={styles.educationContainer}>
-                      <Text style={styles.position}>{e.position}</Text>
-                      <Text style={styles.description}>{e.description}</Text>
+                      <Text style={styles.subTitle}>
+                        {e.position}
+                      </Text>
+                      <Text style={styles.lowerRightInfo}>
+                        {formatDate(e.startDate) + " - " + formatDate(e.endDate)}
+                      </Text>
                     </View>
+
+                    <Text style={styles.description}>{e.description}</Text>
                   </View>
                 );
               })
             ) : (
               <Text></Text>
             )}
+
 
             {/* Skills */}
 

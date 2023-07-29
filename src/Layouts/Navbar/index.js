@@ -61,9 +61,6 @@ const Navbar = () => {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  const handleLearnOpen = (event) => {
-    setanchorElLearn(event.currentTarget);
-  };
 
   //TODO: Add similar things for mobile phone
   const handleCloseLearn = (index) => {
@@ -106,6 +103,8 @@ const Navbar = () => {
     } else if (index === 1) {
       //learn tab
       setanchorElLearn(event.currentTarget);
+    } else if (index === 2) {
+      navigate("/help");
     }
   };
 
@@ -229,29 +228,41 @@ const Navbar = () => {
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
-              justifyContent: "center" // Center the buttons horizontally
+              justifyContent: "flex-end",
+              marginRight: "1rem"
             }}
           >
             {pages.map((page, index) => (
-              <Button
-                key={page}
-                onClick={(event) => handleCloseNavMenu(event, index)}
-                sx={{
-                  mx: 1,
-                  color: Colors.primaryColor,
-                  fontFamily: "Inria Sans",
-                  fontWeight: 700,
-                  letterSpacing: ".2rem",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  "&:hover": {
-                    textDecoration: "none",
-                    color: Colors.primaryColor
-                  }
-                }}
-              >
-                {page}
-              </Button>
+              <Box>
+                <Button
+                  key={page}
+                  onClick={(event) => handleCloseNavMenu(event, index)}
+                  sx={{
+                    my: 2,
+                    color: Colors.primaryColor,
+                    display: "block",
+                    alignItems: "right"
+                  }}
+                >
+                  {page}
+                </Button>
+
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorElLearn}
+                  open={openLearn}
+                  onClose={() => handleCloseLearn(-1)}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button"
+                  }}
+                >
+                  {learnMenu.map((item, index) => (
+                    <MenuItem onClick={() => handleCloseLearn(index)}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
@@ -298,5 +309,4 @@ const Navbar = () => {
     </AppBar>
   );
 };
-
 export default Navbar;

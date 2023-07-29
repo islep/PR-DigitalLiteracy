@@ -9,6 +9,7 @@ import HomeMain from "../HomeMain";
 import { Home } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 const HomeIntro = () => {
+  const navigate = useNavigate();
   return (
     <Box sx={styles.homeContainer}>
       <Grid container spacing={2}>
@@ -55,18 +56,17 @@ const HomeIntro = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item md={5} xs={12}>
+        <Grid item md={12} xs={12}>
           <Box
             sx={{
-              marginTop: "2rem",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "left",
+              justifyContent: "center",
               alignItems: "center",
               fontFamily: "Inria Sans",
               color: Colors.primaryColor,
               fontWeight: "700",
-              textAlign: "left",
+              textAlign: "center",
               fontSize: { md: "1.5rem", xs: "1.2rem" },
               maxWidth: "100%",
               marginBottom: "2rem"
@@ -75,18 +75,40 @@ const HomeIntro = () => {
             <Button
               variant="contained"
               sx={{
-                marginTop: "3rem",
-                marginRight: "13rem",
                 backgroundColor: Colors.primaryColor,
                 color: Colors.white,
                 "&:hover": {
                   backgroundColor: Colors.primaryColorDark
                 }
               }}
-              onClick={useNavigate('/quiz')}
+              onClick={() => navigate('/quiz')}
             >
-              Click here to take our quiz!
+              Find your learning pathway!
             </Button>
+            <Box
+              sx={{
+                fontFamily: "Inria Sans",
+                color: Colors.primaryColor,
+                fontWeight: "700",
+                textAlign: "center",
+                fontSize: { md: "1.5rem", xs: "1.2rem" },
+                marginTop: "1rem"
+              }}
+            >
+              OR
+            </Box>
+            <Box
+              sx={{
+                fontFamily: "Inria Sans",
+                color: Colors.primaryColor,
+                fontWeight: "700",
+                textAlign: "center",
+                fontSize: { md: "1.5rem", xs: "1.2rem" },
+                marginTop: "1rem"
+              }}
+            >
+              Explore All Materials!
+            </Box>
           </Box>
         </Grid>
       </Grid>

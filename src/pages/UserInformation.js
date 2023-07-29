@@ -179,7 +179,7 @@ const UserInformation = () => {
                           sx={{ color: Colors.primaryColor }}
                           onClick={() => {
                             navigate({
-                              pathname: "/signup",
+                              pathname: "/home",
                               search: createSearchParams({
                                 fromPath: searchParams.get("fromPath")
                               }).toString()

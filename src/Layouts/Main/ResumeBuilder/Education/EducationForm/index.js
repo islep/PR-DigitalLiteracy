@@ -34,7 +34,7 @@ import { updateData } from "../../../../../firebase/firebaseReadWrite";
 import dayjs from 'dayjs';
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { debounce } from 'lodash';
 const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -42,9 +42,7 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
   if (currentUser !== null) {
     // console.log("uid ", currentUser.uid);
     docRef = doc(db, "users", currentUser.uid);
-  }
-
-  const [inputList, setInputList] = useState([
+  } const [inputList, setInputList] = useState([
     {
       schoolName: "",
       startDate: "",
@@ -175,25 +173,33 @@ const EducationForm = ({ dataFromEducationInfo, dataFromFirebase }) => {
 
       setInputList(data);
 
-      // Autosave to Firebase
+      // Autosave to Firebaseif (currentUser) {
       if (currentUser) {
-        setLoading(true);
-        const updatedData = data.map((item) => {
-          const { startDate, endDate, ...rest } = item;
-          return {
-            ...rest,
-            startDate: startDate ? Timestamp.fromMillis(startDate) : null,
-            endDate: endDate ? Timestamp.fromMillis(endDate) : null
-          };
-        });
-        await updateDoc(docRef, { "resumeData.education_info": updatedData });
-        console.log("Data saved to Firebase:", updatedData);
-        setLoading(false);
+        debouncedSave();
       }
     } catch (error) {
       console.error("Error in handleFormChange:", error);
     }
+
   };
+  const saveData = async () => {
+    if (currentUser) {
+      const updatedData = inputList.map((item) => {
+        const { startDate, endDate, ...rest } = item;
+        return {
+          ...rest,
+          startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+          endDate: endDate ? Timestamp.fromMillis(endDate) : null
+        };
+      });
+
+      await updateDoc(docRef, { "resumeData.education_info": updatedData });
+      console.log("Data saved to Firebase:", updatedData);
+    }
+  };
+
+  const debouncedSave = debounce(saveData, 1000);
+
 
 
 

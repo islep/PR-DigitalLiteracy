@@ -21,10 +21,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Timestamp, doc, getDoc, updatedoc } from "firebase/firestore";
+import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../firebase/firebase";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { debounce } from "lodash";
 
 const ProfessionalExperienceForm = ({
   dataFromProfessionalExperienceInfo,
@@ -126,26 +127,7 @@ const ProfessionalExperienceForm = ({
 
       //autosave
       if (currentUser) {
-        setLoading(true);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const existingData = docSnap.data().resumeData;
-          const updatedData = {
-            ...existingData,
-            professionalExperience: data.map((item) => {
-              const { startDate, endDate, ...rest } = item;
-              return {
-                ...rest,
-                startDate: startDate ? Timestamp.fromMillis(startDate) : null,
-                endDate: endDate ? Timestamp.fromMillis(endDate) : null
-              };
-            })
-          };
-          const newData = { ...existingData, professionalExperience: updatedData.professionalExperience };
-          await updateData(docRef, { resumeData: newData });
-          console.log("Updated data: ", newData);
-          setLoading(false);
-        }
+        debouncedSave();
       }
 
     } catch (err) {
@@ -153,6 +135,31 @@ const ProfessionalExperienceForm = ({
     }
 
   };
+  const saveData = async () => {
+    setLoading(true);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const existingData = docSnap.data().resumeData;
+      const updatedData = {
+        ...existingData,
+        professionalExperience: inputList.map((item) => {
+          const { startDate, endDate, ...rest } = item;
+          return {
+            ...rest,
+            startDate: startDate ? Timestamp.fromMillis(startDate) : null,
+            endDate: endDate ? Timestamp.fromMillis(endDate) : null
+          };
+        })
+      };
+      const newData = { ...existingData, professionalExperience: updatedData.professionalExperience };
+      await updateDoc(docRef, { resumeData: newData });
+      console.log("Updated data: ", newData);
+      setLoading(false);
+    }
+  }
+  const debouncedSave = debounce(saveData, 1000);
+
+
 
   const experienceFormFunction = inputList.map((input, index) => {
     return (

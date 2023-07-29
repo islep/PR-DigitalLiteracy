@@ -31,7 +31,7 @@ const PasswordRules = () => {
             fontSize: { md: "1rem", sm: "1rem", xs: "1.2rem" },
             color: Colors.primaryColor,
             fontWeight: 700,
-            marginTop: 2
+            marginTop: 1
           }}
         >
           Password must contain atleast:
@@ -43,7 +43,7 @@ const PasswordRules = () => {
                 fontFamily: "Inria Sans",
                 color: Colors.primaryColor,
                 marginBottom: "0.5",
-                fontSize: { md: "1rem", sm: "1rem", xs: "1.1rem" }
+                fontSize: { md: "1rem", sm: "1.2rem", xs: "1.1rem" }
               }}
             >
               - {e}
