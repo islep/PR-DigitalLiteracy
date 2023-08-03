@@ -20,7 +20,7 @@ const HomeIntro = () => {
                 marginTop: "2rem",
                 textAlign: "left",
                 marginLeft: { md: "8rem", sm: "8rem", xs: "1rem" },
-                maxWidth: "100%"
+                maxWidth: "80%"
               }}
             >
               <Box
@@ -65,21 +65,23 @@ const HomeIntro = () => {
               alignItems: "center",
               fontFamily: "Inria Sans",
               color: Colors.primaryColor,
-              fontWeight: "700",
+              fontWeight: "800",
               textAlign: "center",
               fontSize: { md: "1.5rem", xs: "1.2rem" },
               maxWidth: "100%",
-              marginBottom: "2rem"
+              marginBottom: "2rem",
             }}
           >
             <Button
               variant="contained"
+              size="large"
               sx={{
                 backgroundColor: Colors.primaryColor,
                 color: Colors.white,
                 "&:hover": {
                   backgroundColor: Colors.primaryColorDark
                 }
+
               }}
               onClick={() => navigate('/quiz')}
             >
@@ -103,7 +105,7 @@ const HomeIntro = () => {
                 color: Colors.primaryColor,
                 fontWeight: "700",
                 textAlign: "center",
-                fontSize: { md: "1.5rem", xs: "1.2rem" },
+                fontSize: { md: "2.5rem", xs: "1.2rem" },
                 marginTop: "1rem"
               }}
             >

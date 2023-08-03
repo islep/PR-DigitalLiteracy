@@ -46,20 +46,24 @@ const cardHeadingList = [
 const HomeMain = () => {
   return (
     <div id="#homeMain">
-
       <Box
         sx={{
-          margin: "auto",
-          width: "70%",
+          display: "flex",
+          justifyContent: "center",
+          maxWidth: "80%",
+          marginLeft: { md: "15rem", sm: "8rem", xs: "1rem" },
+          alignItems: "center",
         }}
       >
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 5, sm: 8, md: 12 }}
+          justifyContent="center"
+          alignItems="center"
         >
           {Array.from(Array(6)).map((_, index) => (
-            <Grid item xs={8} sm={4} md={4} key={index}>
+            <Grid item xs={8} sm={4} md={4} key={index} >
               <HomeCard
                 image={cardImageList[index]}
                 alt={cardHeadingList[index]}
@@ -76,3 +80,5 @@ const HomeMain = () => {
 };
 
 export default HomeMain;
+
+

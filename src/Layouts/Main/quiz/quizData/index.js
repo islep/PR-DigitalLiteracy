@@ -104,7 +104,7 @@ const quizData = [
         ]
     },
     {
-        category: "pc",
+        category: "android",
         questions: [
             {
                 question: "q1",

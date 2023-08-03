@@ -16,7 +16,7 @@ import AddYoutubeVideos from "./pages/AddYoutubeVideos";
 import HelpManager from "./pages/HelpManager";
 import Quiz from "./pages/Quiz";
 import Help from "./pages/QuestionsPage"
-
+import QuestionDisplay from "./Layouts/Main/FAQ/QuestionDisplay/index"
 function App() {
   return (
     <AuthProvider>
@@ -42,6 +42,7 @@ function App() {
           />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/questions/:questionId" element={<QuestionDisplay />} />
 
           {/* protected routes */}
           <Route path="/jobSupport" element={<JobSupport />} />

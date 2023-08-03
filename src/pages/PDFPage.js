@@ -224,7 +224,6 @@ const MyDoc = (data) => {
             )}
 
             {/* experience */}
-            {/* experience */}
             <Text style={styles.heading}>Experience</Text>
             <Text style={styles.line} />
             {resumeData.professionalExperience !== undefined &&
