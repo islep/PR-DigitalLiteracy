@@ -51,7 +51,7 @@ const HomeIntro = () => {
                   marginBottom: "2rem"
                 }}
               >
-                Collaborative support to use technology in meeting our goals!
+                Collaborative support to use technology in meeting our goals
               </Box>
             </Box>
           </Box>
@@ -72,20 +72,23 @@ const HomeIntro = () => {
               marginBottom: "2rem",
             }}
           >
-            <Button
+            {/* <Button
               variant="contained"
               size="large"
+              style={{ width: 'auto', height: 'auto', padding: '10px 35px' }} // Adjust the padding as needed
               sx={{
-                backgroundColor: Colors.primaryColor,
+                fontFamily: "Inria Sans",
                 color: Colors.white,
+                fontWeight: "300",
+                fontSize: { md: "1.5rem", xs: "1.2rem" },
+                backgroundColor: Colors.primaryColor,
                 "&:hover": {
                   backgroundColor: Colors.primaryColorDark
                 }
-
               }}
               onClick={() => navigate('/quiz')}
             >
-              Find your learning pathway!
+              Find your learning pathway
             </Button>
             <Box
               sx={{
@@ -98,18 +101,18 @@ const HomeIntro = () => {
               }}
             >
               OR
-            </Box>
+            </Box> */}
             <Box
               sx={{
                 fontFamily: "Inria Sans",
                 color: Colors.primaryColor,
                 fontWeight: "700",
                 textAlign: "center",
-                fontSize: { md: "2.5rem", xs: "1.2rem" },
+                fontSize: { md: "3.5rem", xs: "1.5rem" },
                 marginTop: "1rem"
               }}
             >
-              Explore All Materials!
+              Explore All Materials
             </Box>
           </Box>
         </Grid>

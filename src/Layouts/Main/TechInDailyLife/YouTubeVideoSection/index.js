@@ -8,40 +8,55 @@ import "./youtubeVideoSection.css";
 
 export const YouTubeVideoSection = ({ osvalue }) => {
   const [tags, setTags] = useState([]);
-  //const [foundVideos, setFoundVideos] = useState(osvalue);
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState(osvalue || []);
   const [loading, setLoading] = useState(true);
+  console.log("Initial osvalue:", osvalue);
   const videoIdRegex =
     /(?:(?:https?:\/\/)?(?:www\.)?)?youtu(?:\.be\/|be.com\/(?:watch\?(?:.*&)?v=|(?:embed|v)\/))([\w'-]+)/i;
-
   useEffect(() => {
-    console.log("useEffect 5");
-    setVideos(osvalue);
-    if (videos.length > 0) {
-      setLoading(false);
-    }
-    // eslint-disable-next-line
-  }, [osvalue]);
-
-  useEffect(() => {
-    if (videos.length > 0) {
-      setLoading(false);
+    if (window.YT && window.YT.Player && Array.isArray(videos)) {
+      videos.forEach((video, index) => {
+        const match = video.url.match(videoIdRegex);
+        const videoId = match ? match[1] : null;
+        new window.YT.Player(`player-${index}`, {
+          height: '390',
+          width: '640',
+          videoId: videoId
+        });
+      });
     }
   }, [videos]);
 
   //console.log(videos);
   useEffect(() => {
-    console.log("useEffect 6");
+    // Load the IFrame Player API code asynchronously.
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    window.onYouTubeIframeAPIReady = () => {
+      videos.forEach((video, index) => {
+        const match = video.url.match(videoIdRegex);
+        const videoId = match ? match[1] : null;
+        new window.YT.Player(`player-${index}`, {
+          height: '390',
+          width: '640',
+          videoId: videoId
+        });
+      });
+    };
+
+    setVideos(osvalue);
+  }, [osvalue]);
+
+  useEffect(() => {
     if (tags.length > 0) {
       const results = osvalue.filter((video) => {
         const isSubset = (videoTags, inputTags) =>
-          inputTags.every((inputTag) => {
-            const tagWords = videoTags.join(" ").toLowerCase().split(" ");
-            return (
-              tagWords.includes(inputTag.toLowerCase()) ||
-              videoTags.includes(inputTag)
-            );
-          });
+          inputTags.every((inputTag) => videoTags.includes(inputTag));
         return isSubset(video.tags, tags);
       });
       setVideos(results);
@@ -49,6 +64,7 @@ export const YouTubeVideoSection = ({ osvalue }) => {
       setVideos(osvalue);
     }
   }, [tags, osvalue]);
+
 
   return (
     <>
@@ -94,28 +110,11 @@ export const YouTubeVideoSection = ({ osvalue }) => {
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 5, sm: 8, md: 12 }}
         >
-          {loading ? ( // Check if it's initial loading or loading
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ backgroundColor: "grey", width: "45%", height: "200px", margin: "10px" }} />
-                <div style={{ backgroundColor: "grey", width: "45%", height: "200px", margin: "10px" }} />
-              </Grid>
-            </Grid>
-          ) : videos && videos.length > 0 ? (
+          {videos && videos.length > 0 ? (
             videos.map((video, index) => {
-              const match = video.url.match(videoIdRegex);
-              const videoId = match ? match[1] : null;
               return (
                 <Grid item xs={8} sm={4} md={6} key={video.tags}>
-                  <div>
-                    <YoutubeEmbed
-                      embedId={videoId}
-                      key={video.url}
-                      stopTimes={video.stopTimes}
-                      messages={video.messages}
-                      index={index}
-                    />
-                  </div>
+                  <div id={`player-${index}`}></div>
                 </Grid>
               );
             })

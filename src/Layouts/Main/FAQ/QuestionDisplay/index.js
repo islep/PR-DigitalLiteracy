@@ -128,10 +128,20 @@ const QuestionDisplay = () => {
                                     color: Colors.primaryColor,
                                     fontWeight: "700",
                                     fontSize: { md: "1.5rem", xs: "1.2rem" },
-                                    marginBottom: '1rem',
                                 }}
                             >
                                 {question.questionTitle}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    fontFamily: "Inria Sans",
+                                    color: Colors.primaryColor,
+                                    fontWeight: "400",
+                                    fontSize: { md: "1rem", xs: "1.2rem" },
+                                }}
+                            >
+                                Posted on: {question.timeStamp ? question.timeStamp.toDate().toLocaleDateString() : "Error date not found"
+                                }
                             </Typography>
                             <Typography
                                 sx={{
@@ -166,7 +176,7 @@ const QuestionDisplay = () => {
                                     },
                                 }}
                             >
-                                Post an answer
+                                Add an answer to this question
                             </Button>
                             <Modal
                                 open={open}
@@ -197,11 +207,12 @@ const QuestionDisplay = () => {
                                 <Box
                                     key={index}
                                     sx={{
-                                        border: `1px solid ${Colors.primaryColor}`,
                                         boxShadow: '0 0 10px rgba(0,0,0,0.1)',
                                         padding: '1rem',
                                         margin: '1rem 0',
                                         borderRadius: '5px',
+                                        backgroundColor: "lightgrey"
+
                                     }}
                                 >
                                     <Typography
@@ -210,10 +221,19 @@ const QuestionDisplay = () => {
                                             color: Colors.primaryColor,
                                             fontWeight: "600",
                                             fontSize: { md: "1rem", xs: "1.2rem" },
-                                            marginBottom: '1rem',
                                         }}
                                     >
                                         Answer by: {answer.userName}
+                                    </Typography>
+                                    <Typography
+                                        sx={{
+                                            fontFamily: "Inria Sans",
+                                            color: Colors.primaryColor,
+                                            fontWeight: "400",
+                                            fontSize: { md: "1rem", xs: "1.2rem" },
+                                        }}
+                                    >
+                                        Posted on: {answer.timeStamp.toDate().toLocaleString()}
                                     </Typography>
                                     <Typography
                                         sx={{

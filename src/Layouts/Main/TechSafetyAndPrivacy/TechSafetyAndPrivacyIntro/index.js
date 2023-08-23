@@ -1,41 +1,15 @@
-import { React, useEffect } from "react";
-//import styles from "./index.module.css";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, MenuItem, Select, Divider } from "@mui/material";
-import { useState } from "react";
 import { Colors } from "../../../../constants/Colors";
-import { useAuth } from "../../../../firebase/AuthContext";
-import { db } from "../../../../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
 
-export const TechSafetyAndPrivacyIntro = ({
-  dataFromFirebase,
-  dataFromSafetyAndPrivacyIntro
-}) => {
-  const { currentUser } = useAuth();
-  let [value, setValue] = useState("");
-  let [osvalue, setosValue] = useState([]);
-  let pageValue = "safety_privacy";
-  let docRef;
-
-  if (currentUser !== null) {
-    docRef = doc(db, "users", currentUser.uid);
-  }
+export const TechSafetyAndPrivacyIntro = ({ dataFromFirebase, dataFromSafetyAndPrivacyIntro }) => {
+  const [value, setValue] = useState("All");
+  const [osvalue, setosValue] = useState([]);
+  const pageValue = "safety_privacy";
 
   useEffect(() => {
-    console.log("useEffect 2");
-    if (currentUser !== null) {
-      getDoc(docRef).then((doc) => {
-        setValue(doc.data().operating_system_used);
-      });
-    }
-    setValue("All");
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    console.log("useEffect 3");
-    console.log("dataFromFirebase type is ", typeof dataFromFirebase);
-    if (Array.isArray(dataFromFirebase)) {
+    console.log("useEffect for setting osvalue based on dataFromFirebase and value");
+    if (Array.isArray(dataFromFirebase) && dataFromFirebase.length > 0) {
       const transformedData = dataFromFirebase.map((item) => {
         return {
           category: item.category,
@@ -47,64 +21,26 @@ export const TechSafetyAndPrivacyIntro = ({
         };
       });
       if (value === "All") {
-        const os = transformedData.filter(
-          (video) => video.category === pageValue
-        );
+        const os = transformedData.filter(video => video.category === pageValue);
         setosValue(os);
       } else {
-        const os = transformedData.filter(
-          (video) =>
-            video.operating_system === value && video.category === pageValue
-        );
+        const os = transformedData.filter(video => video.operating_system === value && video.category === pageValue);
         setosValue(os);
       }
     } else {
-      console.log("dataFromFirebase is not an array");
+      console.log("dataFromFirebase is empty or not an array");
     }
-    // eslint-disable-next-line
   }, [value, dataFromFirebase]);
 
   useEffect(() => {
+    console.log("useEffect for sending osvalue to dataFromSafetyAndPrivacyIntro");
     dataFromSafetyAndPrivacyIntro(osvalue);
-    // eslint-disable-next-line
   }, [osvalue]);
 
   const filteros = (e) => {
-    const keyword = e.target.value;
-
-    if (keyword !== "All") {
-      const filterd_os = osvalue.filter((video) => {
-        return video.operating_system === keyword;
-      });
-      setosValue(filterd_os);
-    } else {
-      if (Array.isArray(dataFromFirebase)) {
-        const transformedData = dataFromFirebase.map((item) => {
-          return {
-            category: item.category,
-            messages: item.messages,
-            operating_system: item.operating_system,
-            stopTimes: item.stopTimes,
-            tags: item.tags,
-            url: item.url
-          };
-        });
-        setosValue(
-          transformedData.filter((video) => video.category === pageValue)
-        );
-      } else {
-        console.log("dataFromFirebase is not an array");
-      }
-    }
-    setValue(keyword);
-  };
-
-  console.log("value ", value);
-  console.log("osvalue: ", osvalue);
-  const twoCalls = (e) => {
     setValue(e.target.value);
-    filteros(e);
   };
+
   return (
     <>
       <Box
@@ -124,9 +60,7 @@ export const TechSafetyAndPrivacyIntro = ({
       >
         <Select
           value={value}
-          onChange={(e) => {
-            twoCalls(e);
-          }}
+          onChange={filteros}
         >
           <MenuItem disabled={true}>Mobile Devices</MenuItem>
           <MenuItem value={"iOS"}>iOS</MenuItem>
@@ -137,7 +71,7 @@ export const TechSafetyAndPrivacyIntro = ({
           <MenuItem value={"Mac"}>Mac</MenuItem>
           <MenuItem value={"Linux"}>Linux</MenuItem>
           <Divider />
-          <MenuItem value={"All"}> All </MenuItem>
+          <MenuItem value={"All"}>All</MenuItem>
         </Select>
       </Box>
       <Grid item md={6} xs={12}>
@@ -152,7 +86,6 @@ export const TechSafetyAndPrivacyIntro = ({
               fontFamily: "Inria Sans",
               color: Colors.primaryColor,
               fontWeight: "700",
-              textAlign: "center",
               fontSize: {
                 md: "2.75rem",
                 sm: "3rem",
@@ -160,8 +93,7 @@ export const TechSafetyAndPrivacyIntro = ({
               }
             }}
           >
-            Search videos tutorials for information on techology safety and
-            privacy
+            Search video tutorials for information on technology safety and privacy
           </Box>
         </Box>
       </Grid>

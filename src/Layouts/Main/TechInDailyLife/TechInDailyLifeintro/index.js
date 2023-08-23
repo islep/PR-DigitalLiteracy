@@ -1,41 +1,17 @@
-import { React, useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, MenuItem, Select, Divider } from "@mui/material";
 import { Colors } from "../../../../constants/Colors";
 import { useAuth } from "../../../../firebase/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../../firebase/firebase";
 
-export const TechInDailyLifeIntro = ({
-  dataFromFirebase,
-  dataFromDailyLifeIntro
-}) => {
-  const { currentUser } = useAuth();
-  const [value, setValue] = useState("");
+export const TechInDailyLifeIntro = ({ dataFromFirebase, dataFromDailyLifeIntro }) => {
+  const [value, setValue] = useState("All");
   const [osvalue, setosValue] = useState([]);
+
   const pageValue = "daily_life";
-  let docRef;
-
-  if (currentUser !== null) {
-    docRef = doc(db, "users", currentUser.uid);
-  }
 
   useEffect(() => {
-    console.log("useEffect 2");
-    if (currentUser !== null) {
-      getDoc(docRef).then((doc) => {
-        setValue(doc.data().operating_system_used);
-      });
-    }
-    setValue("All");
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    console.log("useEffect 3");
-    console.log("dataFromFirebase type is ", typeof dataFromFirebase);
+    console.log("useEffect for setting osvalue based on dataFromFirebase and value");
     if (Array.isArray(dataFromFirebase) && dataFromFirebase.length > 0) {
-      // check if dataFromFirebase is not empty
       const transformedData = dataFromFirebase.map((item) => {
         return {
           category: item.category,
@@ -47,66 +23,26 @@ export const TechInDailyLifeIntro = ({
         };
       });
       if (value === "All") {
-        const os = transformedData.filter(
-          (video) => video.category === pageValue
-        );
+        const os = transformedData.filter(video => video.category === pageValue);
         setosValue(os);
       } else {
-        const os = transformedData.filter(
-          (video) =>
-            video.operating_system === value && video.category === pageValue
-        );
+        const os = transformedData.filter(video => video.operating_system === value && video.category === pageValue);
         setosValue(os);
       }
     } else {
-      console.log("dataFromFirebase is empty");
+      console.log("dataFromFirebase is empty or not an array");
     }
-    // eslint-disable-next-line
   }, [value, dataFromFirebase]);
 
   useEffect(() => {
-    console.log("useEffect 4");
+    console.log("useEffect for sending osvalue to dataFromDailyLifeIntro");
     dataFromDailyLifeIntro(osvalue);
-    // eslint-disable-next-line
   }, [osvalue]);
 
   const filteros = (e) => {
-    const keyword = e.target.value;
-
-    if (keyword !== "All") {
-      const filterd_os = osvalue.filter((video) => {
-        return video.operating_system === keyword;
-      });
-      setosValue(filterd_os);
-    } else {
-      if (Array.isArray(dataFromFirebase)) {
-        const transformedData = dataFromFirebase.map((item) => {
-          return {
-            category: item.category,
-            messages: item.messages,
-            operating_system: item.operating_system,
-            stopTimes: item.stopTimes,
-            tags: item.tags,
-            url: item.url
-          };
-        });
-        setosValue(
-          transformedData.filter((video) => video.category === pageValue)
-        );
-      } else {
-        console.log("dataFromFirebase is not an array");
-      }
-    }
-    setValue(keyword);
-  };
-
-  console.log("osvalue: ", osvalue);
-  console.log("value: ", value);
-
-  const twoCalls = (e) => {
     setValue(e.target.value);
-    filteros(e);
   };
+
   return (
     <>
       <Box
@@ -126,9 +62,7 @@ export const TechInDailyLifeIntro = ({
       >
         <Select
           value={value}
-          onChange={(e) => {
-            twoCalls(e);
-          }}
+          onChange={filteros}
         >
           <MenuItem disabled={true}>Mobile Devices</MenuItem>
           <MenuItem value={"iOS"}>iOS</MenuItem>
@@ -161,7 +95,7 @@ export const TechInDailyLifeIntro = ({
               }
             }}
           >
-            Search videos tutorials for help with techology used in daily life
+            Search video tutorials for help with technology used in daily life
           </Box>
         </Box>
       </Grid>

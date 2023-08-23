@@ -5,6 +5,7 @@ import { Colors } from "../../../../constants/Colors";
 const QuestionBox = ({ question }) => {
 
     const navigate = useNavigate();
+    const formattedDate = question.timeStamp ? question.timeStamp.toDate().toLocaleDateString() : "Error cannot find date";
 
     return (
         <Box
@@ -22,11 +23,20 @@ const QuestionBox = ({ question }) => {
                     color: Colors.primaryColor,
                     fontWeight: "700",
                     fontSize: { md: "1.5rem", xs: "1.2rem" },
-                    marginBottom: '1rem',
                 }}
             >
                 {question.questionTitle}
 
+            </Typography>
+            <Typography
+                sx={{
+                    fontFamily: "Inria Sans",
+                    color: Colors.primaryColor,
+                    fontWeight: "400",
+                    fontSize: { md: "1rem", xs: "1.2rem" },
+                }}
+            >
+                Posted on: {formattedDate}
             </Typography>
             <Typography
                 sx={{
@@ -50,7 +60,7 @@ const QuestionBox = ({ question }) => {
                     },
                 }}
             >
-                Go to Question
+                See the Question and Answers
             </Button>
         </Box>
     );

@@ -133,7 +133,7 @@ const QuestionsPage = () => {
             maxWidth: "100%"
           }}
         >
-          Questions
+          Scroll through the questions that fellow community members have previously asked.
         </Box>
         <Box
           sx={{
