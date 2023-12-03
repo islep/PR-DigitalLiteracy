@@ -1,0 +1,29 @@
+{
+	"root": true,
+	"env": {
+		"browser": true,
+		"es2021": true,
+		"node": false
+	},
+	"extends": ["airbnb", "prettier", "eslint:recommended", "plugin:react/recommended"],
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"plugins": ["react", "prettier"],
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".jsx"]
+			}
+		}
+	},
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"react/function-component-definition": "off",
+		"no-unused-vars": "warn"
+	}
+}
