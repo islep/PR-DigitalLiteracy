@@ -28,7 +28,18 @@ function TechInDailyLife() {
 
 	return (
 		<>
-			<FilterPanel filters={['filter1', 'filter2']} />
+			<FilterPanel
+				filterGroups={[
+					{
+						subheading: 'Device Type',
+						filters: ['Mobile - iOS', 'Mobile - Android', 'Desktop - Windows', 'Desktop - Mac', 'Desktop - Linux'],
+					},
+					{
+						subheading: 'Content Type',
+						filters: ['Daily Life', 'Finance', 'Safety Privacy'],
+					},
+				]}
+			/>
 			<div className="md:pl-80">
 				{dataFromFirebase ? (
 					<TechInDailyLifeIntro dataFromDailyLifeIntro={dataFromDailyLifeIntro} dataFromFirebase={dataFromFirebase} />

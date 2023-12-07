@@ -35,7 +35,18 @@ function TechSafetyAndPrivacy() {
 
 	return (
 		<>
-			<FilterPanel filters={['filter1', 'filter2']} />
+			<FilterPanel
+				filterGroups={[
+					{
+						subheading: 'Device Type',
+						filters: ['Mobile - iOS', 'Mobile - Android', 'Desktop - Windows', 'Desktop - Mac', 'Desktop - Linux'],
+					},
+					{
+						subheading: 'Content Type',
+						filters: ['Daily Life', 'Finance', 'Safety Privacy'],
+					},
+				]}
+			/>
 			<div className="pl-80">
 				<TechSafetyAndPrivacyIntro
 					dataFromSafetyAndPrivacyIntro={dataFromSafetyAndPrivacyIntro}
