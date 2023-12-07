@@ -3,25 +3,20 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const HomeCard = ({ index, href, image, heading, subItems, onClick }) => (
-	<Link to={href}>
-		<div
-			className="bg-white rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 transition-all duration-150"
-			onClick={onClick}
-			role="button"
-			tabIndex={index}
-			onKeyDown={onClick}
-		>
-			<div className="flex-col items-stretch justify-center w-full p-8">
-				<div className="border-b border-gray-200">
-					<img src={image} alt={heading} className="h-48 mx-auto my-4 p-4" />
-				</div>
-				<h5 className="text-xl font-bold py-3">{heading}</h5>
-				{subItems.map((e) => (
-					<p key={e} className="text-gray-800 text-lg text-end">
-						{e}
-					</p>
-				))}
+	<Link
+		to={href}
+		className="w-full md:w-[calc(33.3333%-3rem)] bg-white rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 transition-all duration-150 "
+	>
+		<div className="flex-col items-stretch justify-center w-full p-8">
+			<div className="border-b border-gray-200">
+				<img src={image} alt={heading} className="h-48 mx-auto my-4 p-4" />
 			</div>
+			<h5 className="text-xl font-bold py-3">{heading}</h5>
+			{subItems.map((e) => (
+				<p key={e} className="text-gray-800 text-lg text-end">
+					{e}
+				</p>
+			))}
 		</div>
 	</Link>
 );
