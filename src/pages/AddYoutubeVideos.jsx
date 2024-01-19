@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../firebase/AuthContext';
-import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
 import YouTubeVideo from '../Layouts/Main/YouTubeVideo/YouTubeVideo';
 
 function AddYoutubeVideos() {
