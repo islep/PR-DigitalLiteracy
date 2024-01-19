@@ -31,11 +31,14 @@
 		"tailwindcss": "^3.3.3"
 	},
 	"scripts": {
+		"dev": "react-scripts start",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"lint": "eslint --ext .js,.jsx . --fix"
+		"lint": "eslint --ext .js,.jsx . --fix",
+		"predeploy": "DISABLE_ESLINT_PLUGIN=true npm run build",
+		"deploy": "firebase deploy"
 	},
 	"browserslist": {
 		"production": [
