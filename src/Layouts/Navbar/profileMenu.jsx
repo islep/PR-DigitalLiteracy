@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
+import Snackbar from '@mui/material/Snackbar';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Icon, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { logout } from '../../firebase/firebase';
 import { useAuth } from '../../firebase/AuthContext';
 import PATHS from '../../paths';
@@ -14,7 +15,21 @@ const ProfileMenu = ({ isMobile }) => {
 	const [settings, setSettings] = useState([]);
 	const { currentUser } = useAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
+	const isMenuOpen = Boolean(anchorEl);
+	const [notification, setNotification] = useState('');
+
+	const showMenu = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const closeMenu = () => {
+		setAnchorEl(null);
+	};
+
+	const handleLogout = () => {
+		logout();
+		setNotification('You have been logged out');
+	};
 
 	useEffect(() => {
 		if (currentUser) {
@@ -22,7 +37,7 @@ const ProfileMenu = ({ isMobile }) => {
 				setSettings([
 					{
 						name: 'Log Out',
-						href: PATHS.logout,
+						onClick: handleLogout,
 					},
 					{ name: 'Add Videos', href: PATHS.addYoutubeVideos },
 					{
@@ -34,7 +49,7 @@ const ProfileMenu = ({ isMobile }) => {
 				setSettings([
 					{
 						name: 'Log Out',
-						href: PATHS.logout,
+						onClick: handleLogout,
 					},
 				]);
 			}
@@ -48,14 +63,6 @@ const ProfileMenu = ({ isMobile }) => {
 		}
 	}, [currentUser]);
 
-	const handleMenu = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
 	return (
 		<>
 			{isMobile ? (
@@ -65,7 +72,7 @@ const ProfileMenu = ({ isMobile }) => {
 					aria-label="account of current user"
 					aria-controls="menu-appbar"
 					aria-haspopup="true"
-					onClick={handleMenu}
+					onClick={showMenu}
 					color="inherit"
 				>
 					<ListItemIcon>
@@ -80,7 +87,7 @@ const ProfileMenu = ({ isMobile }) => {
 					aria-label="account of current user"
 					aria-controls="menu-appbar"
 					aria-haspopup="true"
-					onClick={handleMenu}
+					onClick={showMenu}
 					color="inherit"
 				>
 					<AccountCircle />
@@ -98,15 +105,29 @@ const ProfileMenu = ({ isMobile }) => {
 					vertical: 'top',
 					horizontal: 'right',
 				}}
-				open={open}
-				onClose={handleClose}
+				open={isMenuOpen}
+				onClose={closeMenu}
 			>
 				{settings.map((option) => (
-					<MenuItem key={option.name} component={Link} to={option.href} onClick={handleClose}>
+					<MenuItem
+						key={option.name}
+						component={Link}
+						to={option.href}
+						onClick={() => {
+							if (option.onClick) option.onClick();
+							closeMenu();
+						}}
+					>
 						{option.name}
 					</MenuItem>
 				))}
 			</Menu>
+			<Snackbar
+				open={notification !== ''}
+				autoHideDuration={6000}
+				onClose={() => setNotification('')}
+				message={notification}
+			/>
 		</>
 	);
 };
