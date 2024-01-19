@@ -11,7 +11,7 @@ function HelpManager() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (currentUser && currentUser.uid === 'h9IvP69YaPfmcNFiqx78VUnwJ0v2') {
+		if (currentUser && currentUser.uid === process.env.REACT_APP_ADMIN_UID) {
 			navigate('/helpManager');
 		} else {
 			navigate('/home');

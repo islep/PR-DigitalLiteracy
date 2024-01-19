@@ -18,8 +18,7 @@ const ProfileMenu = ({ isMobile }) => {
 
 	useEffect(() => {
 		if (currentUser) {
-			console.log('current user is ', currentUser);
-			if (currentUser.uid === 'ZDcu0yY6fbU8FvuyKY4lHITysbq1') {
+			if (currentUser.uid === process.env.REACT_APP_ADMIN_UID) {
 				setSettings([
 					{
 						name: 'Log Out',

@@ -30,7 +30,7 @@ function Help() {
 			// doc.data() is never undefined for query doc snapshots
 			// console.log(doc.id, " => ", doc.data());
 
-			if (doc.id !== 'h9IvP69YaPfmcNFiqx78VUnwJ0v2') {
+			if (doc.id !== process.env.REACT_APP_ADMIN_UID) {
 				const personData = doc.data();
 				let firstName = '';
 				let lastName = '';
