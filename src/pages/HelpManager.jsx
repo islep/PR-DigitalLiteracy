@@ -14,7 +14,7 @@ function HelpManager() {
 		if (currentUser && currentUser.uid === process.env.REACT_APP_ADMIN_UID) {
 			navigate('/helpManager');
 		} else {
-			navigate('/home');
+			navigate('/');
 		}
 	}, [currentUser, navigate]);
 

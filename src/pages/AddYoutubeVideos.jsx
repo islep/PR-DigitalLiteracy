@@ -13,7 +13,7 @@ function AddYoutubeVideos() {
 		if (currentUser && currentUser.uid === process.env.REACT_APP_ADMIN_UID) {
 			navigate('/addYoutubeVideos');
 		} else {
-			navigate('/home');
+			navigate('/');
 		}
 	}, [currentUser, navigate]);
 

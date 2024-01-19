@@ -169,7 +169,7 @@ function UserInformation() {
 													sx={{ color: Colors.primaryColor }}
 													onClick={() => {
 														navigate({
-															pathname: '/home',
+															pathname: '/',
 															search: createSearchParams({
 																fromPath: searchParams.get('fromPath'),
 															}).toString(),
