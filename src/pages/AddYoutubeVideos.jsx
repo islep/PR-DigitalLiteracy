@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../firebase/AuthContext';
-import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
 import YouTubeVideo from '../Layouts/Main/YouTubeVideo/YouTubeVideo';
 
 function AddYoutubeVideos() {
@@ -10,10 +8,10 @@ function AddYoutubeVideos() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (currentUser && currentUser.uid === 'h9IvP69YaPfmcNFiqx78VUnwJ0v2') {
+		if (currentUser && currentUser.uid === process.env.REACT_APP_ADMIN_UID) {
 			navigate('/addYoutubeVideos');
 		} else {
-			navigate('/home');
+			navigate('/');
 		}
 	}, [currentUser, navigate]);
 

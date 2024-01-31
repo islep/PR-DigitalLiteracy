@@ -25,7 +25,7 @@
 	"editor.wordWrap": "bounded",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"eslint.lintTask.enable": true
 }

@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, useMediaQuery, FormGroup, FormControlLabel, Checkbox, Button } from '@mui/material';
-import TuneIcon from '@mui/icons-material/Tune';
+import {
+	Drawer,
+	useMediaQuery,
+	FormGroup,
+	FormControlLabel,
+	Checkbox,
+	Button,
+	Accordion,
+	AccordionDetails,
+	AccordionSummary,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const FilterPanel = ({ filterGroups, onSave }) => {
 	const isMobile = useMediaQuery('(max-width: 768px)');
@@ -53,21 +63,23 @@ const FilterPanelDesktop = ({ filterGroups, onSave }) => (
 
 const FilterPanelContent = ({ filterGroups, onSave }) => (
 	<>
+		<h2 className="text-xl mb-8">Filter By</h2>
 		{filterGroups.map(({ subheading, filters }) => (
-			<div key={subheading}>
-				<div className="text-lg flex items-center my-8">
-					<TuneIcon />
+			<Accordion defaultExpanded key={subheading}>
+				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<span className="ml-4">{subheading}</span>
-				</div>
-				<div className="overflow-y-auto max-h-screen">
-					<FormGroup>
-						{filters.map((f) => (
-							// show a checkbox
-							<FormControlLabel key={f} control={<Checkbox defaultChecked />} label={f} />
-						))}
-					</FormGroup>
-				</div>
-			</div>
+				</AccordionSummary>
+
+				<AccordionDetails>
+					<div className="overflow-y-auto max-h-screen">
+						<FormGroup>
+							{filters.map((f) => (
+								<FormControlLabel key={f} control={<Checkbox defaultChecked />} label={f} />
+							))}
+						</FormGroup>
+					</div>
+				</AccordionDetails>
+			</Accordion>
 		))}
 		<div className="fixed bottom-0 w-64 py-8">
 			<Button variant="contained" fullWidth onClick={onSave}>

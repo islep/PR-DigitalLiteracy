@@ -46,7 +46,6 @@ const MobileDrawer = (props) => {
 					<ListItemIcon>
 						<img src={logo} alt="home" className="h-10" />
 					</ListItemIcon>
-					<ListItemText primary="Home" />
 				</ListItemButton>
 			</ListItem>
 			<ListItem disablePadding>
