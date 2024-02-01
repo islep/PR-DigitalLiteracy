@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 export function Breadcrumb({ subtopicValue, handleResetSubtopic }) {
 	return (
-		<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+		<div style={{
+			display: 'flex',
+			flexDirection: 'row', alignItems: 'center', fontSize: '1.2em', fontFamily: 'Inria Sans',
+		}}>
 			<Link to="/">Home</Link>
 			{subtopicValue.length > 0 ? (
 				<>

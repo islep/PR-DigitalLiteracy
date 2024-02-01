@@ -5,12 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
 import TechInDailyLifeIntro from '../Layouts/Main/TechInDailyLife/TechInDailyLifeintro';
-import SubtopicSelection from '../components/SubtopicSelection';
-import Searchbar from '../components/Searchbar';
+import SubtopicSelection from '../components/Video/SubtopicSelection';
+import Searchbar from '../components/Video/Searchbar';
 import YouTubeVideoSection from '../Layouts/Main/TechInDailyLife/YouTubeVideoSection';
 import { db } from '../firebase/firebase';
 import FilterPanel from '../components/FilterPanel';
-import { Breadcrumb } from '../components/Breadcrumb';
+import { Breadcrumb } from '../components/Video/Breadcrumb';
 import { Box } from '@mui/material';
 
 function TechInDailyLife() {
