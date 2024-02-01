@@ -22,7 +22,7 @@ function TechInDailyLife() {
 	const [tags, tagsFromSearchBar] = useState([]);
 
 	// FINAL VALUES (move to constant folder)
-	const subtoptics = ['sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'sub6'];
+	const subtoptics = [];
 
 	useEffect(() => {
 		const unsubscribe = onSnapshot(collection(db, 'youtube-videos'), (querySnapshot) => {
@@ -66,12 +66,12 @@ function TechInDailyLife() {
 					dataFromFirebase={dataFromFirebase}
 				/>
 
-				<Box style={{ margin: 'auto', width: '70%' }}>
+				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
-					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} />
+					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={subtoptics} />
 				</Box>
 
-				{subtopicValue.length > 0 || tags.length > 0 ? (
+				{subtoptics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}
 						subtopicValue={subtopicValue}

@@ -7,6 +7,7 @@ import YouTubeVideoSection from '../Layouts/Main/TechInDailyLife/YouTubeVideoSec
 import FinanceAndManagementIntro from '../Layouts/Main/FinanceAndManagement/FinanceAndManagementIntro';
 import SubtopicSelection from '../components/Video/SubtopicSelection';
 import Searchbar from '../components/Video/Searchbar';
+import { Breadcrumb } from '../components/Video/Breadcrumb';
 import { db } from '../firebase/firebase';
 import FilterPanel from '../components/FilterPanel';
 import { Box } from '@mui/material';
@@ -22,7 +23,7 @@ function FinanceAndManagement() {
 	const [tags, tagsFromSearchBar] = useState([]);
 
 	// FINAL VALUES (move to constant folder)
-	const subtoptics = ['sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'sub6'];
+	const subtoptics = ['Using & Managing credit and debit cards', 'Maintaining Credit score', 'Bank Accounts', 'Savings & Interest', 'Financial scams', 'Investments & risks	'];
 
 	useEffect(() => {
 		console.log('useEffect 1');
@@ -72,12 +73,12 @@ function FinanceAndManagement() {
 					dataFromFirebase={dataFromFirebase}
 				/>
 
-				<Box style={{ margin: 'auto', width: '70%' }}>
+				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
-					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} />
+					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={subtoptics} />
 				</Box>
 
-				{subtopicValue.length > 0 || tags.length > 0 ? (
+				{subtoptics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}
 						subtopicValue={subtopicValue}

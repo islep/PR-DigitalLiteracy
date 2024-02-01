@@ -69,7 +69,7 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, handleResetSubtopi
 
 	return (
 		<>
-			<Box sx={{ margin: 'auto', width: '70%', marginTop: '2rem' }}>
+			<Box sx={{ margin: 'auto', width: '70%' }}>
 				<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 					{videos && videos.length > 0 ? (
 						videos.map((video, index) => (

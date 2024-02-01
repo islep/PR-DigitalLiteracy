@@ -39,6 +39,7 @@ export function FinanceAndManagementIntro({ dataFromFirebase, dataFromFinanceAnd
 				stopTimes: item.stopTimes,
 				tags: item.tags,
 				url: item.url,
+				subtopic: item.subtopic,
 			}));
 			if (value === 'All') {
 				const os = transformedData.filter((video) => video.category === pageValue);
