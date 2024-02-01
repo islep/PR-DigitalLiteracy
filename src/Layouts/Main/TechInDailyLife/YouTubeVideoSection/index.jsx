@@ -69,9 +69,6 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, handleResetSubtopi
 
 	return (
 		<>
-
-			<button onClick={handleResetSubtopic}>Click me</button>
-
 			<Box sx={{ margin: 'auto', width: '70%', marginTop: '2rem' }}>
 				<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 					{videos && videos.length > 0 ? (

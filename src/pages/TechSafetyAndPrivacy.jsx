@@ -6,9 +6,11 @@ import Footer from '../Layouts/Footer';
 import TechSafetyAndPrivacyIntro from '../Layouts/Main/TechSafetyAndPrivacy/TechSafetyAndPrivacyIntro';
 import YouTubeVideoSection from '../Layouts/Main/TechInDailyLife/YouTubeVideoSection';
 import SubtopicSelection from '../components/SubtopicSelection';
+import Breadcrumb from '../components/Breadcrumb';
 import Searchbar from '../components/Searchbar';
 import { db } from '../firebase/firebase';
 import FilterPanel from '../components/FilterPanel';
+import { Box } from '@mui/material';
 
 function TechSafetyAndPrivacy() {
 	const navigate = useNavigate();
@@ -71,13 +73,15 @@ function TechSafetyAndPrivacy() {
 					dataFromFirebase={dataFromFirebase}
 				/>
 
-				<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+				<Box style={{ margin: 'auto', width: '70%' }}>
+					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} />
+				</Box>
 
 				{subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}
 						subtopicValue={subtopicValue}
-						handleResetSubtopic={handleResetSubtopic}
 						tags={tags}
 					/>
 				) : (

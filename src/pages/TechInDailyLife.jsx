@@ -10,6 +10,8 @@ import Searchbar from '../components/Searchbar';
 import YouTubeVideoSection from '../Layouts/Main/TechInDailyLife/YouTubeVideoSection';
 import { db } from '../firebase/firebase';
 import FilterPanel from '../components/FilterPanel';
+import { Breadcrumb } from '../components/Breadcrumb';
+import { Box } from '@mui/material';
 
 function TechInDailyLife() {
 	const [osvalue, setosValue] = useState([]);
@@ -64,7 +66,10 @@ function TechInDailyLife() {
 					dataFromFirebase={dataFromFirebase}
 				/>
 
-				<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+				<Box style={{ margin: 'auto', width: '70%' }}>
+					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} />
+				</Box>
 
 				{subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
@@ -78,7 +83,7 @@ function TechInDailyLife() {
 						dataFromSubtopicSelector={dataFromSubtopicSelector}
 						subtopics={subtoptics} />
 				)}
-			</div>
+			</div >
 		</>
 	);
 }
