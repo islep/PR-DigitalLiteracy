@@ -5,14 +5,23 @@ import Navbar from '../Layouts/Navbar';
 import Footer from '../Layouts/Footer';
 import TechUsedInClassAndWordIntro from '../Layouts/Main/TechUsedInClassAndWord/TechUsedInClassAndWordIntro';
 import YouTubeVideoSection from '../Layouts/Main/TechInDailyLife/YouTubeVideoSection';
+import SubtopicSelection from '../components/SubtopicSelection';
+import Searchbar from '../components/Searchbar';
 import { db } from '../firebase/firebase';
 import FilterPanel from '../components/FilterPanel';
 
 function TechUsedInClassAndWord() {
 	const navigate = useNavigate();
-	const [osvalue, setosValue] = useState('');
+	const [osvalue, setosValue] = useState([]);
 	const [dataFromFirebase, setDatafromFirebase] = useState([]);
 	const docRef = collection(db, 'youtube-videos');
+
+	// video search constants
+	const [subtopicValue, setsubtopicValue] = useState([]);
+	const [tags, tagsFromSearchBar] = useState([]);
+
+	// FINAL VALUES (move to constant folder)
+	const subtoptics = ['sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'sub6'];
 
 	useEffect(() => {
 		console.log('useEffect 1');
@@ -33,6 +42,14 @@ function TechUsedInClassAndWord() {
 		navigate('/techInClassAndWord');
 	}, [navigate]);
 
+	const dataFromSubtopicSelector = (subtopicValue) => {
+		setsubtopicValue(subtopicValue);
+	};
+
+	const handleResetSubtopic = () => {
+		setsubtopicValue([]);
+	};
+
 	return (
 		<>
 			<FilterPanel
@@ -47,15 +64,62 @@ function TechUsedInClassAndWord() {
 					},
 				]}
 			/>
-			<div className="pl-80">
+
+			<div className="md:pl-80">
 				<TechUsedInClassAndWordIntro
 					dataFromClassAndWordIntro={dataFromClassAndWordIntro}
 					dataFromFirebase={dataFromFirebase}
 				/>
-				<YouTubeVideoSection osvalue={osvalue} />
+
+				<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+
+				{subtopicValue.length > 0 || tags.length > 0 ? (
+					<YouTubeVideoSection
+						osvalue={osvalue}
+						subtopicValue={subtopicValue}
+						handleResetSubtopic={handleResetSubtopic}
+						tags={tags}
+					/>
+				) : (
+					<SubtopicSelection
+						dataFromSubtopicSelector={dataFromSubtopicSelector}
+						subtopics={subtoptics} />
+				)}
 			</div>
 		</>
 	);
 }
 
 export default TechUsedInClassAndWord;
+
+
+/*
+<div className="pl-80">
+
+				{dataFromFirebase ? (
+					<TechUsedInClassAndWordIntro
+						dataFromClassAndWordIntro={dataFromClassAndWordIntro}
+						dataFromFirebase={dataFromFirebase}
+					/>
+				) : (
+					<div>
+						<CircularProgress />
+					</div>
+				)}
+
+
+				{subtopicValue.length > 0 ? (
+					(osvalue.length > 0 ? (
+						<YouTubeVideoSection osvalue={osvalue}
+							subtopicValue={subtopicValue}
+							handleResetSubtopic={handleResetSubtopic}
+						/>
+					)
+						: <div>Loading...</div>)
+				) : (
+					<SubtopicSelector
+						dataFromSubtopicSelector={dataFromSubtopicSelector}
+						subtopics={subtoptics} />
+				)}
+</div>
+*/

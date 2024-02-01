@@ -6,8 +6,8 @@ import YoutubeEmbed from '../../YouTubeVideo/youtubeVideoEmbed';
 import { Colors } from '../../../../constants/Colors';
 import './youtubeVideoSection.css';
 
-export function YouTubeVideoSection({ osvalue }) {
-	const [tags, setTags] = useState([]);
+export function YouTubeVideoSection({ osvalue, subtopicValue, handleResetSubtopic, tags }) {
+	// const [tags, setTags] = useState([]);
 	const [videos, setVideos] = useState(osvalue || []);
 	const [loading, setLoading] = useState(true);
 	console.log('Initial osvalue:', osvalue);
@@ -56,52 +56,22 @@ export function YouTubeVideoSection({ osvalue }) {
 		if (tags.length > 0) {
 			const results = osvalue.filter((video) => {
 				const isSubset = (videoTags, inputTags) => inputTags.every((inputTag) => videoTags.includes(inputTag));
-				return isSubset(video.tags, tags);
+				return isSubset(video.tags, tags) && (!video.subtopic || video.subtopic === subtopicValue);
 			});
 			setVideos(results);
 		} else {
-			setVideos(osvalue);
+			const results = osvalue.filter((video) => {
+				return (!video.subtopic || video.subtopic === subtopicValue);
+			});
+			setVideos(results);
 		}
-	}, [tags, osvalue]);
+	}, [tags, osvalue, subtopicValue]);
 
 	return (
 		<>
-			<Box sx={{ margin: 'auto', width: '70%' }}>
-				<Box
-					sx={{
-						backgroundColor: '#f0f8ff',
-						height: '89%',
-						margin: '7',
-						width: '95%',
-						borderRadius: '1rem',
-						padding: '1rem',
-						marginTop: '1rem',
-						boxShadow: 2,
-						position: 'relative',
-					}}
-				>
-					<Grid container>
-						<Grid item xs={12}>
-							<Box component="form">
-								<div className="input-tags-wrapper">
-									<TagsInput
-										InputProps={{
-											disableUnderline: true,
-										}}
-										type="text"
-										variant="standard"
-										id="search"
-										value={tags}
-										separators={['Enter']}
-										onChange={setTags}
-										placeHolder="Search Videos"
-									/>
-								</div>
-							</Box>
-						</Grid>
-					</Grid>
-				</Box>
-			</Box>
+
+			<button onClick={handleResetSubtopic}>Click me</button>
+
 			<Box sx={{ margin: 'auto', width: '70%', marginTop: '2rem' }}>
 				<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 					{videos && videos.length > 0 ? (
