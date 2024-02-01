@@ -6,7 +6,7 @@ import YoutubeEmbed from '../../YouTubeVideo/youtubeVideoEmbed';
 import { Colors } from '../../../../constants/Colors';
 import './youtubeVideoSection.css';
 
-export function YouTubeVideoSection({ osvalue, subtopicValue, handleResetSubtopic, tags }) {
+export function YouTubeVideoSection({ osvalue, subtopicValue, tags }) {
 	// const [tags, setTags] = useState([]);
 	const [videos, setVideos] = useState(osvalue || []);
 	const [loading, setLoading] = useState(true);

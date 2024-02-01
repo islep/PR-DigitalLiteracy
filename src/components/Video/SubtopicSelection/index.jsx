@@ -9,10 +9,6 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 		}
 	}
 
-	if (!subtopics) {
-		return null;
-	}
-
 	return (
 
 		<div className="w-full flex items-center justify-center pb-36">
