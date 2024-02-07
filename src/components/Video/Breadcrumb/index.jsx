@@ -9,21 +9,23 @@ export function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
 
 			{subtopicValue.length > 0 ? (
 				<>
-					<span style={{ margin: '0 5px' }}> {'>'} </span>
+					<span className='mx-1.5'> {'>'} </span>
 					<button onClick={handleResetSubtopic}>{subtopicValue}</button>
 				</>
 			) : ((subtopics.length > 0) && (
 				<>
-					<span style={{ margin: '0 5px' }}> {'>'} </span>
-					<b>Subtopics</b>
+					<span className='mx-1.5'> {'>'} </span>
+					<div className='font-bold'>
+						Subtopics
+					</div>
 				</>
 			))}
 
 			{(subtopics.length == 0 || subtopicValue.length > 0) && (
 				<>
-					<span style={{ margin: '0 5px' }}> {'>'} </span>
-					<div>
-						<b>Videos</b>
+					<span className='mx-1.5'> {'>'} </span>
+					<div className='font-bold'>
+						Videos
 					</div>
 				</>
 			)}

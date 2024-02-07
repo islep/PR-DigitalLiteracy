@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../../YouTubeVideo/youtubeVideo.css';
+import '../../../../src/Layouts/Main/YouTubeVideo/youtubeVideo.css';
 import { Box, Grid, CircularProgress } from '@mui/material';
 import { TagsInput } from 'react-tag-input-component';
-import YoutubeEmbed from '../../YouTubeVideo/youtubeVideoEmbed';
-import { Colors } from '../../../../constants/Colors';
+import YoutubeEmbed from '../../../Layouts/Main/YouTubeVideo/youtubeVideoEmbed';
+import { Colors } from '../../../constants/Colors';
 import './youtubeVideoSection.css';
 
 export function YouTubeVideoSection({ osvalue, subtopicValue, tags }) {

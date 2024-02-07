@@ -2,15 +2,14 @@ import { React, useEffect, useState } from 'react';
 import { Box, Grid, MenuItem, Select, Divider } from '@mui/material';
 
 import { doc, getDoc } from 'firebase/firestore';
-import { Colors } from '../../../../constants/Colors';
-import { useAuth } from '../../../../firebase/AuthContext';
-import { db } from '../../../../firebase/firebase';
+import { Colors } from '../../../constants/Colors';
+import { useAuth } from '../../../firebase/AuthContext';
+import { db } from '../../../firebase/firebase';
 
-export function FinanceAndManagementIntro({ dataFromFirebase, dataFromFinanceAndManagementIntro }) {
+export function Intro({ dataFromFirebase, dataFromIntro, pageValue, introText }) {
 	const { currentUser } = useAuth();
 	const [value, setValue] = useState('');
 	const [osvalue, setosValue] = useState([]);
-	const pageValue = 'finance';
 	let docRef;
 
 	if (currentUser !== null) {
@@ -55,7 +54,7 @@ export function FinanceAndManagementIntro({ dataFromFirebase, dataFromFinanceAnd
 	}, [value, dataFromFirebase]);
 
 	useEffect(() => {
-		dataFromFinanceAndManagementIntro(osvalue);
+		dataFromIntro(osvalue);
 		// eslint-disable-next-line
 	}, [osvalue]);
 
@@ -143,7 +142,7 @@ export function FinanceAndManagementIntro({ dataFromFirebase, dataFromFinanceAnd
 							},
 						}}
 					>
-						Search videos tutorials for help with financial well being and management
+						{introText}
 					</Box>
 				</Box>
 			</Grid>
@@ -151,4 +150,4 @@ export function FinanceAndManagementIntro({ dataFromFirebase, dataFromFinanceAnd
 	);
 }
 
-export default FinanceAndManagementIntro;
+export default Intro;
