@@ -9,7 +9,7 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../firebase/firebase';
 import Intro from '../../../components/Video/Intro';
 
-function VideoLayout({ subtoptics, pageValue, introText }) {
+function TechVideos({ subtoptics, pageValue, introText }) {
 
 	useEffect(() => {
 		console.log('useEffect 1');
@@ -86,4 +86,4 @@ function VideoLayout({ subtoptics, pageValue, introText }) {
 	);
 }
 
-export default VideoLayout;
+export default TechVideos;
