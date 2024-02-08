@@ -104,23 +104,6 @@ export function Intro({ dataFromFirebase, dataFromIntro, pageValue, introText })
 					},
 				}}
 			>
-				<Select
-					value={value}
-					onChange={(e) => {
-						twoCalls(e);
-					}}
-				>
-					<MenuItem disabled>Mobile Devices</MenuItem>
-					<MenuItem value="iOS">iOS</MenuItem>
-					<MenuItem value="Android">Android</MenuItem>
-					<Divider />
-					<MenuItem disabled>PC</MenuItem>
-					<MenuItem value="Windows">Windows</MenuItem>
-					<MenuItem value="Mac">Mac</MenuItem>
-					<MenuItem value="Linux">Linux</MenuItem>
-					<Divider />
-					<MenuItem value="All">All</MenuItem>
-				</Select>
 			</Box>
 			<Grid item md={6} xs={12}>
 				<Box
