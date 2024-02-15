@@ -6,87 +6,8 @@ import { Colors } from '../../../constants/Colors';
 import { useAuth } from '../../../firebase/AuthContext';
 import { db } from '../../../firebase/firebase';
 
-export function Intro({ dataFromFirebase, dataFromIntro, pageValue, introText }) {
-	const { currentUser } = useAuth();
-	const [value, setValue] = useState('');
-	const [osvalue, setosValue] = useState([]);
-	let docRef;
+export function Intro({ introText }) {
 
-	if (currentUser !== null) {
-		docRef = doc(db, 'users', currentUser.uid);
-	}
-
-	useEffect(() => {
-		console.log('useEffect 2');
-		if (currentUser !== null) {
-			getDoc(docRef).then((doc) => {
-				setValue(doc.data().operating_system_used);
-			});
-		}
-		setValue('All');
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
-		console.log('useEffect 3');
-		console.log('dataFromFirebase type is ', typeof dataFromFirebase);
-		if (Array.isArray(dataFromFirebase)) {
-			const transformedData = dataFromFirebase.map((item) => ({
-				category: item.category,
-				messages: item.messages,
-				operating_system: item.operating_system,
-				stopTimes: item.stopTimes,
-				tags: item.tags,
-				url: item.url,
-				subtopic: item.subtopic,
-			}));
-			if (value === 'All') {
-				const os = transformedData.filter((video) => video.category === pageValue);
-				setosValue(os);
-			} else {
-				const os = transformedData.filter((video) => video.operating_system === value && video.category === pageValue);
-				setosValue(os);
-			}
-		} else {
-			console.log('dataFromFirebase is not an array');
-		}
-		// eslint-disable-next-line
-	}, [value, dataFromFirebase]);
-
-	useEffect(() => {
-		dataFromIntro(osvalue);
-		// eslint-disable-next-line
-	}, [osvalue]);
-
-	const filteros = (e) => {
-		const keyword = e.target.value;
-
-		if (keyword !== 'All') {
-			const filterd_os = osvalue.filter((video) => video.operating_system === keyword);
-			setosValue(filterd_os);
-		} else if (Array.isArray(dataFromFirebase)) {
-			const transformedData = dataFromFirebase.map((item) => ({
-				category: item.category,
-				messages: item.messages,
-				operating_system: item.operating_system,
-				stopTimes: item.stopTimes,
-				tags: item.tags,
-				url: item.url,
-				subtopic: item.subtopic,
-			}));
-			setosValue(transformedData.filter((video) => video.category === pageValue));
-		} else {
-			console.log('dataFromFirebase is not an array');
-		}
-		setValue(keyword);
-	};
-
-	console.log('value ', value);
-	console.log('osvalue: ', osvalue);
-	const twoCalls = (e) => {
-		setValue(e.target.value);
-		filteros(e);
-	};
 	return (
 		<>
 			<Box

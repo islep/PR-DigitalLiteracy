@@ -6,7 +6,7 @@ import YoutubeEmbed from '../../../Layouts/Main/YouTubeVideo/youtubeVideoEmbed';
 import { Colors } from '../../../constants/Colors';
 import './youtubeVideoSection.css';
 
-export function YouTubeVideoSection({ osvalue, subtopicValue, tags }) {
+export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilterTags }) {
 	// const [tags, setTags] = useState([]);
 	const [videos, setVideos] = useState(osvalue || []);
 	const [loading, setLoading] = useState(true);
@@ -55,17 +55,25 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags }) {
 	useEffect(() => {
 		if (tags.length > 0) {
 			const results = osvalue.filter((video) => {
-				const isSubset = (videoTags, inputTags) => inputTags.every((inputTag) => videoTags.includes(inputTag));
-				return isSubset(video.tags, tags) && (!video.subtopic || video.subtopic === subtopicValue);
+				const isSubset = (videoTags, inputTags) =>
+					inputTags.every((inputTag) => videoTags.includes(inputTag));
+				return (
+					isSubset(video.tags, tags) &&
+					(!video.subtopic || subtopicValue.length == 0 || video.subtopic === subtopicValue) && (video.operating_system == 'All' ||
+						appliedFilterTags.includes(video.operating_system)) && (appliedFilterTags.includes(video.category))
+				);
 			});
 			setVideos(results);
 		} else {
 			const results = osvalue.filter((video) => {
-				return (!video.subtopic || video.subtopic === subtopicValue);
+				return (
+					(!video.subtopic | subtopicValue.length == 0 || video.subtopic === subtopicValue) && (video.operating_system == 'All' ||
+						appliedFilterTags.includes(video.operating_system)) && (appliedFilterTags.includes(video.category))
+				);
 			});
 			setVideos(results);
 		}
-	}, [tags, osvalue, subtopicValue]);
+	}, [tags, osvalue, subtopicValue, appliedFilterTags]);
 
 	return (
 		<>
