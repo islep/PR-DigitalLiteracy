@@ -105,7 +105,11 @@ function TechVideos({ initialPageContent, introText }) {
 		const combinedSubtopics = commonContent.flatMap(tag => {
 			return subtopicsGroups.find(([value]) => value === tag)?.[1] || [];
 		});
-		handleResetSubtopic();
+
+		if (!combinedSubtopics.includes(subtopicValue)) {
+			handleResetSubtopic();
+		}
+
 		setDisplayedSubtopics(combinedSubtopics);
 	};
 
