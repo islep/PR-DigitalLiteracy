@@ -105,6 +105,7 @@ function TechVideos({ initialPageContent, introText }) {
 		const combinedSubtopics = commonContent.flatMap(tag => {
 			return subtopicsGroups.find(([value]) => value === tag)?.[1] || [];
 		});
+		handleResetSubtopic();
 		setDisplayedSubtopics(combinedSubtopics);
 	};
 
@@ -131,6 +132,8 @@ function TechVideos({ initialPageContent, introText }) {
 				<Intro
 					introText={introText}
 				/>
+
+				<p>display subtopic: {displayedSubtopics} | subtopicValue: {subtopicValue} | appliedFitler:{appliedFilterTags}</p>
 
 				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />

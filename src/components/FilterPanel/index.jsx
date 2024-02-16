@@ -66,7 +66,7 @@ const FilterPanelContent = ({ filterGroups, onSave, appliedFilterTags }) => {
 
 	return (
 		<>
-			<h2 className="text-xl mb-8">Filter By</h2>
+			{/* <h2 className="text-xl mb-8">Filter By</h2> */}
 			{filterGroups.map(({ subheading, filters, database_field }) => (
 				<Accordion defaultExpanded key={subheading}>
 					<AccordionSummary expandIcon={<ExpandMoreIcon />}>

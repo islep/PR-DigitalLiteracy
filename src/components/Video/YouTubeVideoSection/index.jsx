@@ -5,14 +5,20 @@ import { TagsInput } from 'react-tag-input-component';
 import YoutubeEmbed from '../../../Layouts/Main/YouTubeVideo/youtubeVideoEmbed';
 import { Colors } from '../../../constants/Colors';
 import './youtubeVideoSection.css';
+import { set } from 'lodash';
+import PropTypes from 'prop-types';
+
 
 export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilterTags }) {
-	// const [tags, setTags] = useState([]);
+
+	const showSubtopicUndefinedVideos = false;
+
 	const [videos, setVideos] = useState(osvalue || []);
-	const [loading, setLoading] = useState(true);
 	console.log('Initial osvalue:', osvalue);
 	const videoIdRegex =
 		/(?:(?:https?:\/\/)?(?:www\.)?)?youtu(?:\.be\/|be.com\/(?:watch\?(?:.*&)?v=|(?:embed|v)\/))([\w'-]+)/i;
+
+
 	useEffect(() => {
 		if (window.YT && window.YT.Player && Array.isArray(videos)) {
 			videos.forEach((video, index) => {
@@ -53,60 +59,73 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 	}, [osvalue]);
 
 	useEffect(() => {
-		if (tags.length > 0) {
-			const results = osvalue.filter((video) => {
-				const isSubset = (videoTags, inputTags) =>
-					inputTags.every((inputTag) => videoTags.includes(inputTag));
-				return (
-					isSubset(video.tags, tags) &&
-					(!video.subtopic || subtopicValue.length == 0 || video.subtopic === subtopicValue) && (video.operating_system == 'All' ||
-						appliedFilterTags.includes(video.operating_system)) && (appliedFilterTags.includes(video.category))
-				);
-			});
-			setVideos(results);
-		} else {
-			const results = osvalue.filter((video) => {
-				return (
-					(!video.subtopic | subtopicValue.length == 0 || video.subtopic === subtopicValue) && (video.operating_system == 'All' ||
-						appliedFilterTags.includes(video.operating_system)) && (appliedFilterTags.includes(video.category))
-				);
-			});
-			setVideos(results);
-		}
+		// retrieve all videos
+		const videos = osvalue.filter((video) => {
+			return (videoTags, inputTags) => inputTags.every((inputTag) => videoTags.includes(inputTag));
+		});
+
+		// filter by content type
+		const categoryVideos = videos.filter((video) => appliedFilterTags.includes(video.category));
+
+		// filter by operating system
+		const osVideos = categoryVideos.filter((video) => {
+			return video.operating_system.includes('All') || (!Array.isArray(video.operating_system) && videos.filter((video) => appliedFilterTags.includes(video.operating_system))) || (Array.isArray(video.operating_system) && video.operating_system.some(os => appliedFilterTags.includes(os)));
+		});
+
+		// filter by subtopic
+		const subtopicVideos = osVideos.filter((video) => {
+			return (showSubtopicUndefinedVideos && !video.subtopic) || (video.subtopic && (subtopicValue.length == 0 || subtopicValue == (video.subtopic)));
+		});
+
+		// filter by tags
+		const tagVideos = subtopicVideos.filter((video) => {
+			return tags.length === 0 || videos(video.tags, tags);
+		});
+
+		setVideos(tagVideos);
+
 	}, [tags, osvalue, subtopicValue, appliedFilterTags]);
 
 	return (
+		console.log('videos:', { videos }),
 		<>
-			<Box sx={{ margin: 'auto', width: '70%' }}>
-				<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
-					{videos && videos.length > 0 ? (
-						videos.map((video, index) => (
-							<Grid item xs={8} sm={4} md={6} key={video.tags}>
+			{videos && videos.length > 0 ? (
+				<Box sx={{ margin: 'auto', width: '70%' }}>
+					<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
+						{videos.map((video, index) => (
+							<Grid item xs={8} sm={4} md={6} key={video.key}>
 								<div id={`player-${index}`} />
 							</Grid>
-						))
-					) : (
-						<Box
-							sx={{
-								fontFamily: 'Inria Sans',
-								color: Colors.primaryColor,
-								textAlign: 'center',
-								fontWeight: '700',
-								padding: '2rem',
-								fontSize: {
-									md: '2rem',
-									sm: '2.25rem',
-									xs: '1.25rem',
-								},
-							}}
-						>
-							No results found
-						</Box>
-					)}
-				</Grid>
-			</Box>
+						))}
+					</Grid>
+				</Box>
+			) : (
+				<Box
+					sx={{
+						fontFamily: 'Inria Sans',
+						color: Colors.primaryColor,
+						textAlign: 'center',
+						fontWeight: '700',
+						padding: '2rem',
+						fontSize: {
+							md: '2rem',
+							sm: '2.25rem',
+							xs: '1.25rem',
+						},
+					}}
+				>
+					No results found
+				</Box>
+			)}
 		</>
 	);
 }
+
+YouTubeVideoSection.propTypes = {
+	osvalue: PropTypes.array.isRequired,
+	subtopicValue: PropTypes.string.isRequired,
+	tags: PropTypes.array,
+	appliedFilterTags: PropTypes.array,
+};
 
 export default YouTubeVideoSection;
