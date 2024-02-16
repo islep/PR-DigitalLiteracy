@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 
 export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilterTags }) {
 
-	const showSubtopicUndefinedVideos = false;
+	// this is just a parameter to hide videos without a subtopic during development
+	const showSubtopicUndefinedVideos = true;
 
 	const [videos, setVideos] = useState(osvalue || []);
 	console.log('Initial osvalue:', osvalue);

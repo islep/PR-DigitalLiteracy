@@ -133,8 +133,6 @@ function TechVideos({ initialPageContent, introText }) {
 					introText={introText}
 				/>
 
-				<p>display subtopic: {displayedSubtopics} | subtopicValue: {subtopicValue} | appliedFitler:{appliedFilterTags}</p>
-
 				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
 					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={displayedSubtopics} />
