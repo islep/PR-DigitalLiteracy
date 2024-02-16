@@ -13,17 +13,9 @@ import Intro from '../../../components/Video/Intro';
 import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 
-function TechVideos({ subtoptics, pageValue, introText }) {
+function TechVideos({ initialPageContent, introText }) {
 
-	// video database values
-	const [osvalue, setosValue] = useState([]);
-	const [dataFromFirebase, setDatafromFirebase] = useState([]);
-	const docRef = collection(db, 'youtube-videos');
-
-	// video search constants
-	const [subtopicValue, setsubtopicValue] = useState([]);
-	const [tags, tagsFromSearchBar] = useState([]);
-
+	// FINAL values that should be refactored out at some point
 	// side filter options unsorted tuple (label, database_value) array
 	const [filterGroups] = useState(() => [
 		{
@@ -47,16 +39,38 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 		},
 	]);
 
-	// database_value from filter. Currently intialized to all values. Can be replaced to store the users state or to 
-	// content type is filtered out depending on page selected
+	const [subtopicsGroups] = useState(() => [
+		['daily_life', []],
+		['finance', ['Using & Managing credit and debit cards', 'Maintaining Credit score', 'Bank Accounts', 'Savings & Interest', 'Financial scams', 'Investments & risks']],
+		['safety_privacy', []],
+		['class_word', []],
+	])
+
+	// video database values
+	const [osvalue, setosValue] = useState([]);
+	const [dataFromFirebase, setDatafromFirebase] = useState([]);
+	const docRef = collection(db, 'youtube-videos');
+
+	// video search constants
+	const [subtopicValue, setsubtopicValue] = useState([]); // current subtopic selected
+	const [tags, tagsFromSearchBar] = useState([]); // tags from the search bar
+
+	// Stores database_value from filter. Content type is filtered out depending on page selected.
+	// Currently intialized to all values. In the future this can be replaced to potentially store the users state returning to page
 	const [appliedFilterTags, setTagsFromFilter] = useState(
 		filterGroups.flatMap(({ subheading, filters }) =>
 			subheading === 'Content Type'
-				? filters.filter(([, value]) => value === pageValue).map(([, value]) => value)
+				? filters.filter(([, value]) => value === initialPageContent).map(([, value]) => value)
 				: filters.map(([, value]) => value)
 		)
 	);
 
+	// displays subtopics based on the content type selected
+	const [displayedSubtopics, setDisplayedSubtopics] = useState(
+		subtopicsGroups.find(([value]) => value === initialPageContent)?.[1] || []
+	);
+
+	// subscribe to changes when a Firestore document referenced
 	useEffect(() => {
 		console.log('useEffect 1');
 		const unsubscribe = onSnapshot(docRef, (querySnapshot) => {
@@ -68,19 +82,35 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 		// eslint-disable-next-line
 	}, []);
 
+	// set videos from Firebase
 	const dataFromIntro = (osvalue) => {
 		setosValue(osvalue);
 	};
 
+	// set value from user clicking on subtopic
 	const dataFromSubtopicSelector = (subtopicValue) => {
 		setsubtopicValue(subtopicValue);
 	};
 
+	// reset subtopic when user clicks on breadcrumb
 	const handleResetSubtopic = () => {
 		setsubtopicValue([]);
 	};
 
+	// update displayed subtopics based on filter side panel
+	const updateDisplayedSubtopics = (selectedFilterTags) => {
+		const commonContent = selectedFilterTags.filter(tag => {
+			return subtopicsGroups.some(([value]) => value.includes(tag));
+		});
+		const combinedSubtopics = commonContent.flatMap(tag => {
+			return subtopicsGroups.find(([value]) => value === tag)?.[1] || [];
+		});
+		setDisplayedSubtopics(combinedSubtopics);
+	};
+
+	// saves selected filters in the side panel
 	const onSave = (selectedFilterTags) => {
+		updateDisplayedSubtopics(selectedFilterTags);
 		setTagsFromFilter(selectedFilterTags);
 	};
 
@@ -94,8 +124,8 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 
 			<div className="md:pl-80">
 				<FirebaseRetrieveVideos
-					dataFromIntro={dataFromIntro}
 					dataFromFirebase={dataFromFirebase}
+					dataFromIntro={dataFromIntro}
 				/>
 
 				<Intro
@@ -104,10 +134,10 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 
 				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
-					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={subtoptics} />
+					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={displayedSubtopics} />
 				</Box>
 
-				{subtoptics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
+				{displayedSubtopics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}
 						subtopicValue={subtopicValue}
@@ -117,7 +147,7 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 				) : (
 					<SubtopicSelection
 						dataFromSubtopicSelector={dataFromSubtopicSelector}
-						subtopics={subtoptics} />
+						subtopics={displayedSubtopics} />
 				)}
 			</div>
 		</div >
@@ -125,10 +155,8 @@ function TechVideos({ subtoptics, pageValue, introText }) {
 }
 
 TechVideos.propTypes = {
-	subtoptics: PropTypes.array.isRequired,
-	pageValue: PropTypes.string.isRequired,
+	initialPageContent: PropTypes.string.isRequired,
 	introText: PropTypes.string.isRequired,
 };
 
 export default TechVideos;
-

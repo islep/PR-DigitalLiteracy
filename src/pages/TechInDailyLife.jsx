@@ -5,8 +5,7 @@ import TechVideos from '../Layouts/Main/TechVideos/index';
 function TechInDailyLife() {
 	const navigate = useNavigate();
 
-	const subtoptics = [];
-	const pageValue = "daily_life";
+	const initialPageContent = "daily_life";
 	const introText = "Search video tutorials for help with technology used in daily life";
 
 	useEffect(() => {
@@ -14,7 +13,7 @@ function TechInDailyLife() {
 	}, [navigate]);
 
 	return (
-		<TechVideos introText={introText} pageValue={pageValue} subtoptics={subtoptics} />
+		<TechVideos introText={introText} initialPageContent={initialPageContent} />
 	);
 }
 

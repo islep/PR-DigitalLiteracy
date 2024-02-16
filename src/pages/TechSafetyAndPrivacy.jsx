@@ -5,8 +5,7 @@ import TechVideos from '../Layouts/Main/TechVideos/index';
 function TechSafetyAndPrivacy() {
 	const navigate = useNavigate();
 
-	const subtoptics = [];
-	const pageValue = "safety_privacy";
+	const initialPageContent = "safety_privacy";
 	const introText = "Search video tutorials for information on technology safety and privacy";
 
 	useEffect(() => {
@@ -14,7 +13,7 @@ function TechSafetyAndPrivacy() {
 	}, [navigate]);
 
 	return (
-		<TechVideos introText={introText} pageValue={pageValue} subtoptics={subtoptics} />
+		<TechVideos introText={introText} initialPageContent={initialPageContent} />
 	);
 }
 
