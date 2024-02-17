@@ -7,7 +7,6 @@ import { Colors } from '../../../constants/Colors';
 import './youtubeVideoSection.css';
 import { set } from 'lodash';
 import PropTypes from 'prop-types';
-import { red } from '@mui/material/colors';
 
 
 export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilterTags }) {
