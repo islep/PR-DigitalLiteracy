@@ -80,7 +80,7 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 
 		// filter by tags
 		const tagVideos = subtopicVideos.filter((video) => {
-			return tags.length === 0 || videos(video.tags, tags);
+			return tags.length === 0 || (!Array.isArray(video.tags) && videos.filter((video) => tags.includes(video.tags))) || (Array.isArray(video.tags) && video.tags.some(tag => tags.includes(tag)))
 		});
 
 		setVideos(tagVideos);

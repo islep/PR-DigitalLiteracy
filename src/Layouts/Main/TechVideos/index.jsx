@@ -151,9 +151,11 @@ function TechVideos({ initialPageContent, introText }) {
 						appliedFilterTags={appliedFilterTags}
 					/>
 				) : (
-					<SubtopicSelection
-						dataFromSubtopicSelector={dataFromSubtopicSelector}
-						subtopics={displayedSubtopics} />
+					<Box sx={{ margin: '0% 10%' }}>
+						<SubtopicSelection
+							dataFromSubtopicSelector={dataFromSubtopicSelector}
+							subtopics={displayedSubtopics} />
+					</Box>
 				)}
 			</div>
 		</div >
