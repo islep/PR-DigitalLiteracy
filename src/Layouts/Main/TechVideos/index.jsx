@@ -142,6 +142,7 @@ function TechVideos({ initialPageContent, introText }) {
 					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={displayedSubtopics} />
 				</Box>
 
+				{/*if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos*/}
 				{displayedSubtopics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}

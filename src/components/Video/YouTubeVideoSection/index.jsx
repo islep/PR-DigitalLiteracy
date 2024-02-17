@@ -7,11 +7,12 @@ import { Colors } from '../../../constants/Colors';
 import './youtubeVideoSection.css';
 import { set } from 'lodash';
 import PropTypes from 'prop-types';
+import { red } from '@mui/material/colors';
 
 
 export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilterTags }) {
 
-	// this is just a parameter to hide videos without a subtopic during development
+	// this is just a parameter to hide videos without a subtopic during testing
 	const showSubtopicUndefinedVideos = true;
 
 	const [videos, setVideos] = useState(osvalue || []);
@@ -88,14 +89,17 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 	}, [tags, osvalue, subtopicValue, appliedFilterTags]);
 
 	return (
+
 		console.log('videos:', { videos }),
 		<>
 			{videos && videos.length > 0 ? (
-				<Box sx={{ margin: 'auto', width: '70%' }}>
+				/* add margin to sides */
+				<Box sx={{ margin: '0% 10%' }}>
 					<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 						{videos.map((video, index) => (
 							<Grid item xs={8} sm={4} md={6} key={video.key}>
-								<div id={`player-${index}`} />
+								<div id={`player-${index}`} style={{ width: '100%', height: '300px', background: 'black' }}>
+								</div>
 							</Grid>
 						))}
 					</Grid>
