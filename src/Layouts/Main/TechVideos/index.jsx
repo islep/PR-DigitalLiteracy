@@ -1,17 +1,17 @@
 
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
-import { Breadcrumb } from '../../../components/Video/Breadcrumb';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../firebase/firebase';
+
+import Breadcrumb from '../../../components/Video/Breadcrumb';
 import FilterPanel from '../../../components/FilterPanel';
 import Searchbar from '../../../components/Video/Searchbar';
 import SubtopicSelection from '../../../components/Video/SubtopicSelection';
 import YouTubeVideoSection from '../../../components/Video/YouTubeVideoSection';
 import FirebaseRetrieveVideos from '../../../components/Video/FirebaseRetrieveVideos';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../../../firebase/firebase';
 import Intro from '../../../components/Video/Intro';
-import PropTypes from 'prop-types';
-import { filter } from 'lodash';
 
 function TechVideos({ initialPageContent, introText }) {
 
@@ -83,13 +83,13 @@ function TechVideos({ initialPageContent, introText }) {
 	}, []);
 
 	// set videos from Firebase
-	const dataFromIntro = (osvalue) => {
-		setosValue(osvalue);
+	const dataFromIntro = (val) => {
+		setosValue(val);
 	};
 
 	// set value from user clicking on subtopic
-	const dataFromSubtopicSelector = (subtopicValue) => {
-		setsubtopicValue(subtopicValue);
+	const dataFromSubtopicSelector = (val) => {
+		setsubtopicValue(val);
 	};
 
 	// reset subtopic when user clicks on breadcrumb
@@ -99,12 +99,8 @@ function TechVideos({ initialPageContent, introText }) {
 
 	// update displayed subtopics based on filter side panel
 	const updateDisplayedSubtopics = (selectedFilterTags) => {
-		const commonContent = selectedFilterTags.filter(tag => {
-			return subtopicsGroups.some(([value]) => value.includes(tag));
-		});
-		const combinedSubtopics = commonContent.flatMap(tag => {
-			return subtopicsGroups.find(([value]) => value === tag)?.[1] || [];
-		});
+		const commonContent = selectedFilterTags.filter(tag => subtopicsGroups.some(([value]) => value.includes(tag)));
+		const combinedSubtopics = commonContent.flatMap(tag => subtopicsGroups.find(([value]) => value === tag)?.[1] || []);
 
 		if (!combinedSubtopics.includes(subtopicValue)) {
 			handleResetSubtopic();
@@ -133,17 +129,19 @@ function TechVideos({ initialPageContent, introText }) {
 					dataFromIntro={dataFromIntro}
 				/>
 
-				<Intro
-					introText={introText}
-				/>
+				<Box sx={{ margin: '0% 10%' }}>
+					<Intro
+						introText={introText}
+					/>
+				</Box>
 
 				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
 					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={displayedSubtopics} />
 				</Box>
 
-				{/*if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos*/}
-				{displayedSubtopics.length == 0 || subtopicValue.length > 0 || tags.length > 0 ? (
+				{/* if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos */}
+				{displayedSubtopics.length === 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
 						osvalue={osvalue}
 						subtopicValue={subtopicValue}

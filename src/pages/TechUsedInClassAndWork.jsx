@@ -9,6 +9,10 @@ function TechUsedInClassAndWork() {
 	const initialPageContent = "class_word";
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
+	});
+
+	useEffect(() => {
 		navigate('/techInClassAndWork');
 	}, [navigate]);
 

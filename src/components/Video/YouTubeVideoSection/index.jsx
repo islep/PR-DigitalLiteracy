@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../../../src/Layouts/Main/YouTubeVideo/youtubeVideo.css';
+import "../../../Layouts/Main/YouTubeVideo/youtubeVideo.css";
 import { Box, Grid, CircularProgress } from '@mui/material';
 import { TagsInput } from 'react-tag-input-component';
 import YoutubeEmbed from '../../../Layouts/Main/YouTubeVideo/youtubeVideoEmbed';
@@ -61,27 +61,19 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 
 	useEffect(() => {
 		// retrieve all videos
-		const videos = osvalue.filter((video) => {
-			return (videoTags, inputTags) => inputTags.every((inputTag) => videoTags.includes(inputTag));
-		});
+		const videos = osvalue.filter((video) => (videoTags, inputTags) => inputTags.every((inputTag) => videoTags.includes(inputTag)));
 
 		// filter by content type
 		const categoryVideos = videos.filter((video) => appliedFilterTags.includes(video.category));
 
 		// filter by operating system
-		const osVideos = categoryVideos.filter((video) => {
-			return video.operating_system.includes('All') || (!Array.isArray(video.operating_system) && videos.filter((video) => appliedFilterTags.includes(video.operating_system))) || (Array.isArray(video.operating_system) && video.operating_system.some(os => appliedFilterTags.includes(os)));
-		});
+		const osVideos = categoryVideos.filter((video) => video.operating_system.includes('All') || (!Array.isArray(video.operating_system) && videos.filter((video) => appliedFilterTags.includes(video.operating_system))) || (Array.isArray(video.operating_system) && video.operating_system.some(os => appliedFilterTags.includes(os))));
 
 		// filter by subtopic
-		const subtopicVideos = osVideos.filter((video) => {
-			return (showSubtopicUndefinedVideos && !video.subtopic) || (video.subtopic && (subtopicValue.length == 0 || subtopicValue == (video.subtopic)));
-		});
+		const subtopicVideos = osVideos.filter((video) => (showSubtopicUndefinedVideos && !video.subtopic) || (video.subtopic && (subtopicValue.length == 0 || subtopicValue == (video.subtopic))));
 
 		// filter by tags
-		const tagVideos = subtopicVideos.filter((video) => {
-			return tags.length === 0 || (!Array.isArray(video.tags) && videos.filter((video) => tags.includes(video.tags))) || (Array.isArray(video.tags) && video.tags.some(tag => tags.includes(tag)))
-		});
+		const tagVideos = subtopicVideos.filter((video) => tags.length === 0 || (!Array.isArray(video.tags) && videos.filter((video) => tags.includes(video.tags))) || (Array.isArray(video.tags) && video.tags.some(tag => tags.includes(tag))));
 
 		setVideos(tagVideos);
 
@@ -97,8 +89,7 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 					<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 						{videos.map((video, index) => (
 							<Grid item xs={8} sm={4} md={6} key={video.key}>
-								<div id={`player-${index}`} style={{ width: '100%', height: '300px', background: 'black' }}>
-								</div>
+								<div id={`player-${index}`} style={{ width: '100%', height: '300px', background: 'black' }} />
 							</Grid>
 						))}
 					</Grid>
@@ -116,6 +107,7 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 							sm: '2.25rem',
 							xs: '1.25rem',
 						},
+						marginBottom: '10%',
 					}}
 				>
 					No results found

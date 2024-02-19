@@ -9,6 +9,10 @@ function FinanceAndManagement() {
 	const initialPageContent = "finance";
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
+	});
+
+	useEffect(() => {
 		navigate('/financeAndManagement');
 	}, [navigate]);
 

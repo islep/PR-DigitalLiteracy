@@ -9,6 +9,10 @@ function TechInDailyLife() {
 	const introText = "Search video tutorials for help with technology used in daily life";
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
+	});
+
+	useEffect(() => {
 		navigate('/techInDailyLife');
 	}, [navigate]);
 

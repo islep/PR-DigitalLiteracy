@@ -9,6 +9,10 @@ function TechSafetyAndPrivacy() {
 	const introText = "Search video tutorials for information on technology safety and privacy";
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
+	});
+
+	useEffect(() => {
 		navigate('/techSafetyAndPrivacy');
 	}, [navigate]);
 
