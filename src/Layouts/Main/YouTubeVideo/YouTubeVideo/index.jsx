@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { addVideoData } from '../../../../firebase/firebaseReadWrite';
 import { Colors } from '../../../../constants/Colors';
 import { inputStyle, multiLineInputStyle } from '../../ResumeBuilder/styles.js';
-import { Box, Grid, FormControl, InputLabel, Select, MenuItem, TextField, Button, Divider } from '@mui/material';
+import { Box, Grid, FormControl, FormControlLabel, Checkbox, InputLabel, Select, MenuItem, TextField, Button, Divider } from '@mui/material';
 import YouTube from 'react-youtube';
 import { TagsInput } from 'react-tag-input-component';
 import './styles.css';
 import Swal from 'sweetalert2';
+import { filter } from 'lodash';
 
 function YouTubeVideo() {
 	const [url, setUrl] = useState('');
@@ -16,7 +17,13 @@ function YouTubeVideo() {
 	const [videoId, setVideoId] = useState('');
 	const [opts, setOpts] = useState({});
 
-	const [count, setCount] = useState(0);
+	const [count, setCount] = useState(0);// as far as i can tell this variable does like actually nothing like wtf did the previous group add this for -ben
+
+	// adding for checkbox
+	const [isChecked, setIsChecked] = useState(false);
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
 
 	const handleUrlChange = (e) => {
 		const newurl = e.target.value;
@@ -28,7 +35,7 @@ function YouTubeVideo() {
 		const videoIdRegex =
 			/(?:(?:https?:\/\/)?(?:www\.)?)?youtu(?:\.be\/|be.com\/(?:watch\?(?:.*&)?v=|(?:embed|v)\/))([\w'-]+)/i;
 		const match = url.match(videoIdRegex);
-		if (match) {
+		if (match && match[1]) {
 			return match[1];
 		}
 		setVideoId('');
@@ -63,37 +70,92 @@ function YouTubeVideo() {
 		},
 	]);
 
+	{/* changing for if box is checked */}
 	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setVideoId('');
+		if (isChecked) {
+			// alert("CHECKED");
+			e.preventDefault();
+			setVideoId('');
 
-		// eslint-disable-next-line
-		const urlRegex = /^(https?:\/\/)/i;
+			const urlRegex = /^(https?:\/\/)/i;
 
-		try {
-			await addVideoData('youtube-videos', {
-				url,
-				tags,
-				operating_system,
-				category,
-				stopTimes,
-				messages,
-			});
-			setUrl('');
-			setTags([]);
-			setOs('');
-			setCategory('');
-			setStopTimes([]);
-			setMessage([]);
-			Swal.fire({
-				width: '30rem',
-				height: '10rem',
-				text: 'Video added successfully!',
-				icon: 'success',
-			});
-		} catch (e) {
-			console.log('Error adding video:', e);
+			try {
+				const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+                const data = await response.json();
+                const video = data.items[0];
+				
+				const desc = video.snippet.description;
+				// filter the description for the timestamps
+				const lines = desc.split('\n');
+				const filteredLines = lines.filter(line => /^\s*\d+:\d+/.test(line));
+				const updatedStopTimes = filteredLines.map(line => convertToSeconds(line.split(' ')[0]));
+				updatedStopTimes.shift();
+				const updatedMessages = filteredLines.map(() => "Did you understand this section?");
+				
+				setStopTimes(updatedStopTimes);
+				setMessage(updatedMessages);
+
+				// alert("stopTimes: " + updatedStopTimes + "\nmessages: " + updatedMessages);
+
+				await addVideoData('youtube-videos', {
+					url,
+					tags,
+					operating_system,
+					category,
+					stopTimes: updatedStopTimes,
+                	messages: updatedMessages,
+				});
+				setUrl('');
+				setTags([]);
+				setOs('');
+				setCategory('');
+							
+				Swal.fire({
+					width: '30rem',
+					height: '10rem',
+					text: 'Video added successfully!',
+					icon: 'success',
+				});
+			
+			} catch (e) {
+				alert(e);
+			}
+
+		} else {
+			e.preventDefault();
+			setVideoId('');
+	
+			// eslint-disable-next-line
+			const urlRegex = /^(https?:\/\/)/i;
+			
+			// alert("stopTimes: " + stopTimes + "\nmessages: " + messages);
+	
+			try {
+				await addVideoData('youtube-videos', {
+					url,
+					tags,
+					operating_system,
+					category,
+					stopTimes,
+					messages,
+				});
+				setUrl('');
+				setTags([]);
+				setOs('');
+				setCategory('');
+				setStopTimes([]);
+        		setMessage([]);
+				Swal.fire({
+					width: '30rem',
+					height: '10rem',
+					text: 'Video added successfully!',
+					icon: 'success',
+				});
+			} catch (e) {
+				console.log('Error adding video:', e);
+			}
 		}
+
 	};
 
 	const onAddBtnClick = () => {
@@ -133,6 +195,8 @@ function YouTubeVideo() {
 		setMessage(message);
 		setCount(count + 1);
 	};
+
+
 
 	const messageInput = messages.map((input, index) => (
 		<Box key={index}>
@@ -464,6 +528,8 @@ function YouTubeVideo() {
 					</Grid>
 				</Box>
 			</Box>
+			
+			{/* Altering this to have a checkbox that hides it -ben*/}
 			<Box
 				sx={{
 					backgroundColor: Colors.backgroundColor,
@@ -473,28 +539,42 @@ function YouTubeVideo() {
 					margin: 'auto',
 					paddingBottom: '2rem',
 					width: '90%',
+					marginTop: '2rem',
 				}}
-			>
-				{messageInput}
+			>	
 				<Grid container spacing={2} sx={{ margin: 'auto', width: '97%' }}>
-					<Grid item md={6} xs={3} />
-					<Grid item md={6} xs={9}>
-						<Box
-							sx={{
-								color: Colors.primaryColor,
-								fontSize: { sm: '1rem', xs: '0.8rem' },
-								textAlign: 'end',
-								marginTop: '1rem',
-								paddingRight: '1rem',
-								cursor: 'pointer',
-							}}
-							onClick={onAddBtnClick}
-						>
-							+ Add a Segment
-						</Box>
-					</Grid>
+					<Grid item>
+                    	<FormControlLabel
+                        control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
+                        label="Use default segmentation from the video"
+                    	/>
+                	</Grid>
+					{!isChecked && (
+                		<>
+						<Grid item xs={12}>
+							{messageInput}
+                        </Grid>
+						<Grid item md={6} xs={3} />
+						<Grid item md={6} xs={9}>
+							<Box
+								sx={{
+									color: Colors.primaryColor,
+									fontSize: { sm: '1rem', xs: '0.8rem' },
+									textAlign: 'end',
+									marginTop: '1rem',
+									paddingRight: '1rem',
+									cursor: 'pointer',
+								}}
+								onClick={onAddBtnClick}
+							>
+								+ Add a Segment
+							</Box>
+						</Grid>
+						</>
+					)}
 				</Grid>
 			</Box>
+			
 			<Box
 				sx={{
 					height: 'auto',

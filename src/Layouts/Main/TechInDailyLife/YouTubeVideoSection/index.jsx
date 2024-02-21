@@ -5,7 +5,6 @@ import { TagsInput } from 'react-tag-input-component';
 import YoutubeEmbed from '../../YouTubeVideo/youtubeVideoEmbed';
 import { Colors } from '../../../../constants/Colors';
 import './youtubeVideoSection.css';
-
 export function YouTubeVideoSection({ osvalue }) {
 	const [tags, setTags] = useState([]);
 	const [videos, setVideos] = useState(osvalue || []);
@@ -26,7 +25,6 @@ export function YouTubeVideoSection({ osvalue }) {
 			});
 		}
 	}, [videos]);
-
 	// console.log(videos);
 	useEffect(() => {
 		// Load the IFrame Player API code asynchronously.
@@ -36,7 +34,6 @@ export function YouTubeVideoSection({ osvalue }) {
 			const firstScriptTag = document.getElementsByTagName('script')[0];
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		}
-
 		window.onYouTubeIframeAPIReady = () => {
 			videos.forEach((video, index) => {
 				const match = video.url.match(videoIdRegex);
@@ -48,10 +45,8 @@ export function YouTubeVideoSection({ osvalue }) {
 				});
 			});
 		};
-
 		setVideos(osvalue);
 	}, [osvalue]);
-
 	useEffect(() => {
 		if (tags.length > 0) {
 			const results = osvalue.filter((video) => {
@@ -63,7 +58,6 @@ export function YouTubeVideoSection({ osvalue }) {
 			setVideos(osvalue);
 		}
 	}, [tags, osvalue]);
-
 	return (
 		<>
 			<Box sx={{ margin: 'auto', width: '70%' }}>
@@ -105,11 +99,18 @@ export function YouTubeVideoSection({ osvalue }) {
 			<Box sx={{ margin: 'auto', width: '70%', marginTop: '2rem' }}>
 				<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
 					{videos && videos.length > 0 ? (
-						videos.map((video, index) => (
-							<Grid item xs={8} sm={4} md={6} key={video.tags}>
-								<div id={`player-${index}`} />
-							</Grid>
-						))
+						
+						videos.map((video) => {
+							const match = video.url.match(videoIdRegex);
+							const embedId = match ? match[1] : null;
+
+							return(
+								<Grid item xs={8} sm={4} md={6} key={video.tags}>
+									<YoutubeEmbed embedId={embedId} stopTimes={video.stopTimes} messages={video.messages} />
+								</Grid>
+							)
+
+						})
 					) : (
 						<Box
 							sx={{
@@ -133,5 +134,4 @@ export function YouTubeVideoSection({ osvalue }) {
 		</>
 	);
 }
-
 export default YouTubeVideoSection;
