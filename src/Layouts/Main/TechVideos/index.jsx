@@ -40,10 +40,10 @@ function TechVideos({ initialPageContent, introText }) {
 	]);
 
 	const [subtopicsGroups] = useState(() => [
-		['daily_life', []],
+		['daily_life', ['Introduction to Basic Devices','Emails', 'Internet Browsing', 'Social Media Basics', 'Social Media Basics', 'Digital Communication', 'Understanding Apps']],
 		['finance', ['Using & Managing credit and debit cards', 'Maintaining Credit score', 'Bank Accounts', 'Savings & Interest', 'Financial scams', 'Investments & risks']],
-		['safety_privacy', []],
-		['class_word', []],
+		['safety_privacy', ['Introduction to Digital Safety', 'Creating Strong Passwords', 'Understanding Personal Information', 'Social Media Safety', 'Safe Browsing Practices', 'Email Security: Recognizing phishing emails', 'Device Security', 'Wi-Fi Security', 'Online Shopping Safety', 'Privacy Settings on Mobile Devices', 'Backing Up Data', 'Cyberbullying Awareness', 'Digital Footprint', 'Two-Factor Authentication (2FA)', 'Emergency Response']],
+		['class_word', ['Using Microsoft Word', 'Using Microsoft Excel', 'Using Google Docs', 'Using Google Sheets', 'Canvas Learning Management System', 'Effective Email Communication', 'Video Conferencing Tools (e.g., Zoom, Microsoft Teams)', 'File Management', 'Time Management Tools (e.g., Calendar)', 'Presentation Software (e.g., PowerPoint, Google Slides)', 'Cybersecurity Awareness', 'Adapting to Technological Changes']],
 	])
 
 	// video database values

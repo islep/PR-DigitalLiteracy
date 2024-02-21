@@ -9,21 +9,27 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 		}
 	}
 
+	const getRandomColor = (subtopic) => {
+		const seed = subtopic.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) / 1000000;
+		const color = `#${Math.floor(seed * 16777215).toString(16)}`;
+		return color;
+	};
+
 	return (
 
-		<div className="w-full flex items-center justify-center pb-36">
+		<div className="flex items-center justify-center">
 			<div className="grid grid-cols-2 gap-4 md:gap-9 max-w-screen-xl">
 				{subtopics.map((subtopic, index) => (
 					<div
-						className="w-full bg-white rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 transition-all duration-150"
+						className="w-full rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 transition-all duration-150 p-8"
 						onClick={() => handleSubtopicSelection(subtopic)}
 						key={index}
+						style={{ backgroundColor: getRandomColor(subtopic) }}
 					>
-						<div className="flex-col items-stretch justify-center w-full p-8">
-							<div className="border-b border-gray-200">
-								<img src={placeholderImage} alt={subtopic} className=" h-full w-full my-4 p-4" />
-							</div>
-							<h5 className="text-xl font-bold py-3" style={{ textAlign: 'center' }}>{subtopic}</h5>
+						<div className='h-64 w-96 flex items-center justify-center'>
+							<h3 className="text-2xl font-bold py-4 bg-white p-3 text-center	rounded">
+								{subtopic}
+							</h3>
 						</div>
 					</div>
 				))}
