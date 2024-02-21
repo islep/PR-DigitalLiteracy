@@ -17,7 +17,7 @@ const cardData = [
 		image: cardImage2,
 		heading: 'Technology use for Class and Work',
 		subItems: ['Microsoft Office Basics', 'Printing and Scanning', 'Email and Document Upload'],
-		href: PATHS.techInClassAndWord,
+		href: PATHS.techInClassAndWork,
 	},
 	{
 		image: cardImage3,

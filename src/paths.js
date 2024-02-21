@@ -4,7 +4,7 @@ const PATHS = {
 	signUp: "/signUp",
 	forgotPassword: "/forgotPassword",
 	techInDailyLife: "/techInDailyLife",
-	techInClassAndWord: "/techInClassAndWord",
+	techInClassAndWork: "/techInClassAndWork",
 	techSafetyAndPrivacy: "/techSafetyAndPrivacy",
 	financeAndManagement: "/financeAndManagement",
 	quiz: "/quiz",
