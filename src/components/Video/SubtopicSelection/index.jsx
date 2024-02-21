@@ -11,7 +11,7 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 
 	const getRandomColor = (subtopic) => {
 		const seed = subtopic.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) / 1000000;
-		const color = `#${Math.floor(seed * 16777215).toString(16)}`;
+		const color = `#${Math.floor(seed * 2472384789).toString(16)}`;
 		return color;
 	};
 
