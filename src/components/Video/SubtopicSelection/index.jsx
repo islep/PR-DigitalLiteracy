@@ -18,19 +18,17 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 	return (
 
 		<div className="flex items-center justify-center">
-			<div className="grid grid-cols-2 gap-4 md:gap-9 max-w-screen-xl">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
 				{subtopics.map((subtopic, index) => (
 					<div
-						className="w-full rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 transition-all duration-150 p-8"
+						className="h-72 w-auto rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 duration-150 p-8 justify-center items-center place-items-center grid "
 						onClick={() => handleSubtopicSelection(subtopic)}
 						key={index}
 						style={{ backgroundColor: getRandomColor(subtopic) }}
 					>
-						<div className='h-64 w-96 flex items-center justify-center'>
-							<h3 className="text-2xl font-bold py-4 bg-white p-3 text-center	rounded">
-								{subtopic}
-							</h3>
-						</div>
+						<h3 className="text-2xl font-bold py-4 bg-white p-3 text-center rounded">
+							{subtopic}
+						</h3>
 					</div>
 				))}
 			</div>
