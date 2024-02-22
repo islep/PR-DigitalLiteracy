@@ -17,7 +17,7 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 
 	return (
 
-		<div className="flex items-center justify-center">
+		<div className="items-center justify-center">
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
 				{subtopics.map((subtopic, index) => (
 					<div
