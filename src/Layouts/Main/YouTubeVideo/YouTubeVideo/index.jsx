@@ -90,7 +90,7 @@ function YouTubeVideo() {
 				const filteredLines = lines.filter(line => /^\s*\d+:\d+/.test(line));
 				const updatedStopTimes = filteredLines.map(line => convertToSeconds(line.split(' ')[0]));
 				updatedStopTimes.shift();
-				const updatedMessages = filteredLines.map(() => "Did you understand this section?");
+				const updatedMessages = filteredLines.map(() => "Are you following along so far?");
 				
 				setStopTimes(updatedStopTimes);
 				setMessage(updatedMessages);
