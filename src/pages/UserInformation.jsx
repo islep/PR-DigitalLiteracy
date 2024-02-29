@@ -17,8 +17,6 @@ import { doc } from 'firebase/firestore';
 import { useAuth } from '../firebase/AuthContext';
 
 import { Colors } from '../constants/Colors';
-import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
 import { db } from '../firebase/firebase';
 import { updateData } from '../firebase/firebaseReadWrite';
 
@@ -62,7 +60,7 @@ function UserInformation() {
 
 	return (
 		<div>
-			<div style={{ marginTop: '5rem' }}>
+			<div style={{ marginTop: '8rem' }}>
 				<Box
 					sx={{
 						backgroundColor: Colors.backgroundColor,

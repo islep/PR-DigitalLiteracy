@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
@@ -14,7 +13,6 @@ import FirebaseRetrieveVideos from '../../../components/Video/FirebaseRetrieveVi
 import Intro from '../../../components/Video/Intro';
 
 function TechVideos({ initialPageContent, introText }) {
-
 	// FINAL values that should be refactored out at some point
 	// side filter options unsorted tuple (label, database_value) array
 	const [filterGroups] = useState(() => [
@@ -40,11 +38,67 @@ function TechVideos({ initialPageContent, introText }) {
 	]);
 
 	const [subtopicsGroups] = useState(() => [
-		['daily_life', ['Introduction to Basic Devices','Emails', 'Internet Browsing', 'Social Media Basics', 'Social Media Basics', 'Digital Communication', 'Understanding Apps']],
-		['finance', ['Using & Managing credit and debit cards', 'Maintaining Credit score', 'Bank Accounts', 'Savings & Interest', 'Financial scams', 'Investments & risks']],
-		['safety_privacy', ['Introduction to Digital Safety', 'Creating Strong Passwords', 'Understanding Personal Information', 'Social Media Safety', 'Safe Browsing Practices', 'Email Security: Recognizing phishing emails', 'Device Security', 'Wi-Fi Security', 'Online Shopping Safety', 'Privacy Settings on Mobile Devices', 'Backing Up Data', 'Cyberbullying Awareness', 'Digital Footprint', 'Two-Factor Authentication (2FA)', 'Emergency Response']],
-		['class_word', ['Using Microsoft Word', 'Using Microsoft Excel', 'Using Google Docs', 'Using Google Sheets', 'Canvas Learning Management System', 'Effective Email Communication', 'Video Conferencing Tools (e.g., Zoom, Microsoft Teams)', 'File Management', 'Time Management Tools (e.g., Calendar)', 'Presentation Software (e.g., PowerPoint, Google Slides)', 'Cybersecurity Awareness', 'Adapting to Technological Changes']],
-	])
+		[
+			'daily_life',
+			[
+				'Introduction to Basic Devices',
+				'Emails',
+				'Internet Browsing',
+				'Social Media Basics',
+				'Social Media Basics',
+				'Digital Communication',
+				'Understanding Apps',
+			],
+		],
+		[
+			'finance',
+			[
+				'Using & Managing credit and debit cards',
+				'Maintaining Credit score',
+				'Bank Accounts',
+				'Savings & Interest',
+				'Financial scams',
+				'Investments & risks',
+			],
+		],
+		[
+			'safety_privacy',
+			[
+				'Introduction to Digital Safety',
+				'Creating Strong Passwords',
+				'Understanding Personal Information',
+				'Social Media Safety',
+				'Safe Browsing Practices',
+				'Email Security: Recognizing phishing emails',
+				'Device Security',
+				'Wi-Fi Security',
+				'Online Shopping Safety',
+				'Privacy Settings on Mobile Devices',
+				'Backing Up Data',
+				'Cyberbullying Awareness',
+				'Digital Footprint',
+				'Two-Factor Authentication (2FA)',
+				'Emergency Response',
+			],
+		],
+		[
+			'class_word',
+			[
+				'Using Microsoft Word',
+				'Using Microsoft Excel',
+				'Using Google Docs',
+				'Using Google Sheets',
+				'Canvas Learning Management System',
+				'Effective Email Communication',
+				'Video Conferencing Tools (e.g., Zoom, Microsoft Teams)',
+				'File Management',
+				'Time Management Tools (e.g., Calendar)',
+				'Presentation Software (e.g., PowerPoint, Google Slides)',
+				'Cybersecurity Awareness',
+				'Adapting to Technological Changes',
+			],
+		],
+	]);
 
 	// video database values
 	const [osvalue, setosValue] = useState([]);
@@ -61,13 +115,13 @@ function TechVideos({ initialPageContent, introText }) {
 		filterGroups.flatMap(({ subheading, filters }) =>
 			subheading === 'Content Type'
 				? filters.filter(([, value]) => value === initialPageContent).map(([, value]) => value)
-				: filters.map(([, value]) => value)
-		)
+				: filters.map(([, value]) => value),
+		),
 	);
 
 	// displays subtopics based on the content type selected
 	const [displayedSubtopics, setDisplayedSubtopics] = useState(
-		subtopicsGroups.find(([value]) => value === initialPageContent)?.[1] || []
+		subtopicsGroups.find(([value]) => value === initialPageContent)?.[1] || [],
 	);
 
 	// subscribe to changes when a Firestore document referenced
@@ -99,8 +153,10 @@ function TechVideos({ initialPageContent, introText }) {
 
 	// update displayed subtopics based on filter side panel
 	const updateDisplayedSubtopics = (selectedFilterTags) => {
-		const commonContent = selectedFilterTags.filter(tag => subtopicsGroups.some(([value]) => value.includes(tag)));
-		const combinedSubtopics = commonContent.flatMap(tag => subtopicsGroups.find(([value]) => value === tag)?.[1] || []);
+		const commonContent = selectedFilterTags.filter((tag) => subtopicsGroups.some(([value]) => value.includes(tag)));
+		const combinedSubtopics = commonContent.flatMap(
+			(tag) => subtopicsGroups.find(([value]) => value === tag)?.[1] || [],
+		);
 
 		if (!combinedSubtopics.includes(subtopicValue)) {
 			handleResetSubtopic();
@@ -117,27 +173,22 @@ function TechVideos({ initialPageContent, introText }) {
 
 	return (
 		<div>
-			<FilterPanel
-				filterGroups={filterGroups}
-				onSave={(onSave)}
-				appliedFilterTags={(appliedFilterTags)}
-			/>
+			<FilterPanel filterGroups={filterGroups} onSave={onSave} appliedFilterTags={appliedFilterTags} />
 
 			<div className="md:pl-80">
-				<FirebaseRetrieveVideos
-					dataFromFirebase={dataFromFirebase}
-					dataFromIntro={dataFromIntro}
-				/>
+				<FirebaseRetrieveVideos dataFromFirebase={dataFromFirebase} dataFromIntro={dataFromIntro} />
 
 				<Box sx={{ margin: '0% 10%' }}>
-					<Intro
-						introText={introText}
-					/>
+					<Intro introText={introText} />
 				</Box>
 
 				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
-					<Breadcrumb subtopicValue={subtopicValue} handleResetSubtopic={handleResetSubtopic} subtopics={displayedSubtopics} />
+					<Breadcrumb
+						subtopicValue={subtopicValue}
+						handleResetSubtopic={handleResetSubtopic}
+						subtopics={displayedSubtopics}
+					/>
 				</Box>
 
 				{/* if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos */}
@@ -149,14 +200,12 @@ function TechVideos({ initialPageContent, introText }) {
 						appliedFilterTags={appliedFilterTags}
 					/>
 				) : (
-					<Box sx={{ margin: '0% 10%' }}>
-						<SubtopicSelection
-							dataFromSubtopicSelector={dataFromSubtopicSelector}
-							subtopics={displayedSubtopics} />
+					<Box sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+						<SubtopicSelection dataFromSubtopicSelector={dataFromSubtopicSelector} subtopics={displayedSubtopics} />
 					</Box>
 				)}
 			</div>
-		</div >
+		</div>
 	);
 }
 

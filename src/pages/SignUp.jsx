@@ -12,7 +12,6 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import Footer from '../Layouts/Footer';
 import Navbar from '../Layouts/Navbar';
 import PasswordRules from '../components/PasswordRules';
 import { isEmailValid, isPasswordValid } from '../utils';
@@ -70,7 +69,7 @@ function SignUp() {
 	return (
 		<div>
 			<Navbar />
-			<div style={{ marginTop: '5rem' }}>
+			<div style={{ marginTop: '8rem' }}>
 				<Box
 					sx={{
 						backgroundColor: Colors.backgroundColor,
@@ -207,7 +206,6 @@ function SignUp() {
 					</Grid>
 				</Box>
 			</div>
-			<Footer />
 		</div>
 	);
 }
