@@ -179,7 +179,7 @@ function TechVideos({ initialPageContent, introText }) {
 					<Intro introText={introText} />
 				</Box>
 
-				<Box style={{ margin: 'auto', width: '70%', paddingBottom: '2rem' }}>
+				<Box className="mx-32" style={{ paddingBottom: '2rem' }}>
 					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
 					<Breadcrumb
 						subtopicValue={subtopicValue}
@@ -190,16 +190,18 @@ function TechVideos({ initialPageContent, introText }) {
 
 				{/* if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos */}
 				{displayedSubtopics.length === 0 || subtopicValue.length > 0 || tags.length > 0 ? (
-					<YouTubeVideoSection
-						osvalue={videoValue}
-						subtopicValue={subtopicValue}
-						tags={tags}
-						appliedFilterTags={appliedFilterTags}
-					/>
+					<div className="flex mx-32 justify-center">
+						<YouTubeVideoSection
+							osvalue={videoValue}
+							subtopicValue={subtopicValue}
+							tags={tags}
+							appliedFilterTags={appliedFilterTags}
+						/>
+					</div>
 				) : (
-					<Box sx={{ margin: 'auto', width: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+					<div className="flex mx-32 justify-center">
 						<SubtopicSelection dataFromSubtopicSelector={dataFromSubtopicSelector} subtopics={displayedSubtopics} />
-					</Box>
+					</div>
 				)}
 			</div>
 		</div>

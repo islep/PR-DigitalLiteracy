@@ -1,4 +1,4 @@
-function RetrieveVideos(dataFromFirebase, setVideoValue) {
+export default function RetrieveVideos (dataFromFirebase, setVideoValue) {
 	if (Array.isArray(dataFromFirebase)) {
 		const transformedData = dataFromFirebase.map((item) => ({
 			category: item.category,
@@ -15,5 +15,3 @@ function RetrieveVideos(dataFromFirebase, setVideoValue) {
 		console.log('dataFromFirebase is not an array');
 	}
 }
-
-export default RetrieveVideos;
