@@ -87,11 +87,17 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 				/* add margin to sides */
 				<Box sx={{ margin: '0% 10%' }}>
 					<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 5, sm: 8, md: 12 }}>
-						{videos.map((video, index) => (
-							<Grid item xs={8} sm={4} md={6} key={video.key}>
-								<div id={`player-${index}`} style={{ width: '100%', height: '300px', background: 'black' }} />
-							</Grid>
-						))}
+						{videos.map((video) => {
+							const match = video.url.match(videoIdRegex);
+							const embedId = match ? match[1] : null;
+
+							return(
+								<Grid item xs={8} sm={4} md={6} key={video.tags}>
+									<YoutubeEmbed embedId={embedId} stopTimes={video.stopTimes} messages={video.messages} />
+								</Grid>
+							)
+
+						})}
 					</Grid>
 				</Box>
 			) : (
