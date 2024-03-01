@@ -9,7 +9,7 @@ import FilterPanel from '../../../components/FilterPanel';
 import Searchbar from '../../../components/Video/Searchbar';
 import SubtopicSelection from '../../../components/Video/SubtopicSelection';
 import YouTubeVideoSection from '../../../components/Video/YouTubeVideoSection';
-import FirebaseRetrieveVideos from '../../../components/Video/FirebaseRetrieveVideos';
+import RetrieveVideos from '../../../utils/Firebase/RetrieveVideos';
 import Intro from '../../../components/Video/Intro';
 
 function TechVideos({ initialPageContent, introText }) {
@@ -101,7 +101,7 @@ function TechVideos({ initialPageContent, introText }) {
 	]);
 
 	// video database values
-	const [osvalue, setosValue] = useState([]);
+	const [videoValue, setVideoValue] = useState([]);
 	const [dataFromFirebase, setDatafromFirebase] = useState([]);
 	const docRef = collection(db, 'youtube-videos');
 
@@ -136,10 +136,9 @@ function TechVideos({ initialPageContent, introText }) {
 		// eslint-disable-next-line
 	}, []);
 
-	// set videos from Firebase
-	const dataFromIntro = (val) => {
-		setosValue(val);
-	};
+	useEffect(() => {
+		RetrieveVideos(dataFromFirebase, setVideoValue);
+	});
 
 	// set value from user clicking on subtopic
 	const dataFromSubtopicSelector = (val) => {
@@ -176,8 +175,6 @@ function TechVideos({ initialPageContent, introText }) {
 			<FilterPanel filterGroups={filterGroups} onSave={onSave} appliedFilterTags={appliedFilterTags} />
 
 			<div className="md:pl-80">
-				<FirebaseRetrieveVideos dataFromFirebase={dataFromFirebase} dataFromIntro={dataFromIntro} />
-
 				<Box sx={{ margin: '0% 10%' }}>
 					<Intro introText={introText} />
 				</Box>
@@ -194,13 +191,13 @@ function TechVideos({ initialPageContent, introText }) {
 				{/* if there is are no subtopics, a subtopic is selected, or someone searched a tag in the search bar display videos */}
 				{displayedSubtopics.length === 0 || subtopicValue.length > 0 || tags.length > 0 ? (
 					<YouTubeVideoSection
-						osvalue={osvalue}
+						osvalue={videoValue}
 						subtopicValue={subtopicValue}
 						tags={tags}
 						appliedFilterTags={appliedFilterTags}
 					/>
 				) : (
-					<Box sx={{ margin: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+					<Box sx={{ margin: 'auto', width: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 						<SubtopicSelection dataFromSubtopicSelector={dataFromSubtopicSelector} subtopics={displayedSubtopics} />
 					</Box>
 				)}
