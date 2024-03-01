@@ -5,6 +5,7 @@ import components from './components';
 import Layout from './Layouts/layout';
 
 function App() {
+	
 	return (
 		<AuthProvider>
 			<Router>

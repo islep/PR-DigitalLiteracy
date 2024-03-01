@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import UserInformation from './pages/UserInformation';
 import PDFPage from './pages/PDFPage';
-import TechUsedInClassAndWord from './pages/TechUsedInClassAndWord';
+import TechUsedInClassAndWork from './pages/TechUsedInClassAndWork';
 import TechSafetyAndPrivacy from './pages/TechSafetyAndPrivacy';
 import FinanceAndManagement from './pages/FinancaAndManagement';
 import ForgotPassword from './pages/ForgotPassword';
@@ -23,7 +23,7 @@ const components = {
 	signUp: SignUp,
 	forgotPassword: ForgotPassword,
 	techInDailyLife: TechInDailyLife,
-	techInClassAndWord: TechUsedInClassAndWord,
+	techInClassAndWork: TechUsedInClassAndWork,
 	techSafetyAndPrivacy: TechSafetyAndPrivacy,
 	financeAndManagement: FinanceAndManagement,
 	quiz: Quiz,

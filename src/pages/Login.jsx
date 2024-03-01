@@ -7,7 +7,6 @@ import { Colors } from '../constants/Colors';
 import { auth, logInWithEmailAndPassword } from '../firebase/firebase';
 import { isEmailValid, isPasswordValid } from '../utils';
 import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
 
 function Login() {
 	const [email, setEmail] = useState('');
@@ -19,6 +18,10 @@ function Login() {
 	const navigate = useNavigate();
 
 	// TODO: sign up -> to add demographic info form (Device, level of comfort with those devices) -> this should be optional
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	});
 
 	useEffect(() => {
 		if (loading) {
@@ -48,7 +51,7 @@ function Login() {
 	return (
 		<div>
 			<Navbar />
-			<div style={{ marginTop: '5rem' }}>
+			<div style={{ marginTop: '8rem' }}>
 				<Box
 					sx={{
 						backgroundColor: Colors.backgroundColor,
@@ -150,7 +153,6 @@ function Login() {
 					</Grid>
 				</Box>
 			</div>
-			<Footer />
 		</div>
 	);
 }
