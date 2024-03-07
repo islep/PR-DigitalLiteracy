@@ -17,7 +17,7 @@ function YouTubeVideo() {
 	const [videoId, setVideoId] = useState('');
 	const [opts, setOpts] = useState({});
 
-	const [count, setCount] = useState(0);// as far as i can tell this variable does like actually nothing like wtf did the previous group add this for -ben
+	const [count, setCount] = useState(0);// as far as i can tell this variable does like actually nothing?
 
 	// adding for checkbox
 	const [isChecked, setIsChecked] = useState(false);
@@ -25,10 +25,35 @@ function YouTubeVideo() {
         setIsChecked(!isChecked);
     };
 
-	const handleUrlChange = (e) => {
+	const [isChapter, setIsChapter] = useState(false);
+
+	const handleUrlChange = async (e) => {
 		const newurl = e.target.value;
 		setUrl(newurl);
 		setVideoId(getVideoId(newurl));
+
+		// here check if can have default checkbox (later might be good idea to consolidate this so we dont have to make fetch calls twice)
+		// first is check if chapters
+		try {
+			const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+			const data = await response.json();
+			const video = data.items[0];
+			
+			const desc = video.snippet.description;
+			const lines = desc.split('\n');
+			const filteredLines = lines.filter(line => /^\s*\d+:\d+/.test(line));
+
+			// if there are chapter then make isChapter true which will unhide the checkbox
+			if (filteredLines.length > 0) {
+				//alert("HAS CHAPTERS");
+				setIsChapter(true);
+			} else {
+				//alert("Thinks has no chapters?");
+				setIsChapter(false);
+			}
+		} catch {
+			
+		}
 	};
 
 	const getVideoId = (url) => {
@@ -57,6 +82,7 @@ function YouTubeVideo() {
 				autoplay: 0,
 			},
 		});
+
 	}, []);
 
 	const [messages, setMessage] = useState([
@@ -69,6 +95,8 @@ function YouTubeVideo() {
 			stopTimes: '',
 		},
 	]);
+
+
 
 	{/* changing for if box is checked */}
 	const handleSubmit = async (e) => {
@@ -156,6 +184,31 @@ function YouTubeVideo() {
 			}
 		}
 
+	};
+
+
+	// doest work yet
+    const videoTime = (e) => {
+        if (e.data === window.YT.PlayerState.PAUSED) {
+            const currentTime = e.target.getCurrentTime();
+            // console.log('Current Time:', currentTime);
+			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
+			//alert(formattedTime);
+			// A seek operation occurred
+			//const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
+			//alert(formattedTime);
+            // Do whatever you need with the current timestamp
+        }
+    };
+
+	// doesnt work yet
+	const handleSeek = (e) => {
+		const currentTime = e.target.getCurrentTime();
+		//console.log('Current Time:', currentTime);
+		const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
+		//alert(formattedTime);
+		// Do whatever you need with the current timestamp
+		
 	};
 
 	const onAddBtnClick = () => {
@@ -347,7 +400,7 @@ function YouTubeVideo() {
 						marginTop: '2rem',
 					}}
 				>
-					{videoId && <YouTube videoId={videoId} opts={opts} sx={{ margin: 'auto' }} />}
+					{videoId && <YouTube videoId={videoId} opts={opts} onStateChange={videoTime} onSeek={handleSeek} sx={{ margin: 'auto' }} />}
 				</Box>
 				<Box
 					sx={{
@@ -542,13 +595,16 @@ function YouTubeVideo() {
 					marginTop: '2rem',
 				}}
 			>	
+				
 				<Grid container spacing={2} sx={{ margin: 'auto', width: '97%' }}>
+					{isChapter && (
 					<Grid item>
                     	<FormControlLabel
                         control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
                         label="Use default segmentation from the video"
                     	/>
                 	</Grid>
+					)}
 					{!isChecked && (
                 		<>
 						<Grid item xs={12}>
@@ -573,6 +629,7 @@ function YouTubeVideo() {
 						</>
 					)}
 				</Grid>
+			
 			</Box>
 			
 			<Box
