@@ -41,7 +41,7 @@ export function FirebaseRetrieveVideos({ dataFromFirebase, dataFromIntro }) {
 				tags: item.tags,
 				url: item.url,
 				subtopic: item.subtopic,
-				key: item.key,
+				key: item.url,
 			}));
 			setosValue(transformedData);
 		} else {
