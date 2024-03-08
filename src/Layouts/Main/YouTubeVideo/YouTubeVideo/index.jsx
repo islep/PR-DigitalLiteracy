@@ -123,28 +123,40 @@ function YouTubeVideo() {
 				setStopTimes(updatedStopTimes);
 				setMessage(updatedMessages);
 
-				// alert("stopTimes: " + updatedStopTimes + "\nmessages: " + updatedMessages);
+				const updatedUrl = url;
+				const updatedTags = tags;
+				const updatedOperatingSystem = operating_system;
+				const updatedCategory = category;
 
-				await addVideoData('youtube-videos', {
-					url,
-					tags,
-					operating_system,
-					category,
-					stopTimes: updatedStopTimes,
-                	messages: updatedMessages,
-				});
-				setUrl('');
-				setTags([]);
-				setOs('');
-				setCategory('');
-							
 				Swal.fire({
 					width: '30rem',
 					height: '10rem',
 					text: 'Video added successfully!',
 					icon: 'success',
 				});
-			
+
+				setUrl('');
+				setTags([]);
+				setOs('');
+				setCategory('');
+				//setStopTimes([]);
+        		//setMessage([]);
+				
+
+				// alert("stopTimes: " + updatedStopTimes + "\nmessages: " + updatedMessages);
+				try {
+					await addVideoData('youtube-videos', {
+						url: updatedUrl,
+						tags: updatedTags,
+						operating_system: updatedOperatingSystem,
+						category: updatedCategory,
+						stopTimes: updatedStopTimes,
+						messages: updatedMessages,
+					});
+				} catch (e) {
+					alert(e);
+				}
+				//alert("hi");
 			} catch (e) {
 				alert(e);
 			}
@@ -157,27 +169,36 @@ function YouTubeVideo() {
 			const urlRegex = /^(https?:\/\/)/i;
 			
 			// alert("stopTimes: " + stopTimes + "\nmessages: " + messages);
+
+			const updatedStopTimes = stopTimes;
+			const updatedMessages = messages;
+			const updatedUrl = url;
+			const updatedTags = tags;
+			const updatedOperatingSystem = operating_system;
+			const updatedCategory = category;
+
+			Swal.fire({
+				width: '30rem',
+				height: '10rem',
+				text: 'Video added successfully!',
+				icon: 'success',
+			});
+
+			setUrl('');
+			setTags([]);
+			setOs('');
+			setCategory('');
+			setStopTimes([]);
+       		setMessage([]);
 	
 			try {
 				await addVideoData('youtube-videos', {
-					url,
-					tags,
-					operating_system,
-					category,
-					stopTimes,
-					messages,
-				});
-				setUrl('');
-				setTags([]);
-				setOs('');
-				setCategory('');
-				setStopTimes([]);
-        		setMessage([]);
-				Swal.fire({
-					width: '30rem',
-					height: '10rem',
-					text: 'Video added successfully!',
-					icon: 'success',
+					url: updatedUrl,
+					tags: updatedTags,
+					operating_system: updatedOperatingSystem,
+					category: updatedCategory,
+					stopTimes: updatedStopTimes,
+					messages: updatedMessages,
 				});
 			} catch (e) {
 				console.log('Error adding video:', e);
@@ -191,23 +212,17 @@ function YouTubeVideo() {
     const videoTime = (e) => {
         if (e.data === window.YT.PlayerState.PAUSED) {
             const currentTime = e.target.getCurrentTime();
-            // console.log('Current Time:', currentTime);
 			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
 			//alert(formattedTime);
-			// A seek operation occurred
-			//const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
-			//alert(formattedTime);
-            // Do whatever you need with the current timestamp
         }
     };
 
 	// doesnt work yet
 	const handleSeek = (e) => {
 		const currentTime = e.target.getCurrentTime();
-		//console.log('Current Time:', currentTime);
 		const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
 		//alert(formattedTime);
-		// Do whatever you need with the current timestamp
+		
 		
 	};
 
