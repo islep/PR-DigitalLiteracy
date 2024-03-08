@@ -252,7 +252,7 @@ function YouTubeVideo() {
 
 
 	const messageInput = messages.map((input, index) => (
-		<Box key={index}>
+		<Box key={messages.length-index-1}>
 			<Grid
 				container
 				spacing={2}
@@ -272,7 +272,7 @@ function YouTubeVideo() {
 							fontWeight: '700',
 						}}
 					>
-						Segment #{index + 1}
+						Segment #{messages.length-index}
 					</Box>
 				</Grid>
 
@@ -286,7 +286,7 @@ function YouTubeVideo() {
 							cursor: 'pointer',
 						}}
 						onClick={() => {
-							remove(index);
+							remove(messages.length-index-1);
 						}}
 					>
 						- Remove Segment
@@ -295,8 +295,8 @@ function YouTubeVideo() {
 			</Grid>
 
 			<Grid
-				key={index}
-				id={`experience-form-${index}`}
+				key={messages.length-index-1}
+				id={`experience-form-${messages.length-index-1}`}
 				container
 				spacing={2}
 				sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}
@@ -332,7 +332,7 @@ function YouTubeVideo() {
 								placeholder="Specify pause times for video in format min:sec, e.g. 0:30"
 								focused
 								onChange={(e) => {
-									handleChange(index, e);
+									handleChange(messages.length-index-1, e);
 								}}
 								name="stopTimes"
 								InputProps={{
@@ -378,7 +378,7 @@ function YouTubeVideo() {
 								value={input.messages}
 								name="messages"
 								onChange={(e) => {
-									handleChange(index, e);
+									handleChange(messages.length-index-1, e);
 								}}
 								rows={5}
 							/>
