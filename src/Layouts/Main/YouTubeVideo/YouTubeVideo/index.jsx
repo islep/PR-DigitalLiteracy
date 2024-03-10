@@ -153,6 +153,7 @@ function YouTubeVideo() {
 						stopTimes: updatedStopTimes,
 						messages: updatedMessages,
 					});
+					alert("test");
 				} catch (e) {
 					alert(e);
 				}
@@ -228,12 +229,14 @@ function YouTubeVideo() {
 
 	const onAddBtnClick = () => {
 		const newField = {
-			messages: '',
+			// for some reason commenting out the line below fixed the reverse order first confirmation bug.
+			//messages: '',
 			stopTimes: '',
 		};
 
 		setMessage([...messages, newField]);
 		setStopTimes([...stopTimes, newField]);
+		// alert("Messages are: " + messages + "\nStop times are: " + stopTimes);
 	};
 
 	const remove = (index) => {
@@ -256,8 +259,10 @@ function YouTubeVideo() {
 		const message = [...messages];
 		if (event.target.name === 'stopTimes') {
 			stopTime[index] = convertToSeconds(event.target.value);
+			// ("stopTime is: " + stopTime + "\nIndex is: " + index);
 		} else if (event.target.name === 'messages') {
 			message[index] = event.target.value;
+			// alert("message is: " + message + "\nIndex is: " + index);
 		}
 		setStopTimes(stopTime);
 		setMessage(message);
@@ -301,7 +306,7 @@ function YouTubeVideo() {
 							cursor: 'pointer',
 						}}
 						onClick={() => {
-							remove(messages.length-index-1);
+							remove(index);
 						}}
 					>
 						- Remove Segment
@@ -622,9 +627,6 @@ function YouTubeVideo() {
 					)}
 					{!isChecked && (
                 		<>
-						<Grid item xs={12}>
-							{messageInput}
-                        </Grid>
 						<Grid item md={6} xs={3} />
 						<Grid item md={6} xs={9}>
 							<Box
@@ -641,6 +643,10 @@ function YouTubeVideo() {
 								+ Add a Segment
 							</Box>
 						</Grid>
+						<Grid item xs={12}>
+							{messageInput}
+                        </Grid>
+						
 						</>
 					)}
 				</Grid>
