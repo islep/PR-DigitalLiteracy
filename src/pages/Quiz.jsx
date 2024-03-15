@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Radio, FormControlLabel, Button, Typography, Grid } from '@mui/material';
+import ReactGA from 'react-ga4';
 import Results from '../Layouts/Main/quiz/results/index';
 import quizData from '../Layouts/Main/quiz/quizData/index';
 
@@ -38,6 +39,13 @@ function Quiz() {
 			setCompleted(true);
 		}
 	};
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+		});
+	});
 
 	return (
 		<Box

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
+import ReactGA from 'react-ga4';
 import { useAuth } from '../firebase/AuthContext';
 import Navbar from '../Layouts/Navbar';
 import { Colors } from '../constants/Colors';
@@ -9,6 +10,13 @@ import Help from '../Layouts/Main/Help';
 function HelpManager() {
 	const { currentUser } = useAuth();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+		});
+	});
 
 	useEffect(() => {
 		if (currentUser && currentUser.uid === process.env.REACT_APP_ADMIN_UID) {

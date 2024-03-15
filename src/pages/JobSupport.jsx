@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import JobSupportIntro from '../Layouts/Main/JobSupport/JobSupportIntro';
 import ResumeSection from '../Layouts/Main/JobSupport/ResumeSection';
-
 import { useAuth } from '../firebase/AuthContext';
-
-import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
 
 function JobSupport() {
 	const { currentUser } = useAuth();
@@ -23,6 +20,13 @@ function JobSupport() {
 			});
 		}
 	}, [currentUser, navigate]);
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+		});
+	});
 
 	return (
 		<div>

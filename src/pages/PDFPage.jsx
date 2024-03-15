@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Page, usePDF, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { Button, Box, Grid } from '@mui/material';
 import moment from 'moment';
+import ReactGA from 'react-ga4';
 import { Colors } from '../constants/Colors';
 import { useAuth } from '../firebase/AuthContext';
 
@@ -114,6 +115,14 @@ function MyDoc(data) {
 	const navigate = useNavigate();
 	const [resumeData, setResumeData] = useState(data);
 	let count = 0;
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+			page_title: 'MyDoc',
+		});
+	});
 
 	useEffect(() => {
 		console.log(resumeData);
@@ -375,6 +384,14 @@ function MyDoc(data) {
 
 function PDFPage({ resumeData }) {
 	const [instance, updateInstance] = usePDF({ document: MyDoc(resumeData) });
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+			page_title: 'PDFPage',
+		});
+	});
 
 	useEffect(() => {
 		console.log('in pdf page ', resumeData);

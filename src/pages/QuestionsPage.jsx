@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { doc, collection, getDocs, Timestamp, addDoc, updateDoc } from 'firebase/firestore';
 import { Accordion, AccordionDetails, AccordionSummary, Typography, Button, TextField } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ReactGA from 'react-ga4';
 import { db } from '../firebase/firebase';
 import Navbar from '../Layouts/Navbar';
 import QuestionBox from '../Layouts/Main/FAQ/QuestionBox';
@@ -19,6 +20,13 @@ function QuestionsPage() {
 		};
 		fetchData();
 	}, []);
+
+	useEffect(() => {
+		ReactGA.send({
+			hitType: 'page_view',
+			page_location: window.location.pathname,
+		});
+	});
 
 	return (
 		<div className="px-4 md:px-64">
