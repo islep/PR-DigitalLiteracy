@@ -618,7 +618,7 @@ function YouTubeVideo() {
 				
 				<Grid container spacing={2} sx={{ margin: 'auto', width: '97%' }}>
 					{isChapter && (
-					<Grid item>
+					 <Grid item xs={6}>
                     	<FormControlLabel
                         control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
                         label="Use default segmentation from the video"
@@ -627,8 +627,7 @@ function YouTubeVideo() {
 					)}
 					{!isChecked && (
                 		<>
-						<Grid item md={6} xs={3} />
-						<Grid item md={6} xs={9}>
+						<Grid item xs={isChapter ? 6 : 12} style={{ textAlign: 'end' }}>
 							<Box
 								sx={{
 									color: Colors.primaryColor,
