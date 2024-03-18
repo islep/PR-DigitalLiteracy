@@ -2,9 +2,12 @@
 - [ ] Get rid of moment???
 
 
-1. Autofill when you pause the video
-2. Make video float so it can always be seen in the add video page
+1. Autofill section time when you pause the video
+2. Fix the video float so that it wont overlap when the page size is shrinked or just come up with a new way to make the video float
 3. Could try to make video confirmation better by finding out why nothing after addVideoData runs
-4. While the checkbox is checked, below it should show the checkboxes auto populated with the segments of the video
-5. Fix reading chapters so it can read chapters from videos without timestamps in the description
-6. Make the remove segment remove the specific segment
+4. While the checkbox is checked, below it should show the segments auto populated with the stop times of the video gotten from the description from the youtube api
+5. Fix reading chapters so it can read chapters from videos without timestamps in the description (after some research this seems impossible with the youtube api)
+6. Make the remove segment remove the specific segment (right now it is removing the first one always i think)
+7. Possibly create a list of bugs/solving bugs that have to do with the Add Videos feature.
+
+^ feel free to add to this if theres something i missed that we discussed at the meeting
