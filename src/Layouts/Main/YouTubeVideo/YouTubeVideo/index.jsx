@@ -336,7 +336,7 @@ function YouTubeVideo() {
 							Stop Times:
 						</Box>
 					</Grid>
-					<Grid item md={6} sm={6} xs={12}>
+					<Grid item md={8} sm={6} xs={12}>
 						<Box
 							component="form"
 							sx={{
@@ -414,10 +414,15 @@ function YouTubeVideo() {
 			<Box>
 				<Box
 					sx={{
+						position: 'fixed',
+						top: '50%',
+						right: '0',
+						transform: 'translateY(-50%)',
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
 						marginTop: '2rem',
+						zIndex: 1000, // Ensure it's above other content
 					}}
 				>
 					{videoId && <YouTube videoId={videoId} opts={opts} onStateChange={videoTime} onSeek={handleSeek} sx={{ margin: 'auto' }} />}
@@ -431,7 +436,15 @@ function YouTubeVideo() {
 						margin: 'auto',
 						marginTop: '2rem',
 						paddingBottom: '2rem',
-						width: '90%',
+						//width: '90%',
+						display: 'flex',
+						flexDirection: 'column', // Change to column layout
+						justifyContent: 'flex-start', // Align items to the start (left)
+						alignItems: 'flex-start', // Align items to the start (left)
+						marginTop: '2rem',
+						marginLeft: '2rem', // Add margin to the left
+						width: '53%', // Take up half of the page width
+						
 					}}
 				>
 					<Grid container spacing={2} sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}>
@@ -449,7 +462,7 @@ function YouTubeVideo() {
 								Youtube Link:
 							</Box>
 						</Grid>
-						<Grid item md={6} sm={6} xs={12}>
+						<Grid item md={10} sm={6} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -488,7 +501,7 @@ function YouTubeVideo() {
 							</Box>
 						</Grid>
 
-						<Grid item md={6} sm={6} xs={12}>
+						<Grid item md={10} sm={6} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -526,7 +539,7 @@ function YouTubeVideo() {
 								Operating System:
 							</Box>
 						</Grid>
-						<Grid item md={6} sm={6} xs={12}>
+						<Grid item md={10} sm={6} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -573,7 +586,7 @@ function YouTubeVideo() {
 								Video Category:
 							</Box>
 						</Grid>
-						<Grid item md={6} sm={6} xs={12}>
+						<Grid item md={10} sm={6} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -611,8 +624,15 @@ function YouTubeVideo() {
 					boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 					margin: 'auto',
 					paddingBottom: '2rem',
-					width: '90%',
+					//width: '90%',
+					//marginTop: '2rem',
+					display: 'flex',
+					flexDirection: 'column', // Change to column layout
+					justifyContent: 'flex-start', // Align items to the start (left)
+					alignItems: 'flex-start', // Align items to the start (left)
 					marginTop: '2rem',
+					marginLeft: '2rem', // Add margin to the left
+					width: '53%', // Take up half of the page width
 				}}
 			>	
 				
