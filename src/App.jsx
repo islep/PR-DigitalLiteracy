@@ -10,11 +10,15 @@ ReactGA.initialize('your GA measurement id');
 
 function App() {
 	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
-	});
+		const trackPageView = () => {
+			ReactGA.send({
+				hitType: 'pageview',
+				page_location: window.location.pathname,
+			});
+		};
+		trackPageView();
+	}, [window.location.pathname]);
+
 	return (
 		<AuthProvider>
 			<Router>

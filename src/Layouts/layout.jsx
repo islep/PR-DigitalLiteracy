@@ -1,15 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
-import ReactGA from 'react-ga4';
 import Navbar from './Navbar';
 import Footer from './Footer';
-
-useEffect(() => {
-	ReactGA.send({
-		hitType: 'page_view',
-		page_location: window.location.pathname,
-	});
-}, [window.location.pathname]);
 
 const Layout = ({ children }) => (
 	<>
