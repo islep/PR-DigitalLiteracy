@@ -3,7 +3,6 @@ import { Box, Grid, Button, Avatar, CssBaseline, TextField, Typography, Link, Co
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate, useSearchParams, createSearchParams } from 'react-router-dom';
-import ReactGA from 'react-ga4';
 import { sendPasswordReset, auth } from '../firebase/firebase';
 import { Colors } from '../constants/Colors';
 
@@ -13,13 +12,6 @@ function ForgotPassword() {
 	const [searchParams] = useSearchParams();
 
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
-	});
 
 	useEffect(() => {
 		if (loading) {

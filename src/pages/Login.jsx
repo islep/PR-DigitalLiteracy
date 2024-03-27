@@ -3,7 +3,6 @@ import { Box, Grid, Button, Avatar, CssBaseline, TextField, Link, Typography, Co
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate, useSearchParams, createSearchParams } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import ReactGA from 'react-ga4';
 import { Colors } from '../constants/Colors';
 import { auth, logInWithEmailAndPassword } from '../firebase/firebase';
 import { isEmailValid, isPasswordValid } from '../utils';
@@ -22,13 +21,6 @@ function Login() {
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
-	});
-
-	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
 	});
 
 	useEffect(() => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { Timestamp, doc, onSnapshot, setDoc, arrayUnion } from 'firebase/firestore';
 import { debounce } from 'lodash';
-import ReactGA from 'react-ga4';
 import KeySkills from '../Layouts/Main/ResumeBuilder/KeySkills';
 import NavigationButtons from '../Layouts/Main/ResumeBuilder/NavigationButtons';
 import PersonalDetailsForm from '../Layouts/Main/ResumeBuilder/PersonalDetailsForm';
@@ -46,13 +45,6 @@ function ResumeBuilder() {
 		objective,
 		referencesInfo,
 	};
-
-	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
-	});
 
 	useEffect(() => {
 		if (currentUser) {

@@ -1,4 +1,4 @@
-export default function RetrieveVideos (dataFromFirebase, setVideoValue) {
+export default function getVideosFromFirebaseData (dataFromFirebase, setVideoValue) {
 	if (Array.isArray(dataFromFirebase)) {
 		const transformedData = dataFromFirebase.map((item) => ({
 			category: item.category,

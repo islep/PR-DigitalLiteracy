@@ -9,96 +9,16 @@ import FilterPanel from '../../../components/FilterPanel';
 import Searchbar from '../../../components/Video/Searchbar';
 import SubtopicSelection from '../../../components/Video/SubtopicSelection';
 import YouTubeVideoSection from '../../../components/Video/YouTubeVideoSection';
-import RetrieveVideos from '../../../utils/Firebase/RetrieveVideos';
+import getVideosFromFirebaseData from '../../../utils/Firebase/getVideosFromFirebaseData';
 import Intro from '../../../components/Video/Intro';
+import { FILTERGROUPS, SUBTOPICGROUPS } from './constants';
 
 function TechVideos({ initialPageContent, introText }) {
 	// FINAL values that should be refactored out at some point
 	// side filter options unsorted tuple (label, database_value) array
-	const [filterGroups] = useState(() => [
-		{
-			subheading: 'Device Type',
-			filters: [
-				['Mobile - iOS', 'iOS'],
-				['Mobile - Android', 'Android'],
-				['Desktop - Windows', 'Windows'],
-				['Desktop - Mac', 'Mac'],
-				['Desktop - Linux', 'Linux'],
-			],
-		},
-		{
-			subheading: 'Content Type',
-			filters: [
-				['Daily Life', 'daily_life'],
-				['Finance', 'finance'],
-				['Safety Privacy', 'safety_privacy'],
-				['Class & Work', 'class_word'],
-			],
-		},
-	]);
+	const [filterGroups] = useState(() => FILTERGROUPS);
 
-	const [subtopicsGroups] = useState(() => [
-		[
-			'daily_life',
-			[
-				'Introduction to Basic Devices',
-				'Emails',
-				'Internet Browsing',
-				'Social Media Basics',
-				'Social Media Basics',
-				'Digital Communication',
-				'Understanding Apps',
-			],
-		],
-		[
-			'finance',
-			[
-				'Using & Managing credit and debit cards',
-				'Maintaining Credit score',
-				'Bank Accounts',
-				'Savings & Interest',
-				'Financial scams',
-				'Investments & risks',
-			],
-		],
-		[
-			'safety_privacy',
-			[
-				'Introduction to Digital Safety',
-				'Creating Strong Passwords',
-				'Understanding Personal Information',
-				'Social Media Safety',
-				'Safe Browsing Practices',
-				'Email Security: Recognizing phishing emails',
-				'Device Security',
-				'Wi-Fi Security',
-				'Online Shopping Safety',
-				'Privacy Settings on Mobile Devices',
-				'Backing Up Data',
-				'Cyberbullying Awareness',
-				'Digital Footprint',
-				'Two-Factor Authentication (2FA)',
-				'Emergency Response',
-			],
-		],
-		[
-			'class_word',
-			[
-				'Using Microsoft Word',
-				'Using Microsoft Excel',
-				'Using Google Docs',
-				'Using Google Sheets',
-				'Canvas Learning Management System',
-				'Effective Email Communication',
-				'Video Conferencing Tools (e.g., Zoom, Microsoft Teams)',
-				'File Management',
-				'Time Management Tools (e.g., Calendar)',
-				'Presentation Software (e.g., PowerPoint, Google Slides)',
-				'Cybersecurity Awareness',
-				'Adapting to Technological Changes',
-			],
-		],
-	]);
+	const [subtopicGroups] = useState(() => SUBTOPICGROUPS);
 
 	// video database values
 	const [videoValue, setVideoValue] = useState([]);
@@ -121,7 +41,7 @@ function TechVideos({ initialPageContent, introText }) {
 
 	// displays subtopics based on the content type selected
 	const [displayedSubtopics, setDisplayedSubtopics] = useState(
-		subtopicsGroups.find(([value]) => value === initialPageContent)?.[1] || [],
+		subtopicGroups.find(([value]) => value === initialPageContent)?.[1] || [],
 	);
 
 	// subscribe to changes when a Firestore document referenced
@@ -137,8 +57,8 @@ function TechVideos({ initialPageContent, introText }) {
 	}, []);
 
 	useEffect(() => {
-		RetrieveVideos(dataFromFirebase, setVideoValue);
-	});
+		getVideosFromFirebaseData(dataFromFirebase, setVideoValue);
+	}, [dataFromFirebase]);
 
 	// set value from user clicking on subtopic
 	const dataFromSubtopicSelector = (val) => {
@@ -152,9 +72,9 @@ function TechVideos({ initialPageContent, introText }) {
 
 	// update displayed subtopics based on filter side panel
 	const updateDisplayedSubtopics = (selectedFilterTags) => {
-		const commonContent = selectedFilterTags.filter((tag) => subtopicsGroups.some(([value]) => value.includes(tag)));
+		const commonContent = selectedFilterTags.filter((tag) => subtopicGroups.some(([value]) => value.includes(tag)));
 		const combinedSubtopics = commonContent.flatMap(
-			(tag) => subtopicsGroups.find(([value]) => value === tag)?.[1] || [],
+			(tag) => subtopicGroups.find(([value]) => value === tag)?.[1] || [],
 		);
 
 		if (!combinedSubtopics.includes(subtopicValue)) {

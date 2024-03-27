@@ -14,7 +14,6 @@ import {
 	Button,
 } from '@mui/material';
 import { doc } from 'firebase/firestore';
-import ReactGA from 'react-ga4';
 import { useAuth } from '../firebase/AuthContext';
 
 import { Colors } from '../constants/Colors';
@@ -32,13 +31,6 @@ function UserInformation() {
 	if (currentUser !== null) {
 		docRef = doc(db, 'users', currentUser.uid);
 	}
-
-	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
-	});
 
 	useEffect(() => {
 		if (!currentUser) {

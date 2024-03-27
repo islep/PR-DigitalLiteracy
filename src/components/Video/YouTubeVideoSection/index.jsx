@@ -88,39 +88,36 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 		setVideos(tagVideos);
 	}, [tags, osvalue, subtopicValue, appliedFilterTags]);
 
-	return (
-		console.log('videos:', { videos }),
-		(
-			<>
-				{videos && videos.length > 0 ? (
-					<div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
-						{videos.map((video, index) => (
-							<div key={video.key}>
-								<div className="h-72 w-full" id={`player-${index}`} />
-							</div>
-						))}
+	if (videos && videos.length > 0) {
+		return (
+			<div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
+				{videos.map((video, index) => (
+					<div key={video.key}>
+						<div className="h-72 w-full" id={`player-${index}`} />
 					</div>
-				) : (
-					<Box
-						sx={{
-							fontFamily: 'Inria Sans',
-							color: Colors.primaryColor,
-							textAlign: 'center',
-							fontWeight: '700',
-							padding: '2rem',
-							fontSize: {
-								md: '2rem',
-								sm: '2.25rem',
-								xs: '1.25rem',
-							},
-							marginBottom: '10%',
-						}}
-					>
-						No results found
-					</Box>
-				)}
-			</>
-		)
+				))}
+			</div>
+		);
+	}
+
+	return (
+		<Box
+			sx={{
+				fontFamily: 'Inria Sans',
+				color: Colors.primaryColor,
+				textAlign: 'center',
+				fontWeight: '700',
+				padding: '2rem',
+				fontSize: {
+					md: '2rem',
+					sm: '2.25rem',
+					xs: '1.25rem',
+				},
+				marginBottom: '10%',
+			}}
+		>
+			No results found
+		</Box>
 	);
 }
 

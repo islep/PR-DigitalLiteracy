@@ -12,7 +12,6 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import ReactGA from 'react-ga4';
 import Navbar from '../Layouts/Navbar';
 import PasswordRules from '../components/PasswordRules';
 import { isEmailValid, isPasswordValid } from '../utils';
@@ -34,13 +33,6 @@ function SignUp() {
 
 	const theme = createTheme();
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		ReactGA.send({
-			hitType: 'page_view',
-			page_location: window.location.pathname,
-		});
-	});
 
 	useEffect(() => {
 		if (loading) return;
