@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
 	subTitle: {
 		fontSize: '10',
-		marginTop: 4,
+		marginTop: 10,
 		fontFamily: 'Helvetica',
 	},
 	lowerRightInfo: {

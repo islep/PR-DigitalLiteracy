@@ -6,9 +6,6 @@ import { useNavigate, useSearchParams, createSearchParams } from 'react-router-d
 import { sendPasswordReset, auth } from '../firebase/firebase';
 import { Colors } from '../constants/Colors';
 
-import Navbar from '../Layouts/Navbar';
-import Footer from '../Layouts/Footer';
-
 function ForgotPassword() {
 	const [email, setEmail] = useState('');
 	const [user, loading] = useAuthState(auth);
