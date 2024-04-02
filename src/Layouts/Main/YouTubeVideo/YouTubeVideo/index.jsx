@@ -442,9 +442,14 @@ function YouTubeVideo() {
 						justifyContent: 'flex-start', // Align items to the start (left)
 						alignItems: 'flex-start', // Align items to the start (left)
 						marginTop: '2rem',
-						marginLeft: '2rem', // Add margin to the left
+						marginLeft: '2rem', // Add margin to the left // 
 						width: '53%', // Take up half of the page width
-						
+						// Adjust for webpage getting smaller
+						'@media screen and (max-width: 1024px)':{
+							flexDirection: 'column-reverse',
+							alignItems: 'center',
+							width: '90%',
+						}
 					}}
 				>
 					<Grid container spacing={2} sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}>
@@ -633,6 +638,12 @@ function YouTubeVideo() {
 					marginTop: '2rem',
 					marginLeft: '2rem', // Add margin to the left
 					width: '53%', // Take up half of the page width
+					// Adjust for webpage getting smaller
+					'@media screen and (max-width: 1024px)':{
+						flexDirection: 'column-reverse',
+						alignItems: 'center',
+						width: '90%',
+					}
 				}}
 			>	
 				
