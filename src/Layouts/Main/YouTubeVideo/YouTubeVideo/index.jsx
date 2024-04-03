@@ -414,15 +414,19 @@ function YouTubeVideo() {
 			<Box>
 				<Box
 					sx={{
-						position: 'fixed',
-						top: '50%',
-						right: '0',
-						transform: 'translateY(-50%)',
+						
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
 						marginTop: '2rem',
-						zIndex: 1000, // Ensure it's above other content
+						'@media screen and (min-width: 1444px)':{
+							position: 'fixed',
+							top: '50%',
+							right: '0',
+							transform: 'translateY(-50%)',
+							zIndex: 1000, // Ensure it's above other content
+						}
+						
 					}}
 				>
 					{videoId && <YouTube videoId={videoId} opts={opts} onStateChange={videoTime} onSeek={handleSeek} sx={{ margin: 'auto' }} />}
@@ -436,14 +440,17 @@ function YouTubeVideo() {
 						margin: 'auto',
 						marginTop: '2rem',
 						paddingBottom: '2rem',
-						//width: '90%',
-						display: 'flex',
-						flexDirection: 'column', // Change to column layout
-						justifyContent: 'flex-start', // Align items to the start (left)
-						alignItems: 'flex-start', // Align items to the start (left)
-						marginTop: '2rem',
-						marginLeft: '2rem', // Add margin to the left
-						width: '53%', // Take up half of the page width
+						width: '90%',
+						'@media screen and (min-width: 1444px)':{
+							display: 'flex',
+							flexDirection: 'column', // Change to column layout
+							justifyContent: 'flex-start', // Align items to the start (left)
+							alignItems: 'flex-start', // Align items to the start (left)
+							marginTop: '2rem',
+							marginLeft: '2rem', // Add margin to the left
+							width: '53%', // Take up half of the page width
+						}
+						
 						
 					}}
 				>
@@ -624,15 +631,17 @@ function YouTubeVideo() {
 					boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 					margin: 'auto',
 					paddingBottom: '2rem',
-					//width: '90%',
-					//marginTop: '2rem',
-					display: 'flex',
-					flexDirection: 'column', // Change to column layout
-					justifyContent: 'flex-start', // Align items to the start (left)
-					alignItems: 'flex-start', // Align items to the start (left)
+					width: '90%',
 					marginTop: '2rem',
-					marginLeft: '2rem', // Add margin to the left
-					width: '53%', // Take up half of the page width
+					'@media screen and (min-width: 1444px)':{
+						display: 'flex',
+						flexDirection: 'column', // Change to column layout
+						justifyContent: 'flex-start', // Align items to the start (left)
+						alignItems: 'flex-start', // Align items to the start (left)
+						marginTop: '2rem',
+						marginLeft: '2rem', // Add margin to the left
+						width: '53%', // Take up half of the page width
+					}
 				}}
 			>	
 				
