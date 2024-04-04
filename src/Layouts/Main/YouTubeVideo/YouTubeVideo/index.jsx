@@ -140,42 +140,32 @@ function YouTubeVideo() {
 				setStopTimes(updatedStopTimes);
 				setMessage(updatedMessages);
 
-				const updatedUrl = url;
-				const updatedTags = tags;
-				const updatedOperatingSystem = operating_system;
-				const updatedCategory = category;
-
-				Swal.fire({
-					width: '30rem',
-					//height: '10rem',
-					text: 'Video added successfully!',
-					icon: 'success',
-				});
-
-				setUrl('');
-				setTags([]);
-				//resetTags();
-				setOs('');
-				setCategory('');
-				//setStopTimes([]);
-				//setMessage([]);
-
-				// alert("stopTimes: " + updatedStopTimes + "\nmessages: " + updatedMessages);
 				try {
 					await addVideoData('youtube-videos', {
-						url: updatedUrl,
-						tags: updatedTags,
-						operating_system: updatedOperatingSystem,
-						category: updatedCategory,
+						url: url,
+						tags: tags,
+						operating_system: operating_system,
+						category: category,
 						stopTimes: updatedStopTimes,
 						messages: updatedMessages,
 					});
-					alert("WORKED");
-					console.log("WORKED")
+					
+					setUrl('');
+					setTags([]);
+					setOs('');
+					setCategory('');
+					setStopTimes([]);
+					setMessage([]);
+	
+					Swal.fire({
+						width: '30rem',
+						//height: '10rem',
+						text: 'Video added successfully!',
+						icon: 'success',
+					});
 				} catch (e) {
-					alert(e);
+					console.log('Error adding video:', e);
 				}
-				//alert("hi");
 			} catch (e) {
 				alert(e);
 			}
@@ -186,40 +176,29 @@ function YouTubeVideo() {
 			// eslint-disable-next-line
 			const urlRegex = /^(https?:\/\/)/i;
 
-			// alert("stopTimes: " + stopTimes + "\nmessages: " + messages);
-
-			const updatedStopTimes = stopTimes;
-			const updatedMessages = messages;
-			const updatedUrl = url;
-			const updatedTags = tags;
-			const updatedOperatingSystem = operating_system;
-			const updatedCategory = category;
-
-			Swal.fire({
-				width: '30rem',
-				//height: '10rem',
-				text: 'Video added successfully!',
-				icon: 'success',
-			});
-
-			setUrl('');
-			setTags([]);
-			setOs('');
-			setCategory('');
-			setStopTimes([]);
-			setMessage([]);
-
 			try {
 				await addVideoData('youtube-videos', {
-					url: updatedUrl,
-					tags: updatedTags,
-					operating_system: updatedOperatingSystem,
-					category: updatedCategory,
-					stopTimes: updatedStopTimes,
-					messages: updatedMessages,
+					url: url,
+					tags: tags,
+					operating_system: operating_system,
+					category: category,
+					stopTimes: stopTimes,
+					messages: messages,
 				});
-			alert("WORKED");
-			console.log("WORKED")
+				
+				setUrl('');
+				setTags([]);
+				setOs('');
+				setCategory('');
+				setStopTimes([]);
+				setMessage([]);
+
+				Swal.fire({
+					width: '30rem',
+					//height: '10rem',
+					text: 'Video added successfully!',
+					icon: 'success',
+				});
 			} catch (e) {
 				console.log('Error adding video:', e);
 			}
