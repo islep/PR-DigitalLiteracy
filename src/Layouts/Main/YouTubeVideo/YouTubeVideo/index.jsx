@@ -1,8 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';//temp added useRef remove if removed
 import { addVideoData } from '../../../../firebase/firebaseReadWrite';
 import { Colors } from '../../../../constants/Colors';
 import { inputStyle, multiLineInputStyle } from '../../ResumeBuilder/styles.js';
-import { Box, Grid, FormControl, FormControlLabel, Checkbox, InputLabel, Select, MenuItem, TextField, Button, Divider } from '@mui/material';
+import {
+	Box,
+	Grid,
+	FormControl,
+	FormControlLabel,
+	Checkbox,
+	InputLabel,
+	Select,
+	MenuItem,
+	TextField,
+	Button,
+	Divider,
+} from '@mui/material';
 import YouTube from 'react-youtube';
 import { TagsInput } from 'react-tag-input-component';
 import './styles.css';
@@ -17,13 +29,13 @@ function YouTubeVideo() {
 	const [videoId, setVideoId] = useState('');
 	const [opts, setOpts] = useState({});
 
-	const [count, setCount] = useState(0);// as far as i can tell this variable does like actually nothing?
+	const [count, setCount] = useState(0); // as far as i can tell this variable does like actually nothing?
 
 	// adding for checkbox
 	const [isChecked, setIsChecked] = useState(false);
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-    };
+	const handleCheckboxChange = () => {
+		setIsChecked(!isChecked);
+	};
 
 	const [isChapter, setIsChapter] = useState(false);
 
@@ -35,13 +47,17 @@ function YouTubeVideo() {
 		// here check if can have default checkbox (later might be good idea to consolidate this so we dont have to make fetch calls twice)
 		// first is check if chapters
 		try {
-			const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+			const response = await fetch(
+				`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${
+					process.env.REACT_APP_YOUTUBE_API_KEY
+				}`,
+			);
 			const data = await response.json();
 			const video = data.items[0];
-			
+
 			const desc = video.snippet.description;
 			const lines = desc.split('\n');
-			const filteredLines = lines.filter(line => /^\s*\d+:\d+/.test(line));
+			const filteredLines = lines.filter((line) => /^\s*\d+:\d+/.test(line));
 
 			// if there are chapter then make isChapter true which will unhide the checkbox
 			if (filteredLines.length > 0) {
@@ -51,9 +67,7 @@ function YouTubeVideo() {
 				//alert("Thinks has no chapters?");
 				setIsChapter(false);
 			}
-		} catch {
-			
-		}
+		} catch {}
 	};
 
 	const getVideoId = (url) => {
@@ -82,7 +96,6 @@ function YouTubeVideo() {
 				autoplay: 0,
 			},
 		});
-
 	}, []);
 
 	const [messages, setMessage] = useState([
@@ -96,9 +109,9 @@ function YouTubeVideo() {
 		},
 	]);
 
-
-
-	{/* changing for if box is checked */}
+	{
+		/* changing for if box is checked */
+	}
 	const handleSubmit = async (e) => {
 		if (isChecked) {
 			// alert("CHECKED");
@@ -108,18 +121,22 @@ function YouTubeVideo() {
 			const urlRegex = /^(https?:\/\/)/i;
 
 			try {
-				const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
-                const data = await response.json();
-                const video = data.items[0];
-				
+				const response = await fetch(
+					`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${
+						process.env.REACT_APP_YOUTUBE_API_KEY
+					}`,
+				);
+				const data = await response.json();
+				const video = data.items[0];
+
 				const desc = video.snippet.description;
 				// filter the description for the timestamps
 				const lines = desc.split('\n');
-				const filteredLines = lines.filter(line => /^\s*\d+:\d+/.test(line));
-				const updatedStopTimes = filteredLines.map(line => convertToSeconds(line.split(' ')[0]));
+				const filteredLines = lines.filter((line) => /^\s*\d+:\d+/.test(line));
+				const updatedStopTimes = filteredLines.map((line) => convertToSeconds(line.split(' ')[0]));
 				updatedStopTimes.shift();
-				const updatedMessages = filteredLines.map(() => "Are you following along so far?");
-				
+				const updatedMessages = filteredLines.map(() => 'Are you following along so far?');
+
 				setStopTimes(updatedStopTimes);
 				setMessage(updatedMessages);
 
@@ -130,18 +147,18 @@ function YouTubeVideo() {
 
 				Swal.fire({
 					width: '30rem',
-					height: '10rem',
+					//height: '10rem',
 					text: 'Video added successfully!',
 					icon: 'success',
 				});
 
 				setUrl('');
 				setTags([]);
+				//resetTags();
 				setOs('');
 				setCategory('');
 				//setStopTimes([]);
-        		//setMessage([]);
-				
+				//setMessage([]);
 
 				// alert("stopTimes: " + updatedStopTimes + "\nmessages: " + updatedMessages);
 				try {
@@ -153,7 +170,7 @@ function YouTubeVideo() {
 						stopTimes: updatedStopTimes,
 						messages: updatedMessages,
 					});
-					alert("test");
+					alert('test');
 				} catch (e) {
 					alert(e);
 				}
@@ -161,14 +178,13 @@ function YouTubeVideo() {
 			} catch (e) {
 				alert(e);
 			}
-
 		} else {
 			e.preventDefault();
 			setVideoId('');
-	
+
 			// eslint-disable-next-line
 			const urlRegex = /^(https?:\/\/)/i;
-			
+
 			// alert("stopTimes: " + stopTimes + "\nmessages: " + messages);
 
 			const updatedStopTimes = stopTimes;
@@ -180,7 +196,7 @@ function YouTubeVideo() {
 
 			Swal.fire({
 				width: '30rem',
-				height: '10rem',
+				//height: '10rem',
 				text: 'Video added successfully!',
 				icon: 'success',
 			});
@@ -190,8 +206,8 @@ function YouTubeVideo() {
 			setOs('');
 			setCategory('');
 			setStopTimes([]);
-       		setMessage([]);
-	
+			setMessage([]);
+
 			try {
 				await addVideoData('youtube-videos', {
 					url: updatedUrl,
@@ -205,35 +221,49 @@ function YouTubeVideo() {
 				console.log('Error adding video:', e);
 			}
 		}
-
 	};
 
+	const playerRef = useRef(null);
+	const handleClickTime = async (index) => {
+		if (playerRef.current) {
+			const currentTime = await playerRef.current.internalPlayer.getCurrentTime();
+			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
+			const reverseIndex = (messages.length - index - 1);
+			stopTimes[reverseIndex] =  convertToSeconds(formattedTime);
+
+			// Assuming you have the id stored in a variable called textFieldId
+			const textField = document.getElementById(`stopTimeTextField_${(reverseIndex)}`);
+			if (textField) {
+				textField.value = formattedTime;
+			}
+		}
+		
+	  };
 
 	// doest work yet
-    const videoTime = (e) => {
-        if (e.data === window.YT.PlayerState.PAUSED) {
-            const currentTime = e.target.getCurrentTime();
+	const videoTime = (e) => {
+		if (e.data === window.YT.PlayerState.PAUSED) {
+			const currentTime = e.target.getCurrentTime();
 			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
 			//alert(formattedTime);
-        }
-    };
+		}
+	};
 
 	// doesnt work yet
 	const handleSeek = (e) => {
 		const currentTime = e.target.getCurrentTime();
 		const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
 		//alert(formattedTime);
-		
-		
 	};
 
 	const onAddBtnClick = () => {
 		const newField = {
 			// for some reason commenting out the line below fixed the reverse order first confirmation bug.
+			// I somehow encountered this bug again but with the top(newest) segment this time. i could not recreate it
 			//messages: '',
 			stopTimes: '',
 		};
-
+		
 		setMessage([...messages, newField]);
 		setStopTimes([...stopTimes, newField]);
 		// alert("Messages are: " + messages + "\nStop times are: " + stopTimes);
@@ -269,10 +299,8 @@ function YouTubeVideo() {
 		setCount(count + 1);
 	};
 
-
-
 	const messageInput = messages.map((input, index) => (
-		<Box key={messages.length-index-1}>
+		<Box key={messages.length - index - 1}>
 			<Grid
 				container
 				spacing={2}
@@ -292,7 +320,7 @@ function YouTubeVideo() {
 							fontWeight: '700',
 						}}
 					>
-						Segment #{messages.length-index}
+						Segment #{messages.length - index}
 					</Box>
 				</Grid>
 
@@ -315,8 +343,8 @@ function YouTubeVideo() {
 			</Grid>
 
 			<Grid
-				key={messages.length-index-1}
-				id={`experience-form-${messages.length-index-1}`}
+				key={messages.length - index - 1}
+				id={`experience-form-${messages.length - index - 1}`}
 				container
 				spacing={2}
 				sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}
@@ -352,14 +380,19 @@ function YouTubeVideo() {
 								placeholder="Specify pause times for video in format min:sec, e.g. 0:30"
 								focused
 								onChange={(e) => {
-									handleChange(messages.length-index-1, e);
+									handleChange(messages.length - index - 1, e);
 								}}
 								name="stopTimes"
 								InputProps={{
+									id: `stopTimeTextField_${(messages.length - index - 1)}`,
 									disableUnderline: true,
 								}}
 							/>
 						</Box>
+					</Grid>
+					<Grid item md={2} sm={6} xs={12}>
+						<button 
+						onClick={(e) => handleClickTime(index, e)}>Take Current Time</button>
 					</Grid>
 				</Grid>
 
@@ -398,7 +431,7 @@ function YouTubeVideo() {
 								value={input.messages}
 								name="messages"
 								onChange={(e) => {
-									handleChange(messages.length-index-1, e);
+									handleChange(messages.length - index - 1, e);
 								}}
 								rows={5}
 							/>
@@ -429,7 +462,16 @@ function YouTubeVideo() {
 						
 					}}
 				>
-					{videoId && <YouTube videoId={videoId} opts={opts} onStateChange={videoTime} onSeek={handleSeek} sx={{ margin: 'auto' }} />}
+					{videoId && (
+						<YouTube
+							videoId={videoId}
+							opts={opts}
+							onStateChange={videoTime}
+							onSeek={handleSeek}
+							ref={playerRef}
+							sx={{ margin: 'auto' }}
+						/>
+					)}
 				</Box>
 				<Box
 					sx={{
@@ -621,7 +663,7 @@ function YouTubeVideo() {
 					</Grid>
 				</Box>
 			</Box>
-			
+
 			{/* Altering this to have a checkbox that hides it -ben*/}
 			<Box
 				sx={{
@@ -643,44 +685,41 @@ function YouTubeVideo() {
 						width: '53%', // Take up half of the page width
 					}
 				}}
-			>	
-				
+			>
 				<Grid container spacing={2} sx={{ margin: 'auto', width: '97%' }}>
 					{isChapter && (
-					 <Grid item xs={6}>
-                    	<FormControlLabel
-                        control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
-                        label="Use default segmentation from the video"
-                    	/>
-                	</Grid>
+						<Grid item xs={6}>
+							<FormControlLabel
+								control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
+								label="Use default segmentation from the video"
+							/>
+						</Grid>
 					)}
 					{!isChecked && (
-                		<>
-						<Grid item xs={isChapter ? 6 : 12} style={{ textAlign: 'end' }}>
-							<Box
-								sx={{
-									color: Colors.primaryColor,
-									fontSize: { sm: '1rem', xs: '0.8rem' },
-									textAlign: 'end',
-									marginTop: '1rem',
-									paddingRight: '1rem',
-									cursor: 'pointer',
-								}}
-								onClick={onAddBtnClick}
-							>
-								+ Add a Segment
-							</Box>
-						</Grid>
-						<Grid item xs={12}>
-							{messageInput}
-                        </Grid>
-						
+						<>
+							<Grid item xs={isChapter ? 6 : 12} style={{ textAlign: 'end' }}>
+								<Box
+									sx={{
+										color: Colors.primaryColor,
+										fontSize: { sm: '1rem', xs: '0.8rem' },
+										textAlign: 'end',
+										marginTop: '1rem',
+										paddingRight: '1rem',
+										cursor: 'pointer',
+									}}
+									onClick={onAddBtnClick}
+								>
+									+ Add a Segment
+								</Box>
+							</Grid>
+							<Grid item xs={12}>
+								{messageInput}
+							</Grid>
 						</>
 					)}
 				</Grid>
-			
 			</Box>
-			
+
 			<Box
 				sx={{
 					height: 'auto',

@@ -10,4 +10,5 @@
 6. Make the remove segment remove the specific segment (right now it is removing the first one always i think)
 7. Possibly create a list of bugs/solving bugs that have to do with the Add Videos feature.
 
+
 ^ feel free to add to this if theres something i missed that we discussed at the meeting

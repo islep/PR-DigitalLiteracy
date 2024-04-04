@@ -25,7 +25,9 @@ export const updateData = async (docRef, docData) => {
 };
 
 export const addVideoData = async (collectionName, docData) => {
+	console.log('test');
 	try {
+		console.log('test 2')
 		const docRef = await addDoc(collection(db, collectionName), docData);
 		console.log('Document added with ID: ', docRef.id);
 	} catch (e) {
