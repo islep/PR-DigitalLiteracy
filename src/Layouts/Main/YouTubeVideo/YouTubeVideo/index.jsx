@@ -170,7 +170,8 @@ function YouTubeVideo() {
 						stopTimes: updatedStopTimes,
 						messages: updatedMessages,
 					});
-					alert('test');
+					alert("WORKED");
+					console.log("WORKED")
 				} catch (e) {
 					alert(e);
 				}
@@ -217,6 +218,8 @@ function YouTubeVideo() {
 					stopTimes: updatedStopTimes,
 					messages: updatedMessages,
 				});
+			alert("WORKED");
+			console.log("WORKED")
 			} catch (e) {
 				console.log('Error adding video:', e);
 			}
@@ -374,7 +377,7 @@ function YouTubeVideo() {
 						>
 							<TextField
 								value={input.stopTime}
-								borderRadius=".375rem"
+								borderradius=".375rem"
 								sx={inputStyle}
 								variant="filled"
 								placeholder="Specify pause times for video in format min:sec, e.g. 0:30"
@@ -477,7 +480,7 @@ function YouTubeVideo() {
 					sx={{
 						backgroundColor: Colors.backgroundColor,
 						height: 'auto',
-						borderRadius: '1rem',
+						borderradius: '1rem',
 						boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 						margin: 'auto',
 						marginTop: '2rem',
@@ -669,7 +672,7 @@ function YouTubeVideo() {
 				sx={{
 					backgroundColor: Colors.backgroundColor,
 					height: 'auto',
-					borderRadius: '1rem',
+					borderradius: '1rem',
 					boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 					margin: 'auto',
 					paddingBottom: '2rem',
