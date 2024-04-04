@@ -12,7 +12,7 @@ function App() {
 	useEffect(() => {
 		const trackPageView = () => {
 			ReactGA.send({
-				hitType: 'pageview',
+				hitType: 'page_view',
 				page_location: window.location.pathname,
 			});
 		};
