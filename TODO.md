@@ -10,5 +10,13 @@
 6. Make the remove segment remove the specific segment (right now it is removing the first one always i think)
 7. Possibly create a list of bugs/solving bugs that have to do with the Add Videos feature.
 
+4/5/2024
+1. Error message when user tries to submit with incorrect format
+- Timestamp past video time
+- Stop time in incorrect format
+- Empty textfields
+2. For tags field if user enters a tag and tries to submit without hitting enter, there will be a popup message asking to enter their tag or delete it. it will also highlight the textbox
+3.  
+
 
 ^ feel free to add to this if theres something i missed that we discussed at the meeting

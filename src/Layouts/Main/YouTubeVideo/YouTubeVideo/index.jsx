@@ -113,6 +113,7 @@ function YouTubeVideo() {
 		/* changing for if box is checked */
 	}
 	const handleSubmit = async (e) => {
+		
 		if (isChecked) {
 			// alert("CHECKED");
 			e.preventDefault();
@@ -154,8 +155,12 @@ function YouTubeVideo() {
 					setTags([]);
 					setOs('');
 					setCategory('');
-					setStopTimes([]);
-					setMessage([]);
+					setStopTimes([{ stopTimes: '' }]);
+					setMessage([{ message: '' }]);
+					// set checked to false
+					setIsChecked(false);
+					setIsChapter(false);
+					console.log("isChecked: " + isChecked + "\nisChapter: " + isChapter);
 	
 					Swal.fire({
 						width: '30rem',
@@ -190,8 +195,20 @@ function YouTubeVideo() {
 				setTags([]);
 				setOs('');
 				setCategory('');
-				setStopTimes([]);
-				setMessage([]);
+				setStopTimes([{ stopTimes: '' }]);
+				setMessage([{ message: '' }]);
+
+				setIsChecked(false);
+				setIsChapter(false);
+
+				const textField = document.getElementById(`stopTimeTextField_0`);
+				if (textField) {
+					textField.value = '';
+				}
+				const textField2 = document.getElementById(`confirmationTextField_0`);
+				if (textField2) {
+					textField2.value = '';
+				}
 
 				Swal.fire({
 					width: '30rem',
@@ -356,7 +373,7 @@ function YouTubeVideo() {
 						>
 							<TextField
 								value={input.stopTime}
-								borderradius=".375rem"
+								//borderRadius=".375rem"
 								sx={inputStyle}
 								variant="filled"
 								placeholder="Specify pause times for video in format min:sec, e.g. 0:30"
@@ -406,6 +423,7 @@ function YouTubeVideo() {
 							<TextField
 								sx={multiLineInputStyle}
 								InputProps={{
+									id: `confirmationTextField_${(messages.length - index - 1)}`,
 									disableUnderline: true,
 								}}
 								variant="standard"
@@ -459,7 +477,7 @@ function YouTubeVideo() {
 					sx={{
 						backgroundColor: Colors.backgroundColor,
 						height: 'auto',
-						borderradius: '1rem',
+						borderRadius: '1rem',
 						boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 						margin: 'auto',
 						marginTop: '2rem',
@@ -651,7 +669,7 @@ function YouTubeVideo() {
 				sx={{
 					backgroundColor: Colors.backgroundColor,
 					height: 'auto',
-					borderradius: '1rem',
+					borderRadius: '1rem',
 					boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 					margin: 'auto',
 					paddingBottom: '2rem',
