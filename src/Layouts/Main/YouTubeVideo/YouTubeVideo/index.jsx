@@ -257,14 +257,12 @@ function YouTubeVideo() {
 
 	const onAddBtnClick = () => {
 		const newField = {
-			// for some reason commenting out the line below fixed the reverse order first confirmation bug.
-			// I somehow encountered this bug again but with the top(newest) segment this time. i could not recreate it
-			//messages: '',
+			messages: '',
 			stopTimes: '',
 		};
-		
-		setMessage([...messages, newField]);
-		setStopTimes([...stopTimes, newField]);
+		//You have to be specific of which field of newField to solve the previous commenting messages issue.
+		setMessage([...messages, newField.messages]);
+		setStopTimes([...stopTimes, newField.stopTimes]);
 		// alert("Messages are: " + messages + "\nStop times are: " + stopTimes);
 	};
 
