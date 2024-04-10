@@ -331,7 +331,7 @@ function YouTubeVideo() {
 							cursor: 'pointer',
 						}}
 						onClick={() => {
-							remove(index);
+							remove(messages.length - index - 1);
 						}}
 					>
 						- Remove Segment
