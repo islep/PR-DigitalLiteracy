@@ -32,7 +32,7 @@ export const SUBTOPICGROUPS = [
 			'Introduction to Basic Devices',
 			'Emails',
 			'Internet Browsing',
-			'Social Media Basics',
+			'Online Saftey/Security',
 			'Social Media Basics',
 			'Digital Communication',
 			'Understanding Apps',
