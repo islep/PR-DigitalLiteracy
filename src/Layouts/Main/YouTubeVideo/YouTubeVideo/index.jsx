@@ -48,8 +48,7 @@ function YouTubeVideo() {
 		// first is check if chapters
 		try {
 			const response = await fetch(
-				`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${
-					process.env.REACT_APP_YOUTUBE_API_KEY
+				`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
 				}`,
 			);
 			const data = await response.json();
@@ -67,7 +66,7 @@ function YouTubeVideo() {
 				//alert("Thinks has no chapters?");
 				setIsChapter(false);
 			}
-		} catch {}
+		} catch { }
 	};
 
 	const getVideoId = (url) => {
@@ -113,6 +112,36 @@ function YouTubeVideo() {
 		/* changing for if box is checked */
 	}
 	const handleSubmit = async (e) => {
+		e.preventDefault();
+		
+		// Form validation check
+		const isValid = validateInputFields();
+
+		if(!isValid) {
+			//const tagsTextBox = document
+			return;
+		}
+
+		// Check if any confirmation message is empty or only contains whitespace
+		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg.messages));
+		if (hasEmptyMessage) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please ensure all confirmation messages are filled out.',
+			});
+			return // Stop the form submission
+		}
+
+		const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time.stopTimes));
+		if (hasInvalidTimestamp) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please ensure all stop times are in a valid MM:SS format.',
+			});
+			return; // Stop the form submission
+		}
 
 		if (isChecked) {
 			// alert("CHECKED");
@@ -123,8 +152,7 @@ function YouTubeVideo() {
 
 			try {
 				const response = await fetch(
-					`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${
-						process.env.REACT_APP_YOUTUBE_API_KEY
+					`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
 					}`,
 				);
 				const data = await response.json();
@@ -150,7 +178,7 @@ function YouTubeVideo() {
 						stopTimes: updatedStopTimes,
 						messages: updatedMessages,
 					});
-					
+
 					setUrl('');
 					setTags([]);
 					setOs('');
@@ -161,7 +189,7 @@ function YouTubeVideo() {
 					setIsChecked(false);
 					setIsChapter(false);
 					console.log("isChecked: " + isChecked + "\nisChapter: " + isChapter);
-	
+
 					Swal.fire({
 						width: '30rem',
 						//height: '10rem',
@@ -190,7 +218,7 @@ function YouTubeVideo() {
 					stopTimes: stopTimes,
 					messages: messages,
 				});
-				
+
 				setUrl('');
 				setTags([]);
 				setOs('');
@@ -220,7 +248,73 @@ function YouTubeVideo() {
 				console.log('Error adding video:', e);
 			}
 		}
+
 	};
+
+	// Validate the necessary input fields. 
+	const validateInputFields = () => {
+		//check youtube url field
+		if (url === '') {
+			Swal.fire({
+				width: '30rem',
+				title: 'Oops...',
+				text: 'Please enter a Youtube video URL.',
+				icon: 'error',
+			});
+			//alert('Please enter a Youtube video URL.');
+			return false;
+		}
+		
+		//check tags field
+		if (tags.length === 0) {
+			Swal.fire({
+				width: '30rem',
+				title: 'Oops...',
+				text: 'Please enter at least one tag.',
+				icon: 'error',
+			});
+			//alert('Please enter at least one tag.');
+			return false;
+		}
+
+		//check operating system
+		if (operating_system === '') {
+			Swal.fire({
+				width: '30rem',
+				title: 'Oops...',
+				text: 'Please select an Operating System.',
+				icon: 'error',
+			});
+			//alert('Please select an operating system.');
+			return false;
+		}
+
+		//check category
+		if(category === '') {
+			Swal.fire({
+				width: '30rem',
+				title: 'Oops...',
+				text: 'Please select a video category.',
+				icon: 'error',
+			});
+			//alert('Please select a video category.');
+			return false;
+		}
+
+		return true;
+	}
+
+	// Checks if a string is empty or contains only whitespace
+	const isEmptyOrSpaces = (str) => {
+		return !str || str.trim() === '';
+	};
+
+	// Validates timestamp format
+	const isValidTimestamp = (timestamp) => {
+		const regex = /^(?:[0-5]?[0-9]):[0-5][0-9]$/; //Simplified to validate MM:SS format
+		return regex.test(timestamp);
+	};
+
 
 	const playerRef = useRef(null);
 	const handleClickTime = async (index) => {
@@ -228,7 +322,7 @@ function YouTubeVideo() {
 			const currentTime = await playerRef.current.internalPlayer.getCurrentTime();
 			const formattedTime = `${Math.floor(currentTime / 60)}:${String(Math.floor(currentTime % 60)).padStart(2, '0')}`;
 			const reverseIndex = (messages.length - index - 1);
-			stopTimes[reverseIndex] =  convertToSeconds(formattedTime);
+			stopTimes[reverseIndex] = convertToSeconds(formattedTime);
 
 			// Assuming you have the id stored in a variable called textFieldId
 			const textField = document.getElementById(`stopTimeTextField_${(reverseIndex)}`);
@@ -236,24 +330,29 @@ function YouTubeVideo() {
 				textField.value = formattedTime;
 			}
 		}
-		
-	  };
 
+	};
+
+	
 	const onAddBtnClick = () => {
 		const newField = {
+			
 			messages: '',
 			stopTimes: '',
 		};
 		//You have to be specific of which field of newField to solve the previous commenting messages issue.
 		setMessage([...messages, newField.messages]);
 		setStopTimes([...stopTimes, newField.stopTimes]);
+		
 		// alert("Messages are: " + messages + "\nStop times are: " + stopTimes);
 	};
-
+	
 	const remove = (index) => {
 		console.log("start of the remove and the index passed in is: " + index + "\nThe messages array is: " + messages)
+		console.log("removing segemnt at index:", index);
 		const messagedata = [...messages];
 		messagedata.splice(index, 1);
+		
 		setMessage(messagedata);
 		const stopdata = [...stopTimes];
 		stopdata.splice(index, 1);
@@ -301,8 +400,10 @@ function YouTubeVideo() {
 		setCount(count + 1);
 	};
 
+
 	const messageInput = messages.map((input, index) => (
 		<Box key={messages.length - index - 1}>
+		
 			<Grid
 				container
 				spacing={2}
@@ -336,7 +437,8 @@ function YouTubeVideo() {
 							cursor: 'pointer',
 						}}
 						onClick={() => {
-							remove(messages.length - index - 1);
+							
+							remove(index);
 						}}
 					>
 						- Remove Segment
@@ -463,12 +565,12 @@ function YouTubeVideo() {
 			<Box>
 				<Box
 					sx={{
-						
+
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
 						marginTop: '2rem',
-						'@media screen and (min-width: 1444px)':{
+						'@media screen and (min-width: 1444px)': {
 							position: 'fixed',
 							top: '50%',
 							right: '0',
@@ -476,7 +578,7 @@ function YouTubeVideo() {
 							zIndex: 1000, // Ensure it's above other content
 							boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 						}
-						
+
 					}}
 				>
 					{videoId && (
@@ -498,7 +600,7 @@ function YouTubeVideo() {
 						marginTop: '2rem',
 						paddingBottom: '2rem',
 						width: '90%',
-						'@media screen and (min-width: 1444px)':{
+						'@media screen and (min-width: 1444px)': {
 							display: 'flex',
 							flexDirection: 'column', // Change to column layout
 							justifyContent: 'flex-start', // Align items to the start (left)
@@ -507,8 +609,8 @@ function YouTubeVideo() {
 							marginLeft: '2rem', // Add margin to the left
 							width: '53%', // Take up half of the page width
 						}
-						
-						
+
+
 					}}
 				>
 					<Grid container spacing={2} sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}>
@@ -690,7 +792,7 @@ function YouTubeVideo() {
 					paddingBottom: '2rem',
 					width: '90%',
 					marginTop: '2rem',
-					'@media screen and (min-width: 1444px)':{
+					'@media screen and (min-width: 1444px)': {
 						display: 'flex',
 						flexDirection: 'column', // Change to column layout
 						justifyContent: 'flex-start', // Align items to the start (left)
