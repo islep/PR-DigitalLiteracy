@@ -113,7 +113,7 @@ function YouTubeVideo() {
 		/* changing for if box is checked */
 	}
 	const handleSubmit = async (e) => {
-		
+
 		if (isChecked) {
 			// alert("CHECKED");
 			e.preventDefault();
@@ -239,22 +239,6 @@ function YouTubeVideo() {
 		
 	  };
 
-	// doest work yet
-	const videoTime = (e) => {
-		if (e.data === window.YT.PlayerState.PAUSED) {
-			const currentTime = e.target.getCurrentTime();
-			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
-			//alert(formattedTime);
-		}
-	};
-
-	// doesnt work yet
-	const handleSeek = (e) => {
-		const currentTime = e.target.getCurrentTime();
-		const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
-		//alert(formattedTime);
-	};
-
 	const onAddBtnClick = () => {
 		const newField = {
 			messages: '',
@@ -267,13 +251,34 @@ function YouTubeVideo() {
 	};
 
 	const remove = (index) => {
+		console.log("start of the remove and the index passed in is: " + index + "\nThe messages array is: " + messages)
 		const messagedata = [...messages];
 		messagedata.splice(index, 1);
 		setMessage(messagedata);
 		const stopdata = [...stopTimes];
 		stopdata.splice(index, 1);
 		setStopTimes(stopdata);
+		//so it removes the spot in the array but messageInput just updates on leangth always removing the top one rn
 		setCount(count + 1);
+		console.log("end of the remove and the index passed in is: " + index + "\nThe messages array is: " + messagedata)
+		// testing, try get index to remove
+		//const textField = document.getElementById(`experience-form-${index}`);
+		//console.log("trying to print the textField: " + textField);
+		//could possibly write a for loop where after cutting out the message and stop time i just put the remaining ones in their spot.
+		for (let i = 0; i < messagedata.length; i++) {
+			//
+			let textField = document.getElementById(`stopTimeTextField_${(i)}`);
+			//console.log("stoptime: " + textField.value)
+			if (textField) {
+				textField.value = `${Math.floor(stopdata[i] / 60)}:${String(stopdata[i] % 60).padStart(2, '0')}`;
+			}
+			textField = document.getElementById(`confirmationTextField_${(i)}`);
+			//console.log("message: " + textField.value)
+			if (textField) {
+				textField.value = messagedata[i];
+			}
+		}
+
 	};
 
 	const convertToSeconds = (time) => {
@@ -389,7 +394,17 @@ function YouTubeVideo() {
 					</Grid>
 					<Grid item md={2} sm={6} xs={12}>
 						<button 
-						onClick={(e) => handleClickTime(index, e)}>Take Current Time</button>
+						onClick={(e) => handleClickTime(index, e)}
+						style={{
+							//padding: '10px 20px',
+							//fontSize: '16px',
+							backgroundColor: '#007bff',
+							color: '#fff',
+							border: '1px solid #007bff',
+							borderRadius: '5px',
+							cursor: 'pointer'
+						}}
+						>Get Timestamp</button>
 					</Grid>
 				</Grid>
 
@@ -420,14 +435,14 @@ function YouTubeVideo() {
 						>
 							<TextField
 								sx={multiLineInputStyle}
-								InputProps={{
-									id: `confirmationTextField_${(messages.length - index - 1)}`,
-									disableUnderline: true,
-								}}
 								variant="standard"
 								multiline
 								value={input.messages}
 								name="messages"
+								InputProps={{
+									id: `confirmationTextField_${(messages.length - index - 1)}`,
+									disableUnderline: true,
+								}}
 								onChange={(e) => {
 									handleChange(messages.length - index - 1, e);
 								}}
@@ -464,8 +479,6 @@ function YouTubeVideo() {
 						<YouTube
 							videoId={videoId}
 							opts={opts}
-							onStateChange={videoTime}
-							onSeek={handleSeek}
 							ref={playerRef}
 							sx={{ margin: 'auto' }}
 						/>
