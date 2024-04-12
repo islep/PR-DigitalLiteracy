@@ -226,7 +226,7 @@ function YouTubeVideo() {
 	const handleClickTime = async (index) => {
 		if (playerRef.current) {
 			const currentTime = await playerRef.current.internalPlayer.getCurrentTime();
-			const formattedTime = `${Math.floor(currentTime / 60)}:${(currentTime % 60).toFixed(0).padStart(2, '0')}`;
+			const formattedTime = `${Math.floor(currentTime / 60)}:${String(Math.floor(currentTime % 60)).padStart(2, '0')}`;
 			const reverseIndex = (messages.length - index - 1);
 			stopTimes[reverseIndex] =  convertToSeconds(formattedTime);
 
@@ -396,13 +396,16 @@ function YouTubeVideo() {
 						<button 
 						onClick={(e) => handleClickTime(index, e)}
 						style={{
+							width: '100%',
+							height: '100%',
 							//padding: '10px 20px',
-							//fontSize: '16px',
-							backgroundColor: '#007bff',
+							fontSize: '16px',
+							backgroundColor: Colors.primaryColor, // Gray background color
 							color: '#fff',
-							border: '1px solid #007bff',
-							borderRadius: '5px',
-							cursor: 'pointer'
+							//border: '1px solid #007bff',
+							//borderRadius: '5px',
+							cursor: 'pointer',
+							fontWeight: 'bold' // Bold text
 						}}
 						>Get Timestamp</button>
 					</Grid>
