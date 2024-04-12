@@ -20,6 +20,7 @@ import { TagsInput } from 'react-tag-input-component';
 import './styles.css';
 import Swal from 'sweetalert2';
 import { filter } from 'lodash';
+import { string } from 'prop-types';
 
 function YouTubeVideo() {
 	const [url, setUrl] = useState('');
@@ -285,12 +286,16 @@ function YouTubeVideo() {
 
 		// Checks if a string is empty or contains only whitespace
 		const isEmptyOrSpaces = (str) => {
+			if(typeof str != "string")
+				return true;
 			return !str || str.trim() === '';
 		};
 
 
 		// Check if any confirmation message is empty or only contains whitespace
+		
 		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg));
+		
 		console.log("messages size: " + messages.length);
 		console.log("first message" + messages[0]);
 		console.log("has empty message?" + messages.some((msg) => isEmptyOrSpaces(msg)))
