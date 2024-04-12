@@ -122,26 +122,6 @@ function YouTubeVideo() {
 			return;
 		}
 
-		// Check if any confirmation message is empty or only contains whitespace
-		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg.messages));
-		if (hasEmptyMessage) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Please ensure all confirmation messages are filled out.',
-			});
-			return // Stop the form submission
-		}
-
-		const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time.stopTimes));
-		if (hasInvalidTimestamp) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Please ensure all stop times are in a valid MM:SS format.',
-			});
-			return; // Stop the form submission
-		}
 
 		if (isChecked) {
 			// alert("CHECKED");
@@ -301,19 +281,61 @@ function YouTubeVideo() {
 			return false;
 		}
 
+		
+
+		// Checks if a string is empty or contains only whitespace
+		const isEmptyOrSpaces = (str) => {
+			return !str || str.trim() === '';
+		};
+
+
+		// Check if any confirmation message is empty or only contains whitespace
+		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg));
+		console.log("messages size: " + messages.length);
+		console.log("first message" + messages[0]);
+		console.log("has empty message?" + messages.some((msg) => isEmptyOrSpaces(msg)))
+		
+		if (hasEmptyMessage) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please ensure all confirmation messages are filled out.',
+			});
+			return false;
+		}
+
+		/*
+		The code below is correct, but there are two issues about validating timestamp format:
+		1. the time stamp has already been converted to the seconds, and if we move this part in the convertToSecond, it needs admin to input the right timestamp all at once
+		2. We need to have the maximum time of the video!
+		*/
+
+		// Validates timestamp format
+		// const isValidTimestamp = (timestamp) => {
+		// 	const regex = /^[0-5]?[0-9]:[0-5][0-9]$/; //validate MM:SS or M:SSformat
+		// 	return regex.test(timestamp);
+		// };
+
+		// const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time));
+		// console.log("timestamp size: "+stopTimes.length);
+		// console.log("first timestamp: "+stopTimes[0]);
+		// console.log("has invalid message?" + stopTimes.some((time) => !isValidTimestamp(time)))
+		// if (hasInvalidTimestamp) {
+		// 	Swal.fire({
+		// 		icon: 'error',
+		// 		title: 'Oops...',
+		// 		text: 'Please ensure all stop times are in a valid MM:SS format.',
+		// 	});
+		// 	return false; // Stop the form submission
+		// }
+		
+
+		
+
 		return true;
 	}
 
-	// Checks if a string is empty or contains only whitespace
-	const isEmptyOrSpaces = (str) => {
-		return !str || str.trim() === '';
-	};
-
-	// Validates timestamp format
-	const isValidTimestamp = (timestamp) => {
-		const regex = /^(?:[0-5]?[0-9]):[0-5][0-9]$/; //Simplified to validate MM:SS format
-		return regex.test(timestamp);
-	};
+	
 
 
 	const playerRef = useRef(null);
