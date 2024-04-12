@@ -123,6 +123,27 @@ function YouTubeVideo() {
 			return;
 		}
 
+		// Check if any confirmation message is empty or only contains whitespace
+		/*
+		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg.messages));
+		if (hasEmptyMessage) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please ensure all confirmation messages are filled out.',
+			});
+			return // Stop the form submission
+		}
+
+		const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time.stopTimes));
+		if (hasInvalidTimestamp) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please ensure all stop times are in a valid MM:SS format.',
+			});
+			return; // Stop the form submission
+		}*/
 
 		if (isChecked) {
 			// alert("CHECKED");
@@ -333,7 +354,27 @@ function YouTubeVideo() {
 		// 	});
 		// 	return false; // Stop the form submission
 		// }
-		
+		for (let i = 0; i < messages.length; i++) {
+			let textField = document.getElementById(`stopTimeTextField_${(i)}`);
+			//console.log("stoptime: " + textField.value)
+			if (textField) {
+				const regex = /^[0-5]?[0-9]:[0-5][0-9]$/; //validate MM:SS or M:SSformat
+				let temp = regex.test(textField.value);
+
+				
+				console.log("text value: " + textField.value + "\ntemp: " + temp);
+				//const hasInvalidTimestamp = !isValidTimestamp(textField.value);
+				
+				if (!temp) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Please ensure all stop times are in a valid MM:SS format.',
+				});
+				return false; // Stop the form submission
+				}
+			}
+		}
 
 		
 
@@ -465,7 +506,7 @@ function YouTubeVideo() {
 						}}
 						onClick={() => {
 							
-							remove(index);
+							remove(messages.length - index - 1);
 						}}
 					>
 						- Remove Segment
