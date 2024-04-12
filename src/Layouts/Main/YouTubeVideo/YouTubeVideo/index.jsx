@@ -392,7 +392,7 @@ function YouTubeVideo() {
 							/>
 						</Box>
 					</Grid>
-					<Grid item md={2} sm={6} xs={12}>
+					<Grid item md={2} sm={3} xs={12}>
 						<button 
 						onClick={(e) => handleClickTime(index, e)}
 						style={{
@@ -474,6 +474,7 @@ function YouTubeVideo() {
 							right: '0',
 							transform: 'translateY(-50%)',
 							zIndex: 1000, // Ensure it's above other content
+							boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
 						}
 						
 					}}
@@ -525,7 +526,7 @@ function YouTubeVideo() {
 								Youtube Link:
 							</Box>
 						</Grid>
-						<Grid item md={10} sm={6} xs={12}>
+						<Grid item md={10} sm={10} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -564,7 +565,7 @@ function YouTubeVideo() {
 							</Box>
 						</Grid>
 
-						<Grid item md={10} sm={6} xs={12}>
+						<Grid item md={10} sm={10} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -602,7 +603,7 @@ function YouTubeVideo() {
 								Operating System:
 							</Box>
 						</Grid>
-						<Grid item md={10} sm={6} xs={12}>
+						<Grid item md={10} sm={10} xs={12}>
 							<Box
 								component="form"
 								sx={{
@@ -649,7 +650,7 @@ function YouTubeVideo() {
 								Video Category:
 							</Box>
 						</Grid>
-						<Grid item md={10} sm={6} xs={12}>
+						<Grid item md={10} sm={10} xs={12}>
 							<Box
 								component="form"
 								sx={{
