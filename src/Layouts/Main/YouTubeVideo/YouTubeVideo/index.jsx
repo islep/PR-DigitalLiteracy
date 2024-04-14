@@ -30,6 +30,14 @@ function YouTubeVideo() {
 	const [videoId, setVideoId] = useState('');
 	const [opts, setOpts] = useState({});
 
+	//added for tags validation
+	const [tagInputValue, setTagInputValue] = useState('');
+	const handleTagsKeyPress = (e) => {
+		if (e.key !== 'Enter') {
+			setTagInputValue(e.target.value);
+		}
+	}
+	
 	const [count, setCount] = useState(0); // as far as i can tell this variable does like actually nothing?
 
 	// adding for checkbox
@@ -281,6 +289,7 @@ function YouTubeVideo() {
 
 	};
 
+
 	// Validate the necessary input fields. 
 	const validateInputFields = () => {
 		//check youtube url field
@@ -296,11 +305,15 @@ function YouTubeVideo() {
 		}
 		
 		//check tags field
-		if (tags.length === 0) {
+		const lastTag = tags[tags.length - 1];
+		if(tags.length === 0 && tagInputValue === ''){
+			return true;
+		}
+		if ((!(tagInputValue === lastTag) && tagInputValue !== '') || tags.length === 0) {
 			Swal.fire({
 				width: '30rem',
 				title: 'Oops...',
-				text: 'Please enter at least one tag.',
+				text: 'Please press enter or delete your current tag.',
 				icon: 'error',
 			});
 			//alert('Please enter at least one tag.');
@@ -797,6 +810,7 @@ function YouTubeVideo() {
 									separators={['Enter']}
 									onChange={setTags}
 									placeHolder="To add tags, input the desired word and press Enter"
+									onKeyUp={handleTagsKeyPress}
 								/>
 							</Box>
 						</Grid>
