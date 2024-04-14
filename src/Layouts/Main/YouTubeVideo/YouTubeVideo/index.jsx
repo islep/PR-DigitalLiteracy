@@ -40,6 +40,8 @@ function YouTubeVideo() {
 
 	const [isChapter, setIsChapter] = useState(false);
 
+	const [duration, setDuration] = useState(0);
+
 	const handleUrlChange = async (e) => {
 		const newurl = e.target.value;
 		setUrl(newurl);
@@ -67,7 +69,26 @@ function YouTubeVideo() {
 				//alert("Thinks has no chapters?");
 				setIsChapter(false);
 			}
-		} catch { }
+
+			//make another call for the duration
+			const response2 = await fetch(
+				`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
+				}`,
+			);
+			const data2 = await response2.json();
+			const duration2 = data2.items[0].contentDetails.duration;
+			const match = duration2.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+			const min = (parseInt(match[2]) || 0);
+			const sec = (parseInt(match[3]) || 0);
+			let temp = min*60 + sec;
+			console.log(temp);
+			setDuration(temp);
+			//console.log("Duration: " + duration + "\nMin: " + min + "\nSec: " + sec);
+
+
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	const getVideoId = (url) => {
@@ -354,6 +375,10 @@ function YouTubeVideo() {
 		// 	});
 		// 	return false; // Stop the form submission
 		// }
+
+
+		//console.log("Duration: " + duration + "\nMin: " + duration.minutes + "\nSec: " + duration.seconds);
+
 		for (let i = 0; i < messages.length; i++) {
 			let textField = document.getElementById(`stopTimeTextField_${(i)}`);
 			//console.log("stoptime: " + textField.value)
@@ -366,12 +391,22 @@ function YouTubeVideo() {
 				//const hasInvalidTimestamp = !isValidTimestamp(textField.value);
 				
 				if (!temp) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Oops...',
-					text: 'Please ensure all stop times are in a valid MM:SS format.',
-				});
-				return false; // Stop the form submission
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Please ensure all stop times are in a valid MM:SS format.',
+					});
+					return false; // Stop the form submission
+				}
+				//check that the min and seconds inputted are less than the max
+				console.log("stopTimes[" + i + "]: " + stopTimes[i] + "\nduration: " + duration);
+				if (stopTimes[i] > duration) {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Please ensure all stop times are below the video length.',
+					});
+					return false;
 				}
 			}
 		}
