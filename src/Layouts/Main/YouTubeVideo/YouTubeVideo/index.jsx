@@ -226,6 +226,13 @@ function YouTubeVideo() {
 				alert(e);
 			}
 		} else {
+			const isValid2 = validateInputFields2();
+
+			if(!isValid2) {
+				//const tagsTextBox = document
+				return;
+			}
+
 			e.preventDefault();
 			setVideoId('');
 
@@ -324,8 +331,13 @@ function YouTubeVideo() {
 			return false;
 		}
 
-		
 
+
+	
+		return true;
+	}
+
+	const validateInputFields2 = () => {
 		// Checks if a string is empty or contains only whitespace
 		const isEmptyOrSpaces = (str) => {
 			if(typeof str != "string")
@@ -410,12 +422,8 @@ function YouTubeVideo() {
 				}
 			}
 		}
-
-		
-
 		return true;
 	}
-
 	
 
 
