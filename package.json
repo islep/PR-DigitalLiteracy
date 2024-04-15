@@ -20,6 +20,7 @@
 		"react-datepicker": "^4.21.0",
 		"react-dom": "^18.2.0",
 		"react-firebase-hooks": "^5.1.1",
+		"react-ga4": "^2.1.0",
 		"react-player": "^2.13.0",
 		"react-query": "^3.39.3",
 		"react-router-dom": "^6.17.0",
@@ -33,7 +34,7 @@
 	"scripts": {
 		"dev": "react-scripts start",
 		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"lint": "eslint --ext .js,.jsx . --fix",

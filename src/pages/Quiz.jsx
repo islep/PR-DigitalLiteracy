@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Radio, FormControlLabel, Button, Typography, Grid } from '@mui/material';
 import Results from '../Layouts/Main/quiz/results/index';
 import quizData from '../Layouts/Main/quiz/quizData/index';
