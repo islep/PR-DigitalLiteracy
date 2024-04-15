@@ -88,7 +88,8 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 		setVideos(tagVideos);
 	}, [tags, osvalue, subtopicValue, appliedFilterTags]);
 
-	if (videos && videos.length > 0) {
+	// this was the previous code but we had to modify below to have the stopTimes keep working -Capstone group
+	/*if (videos && videos.length > 0) {
 		return (
 			<div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
 				{videos.map((video, index) => (
@@ -98,7 +99,26 @@ export function YouTubeVideoSection({ osvalue, subtopicValue, tags, appliedFilte
 				))}
 			</div>
 		);
+	}*/
+	if (videos && videos.length > 0) {
+		return (
+			<div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
+				{videos.map((video) => {
+					const match = video.url.match(videoIdRegex);
+					const embedId = match ? match[1] : null;
+
+					return(
+						<Grid item xs={8} sm={4} md={6} key={video.tags}>
+							<YoutubeEmbed embedId={embedId} stopTimes={video.stopTimes} messages={video.messages} />
+						</Grid>
+					)
+
+				})}
+			</div>
+		);
 	}
+
+
 
 	return (
 		<Box
