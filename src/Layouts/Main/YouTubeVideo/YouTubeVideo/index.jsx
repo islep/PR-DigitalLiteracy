@@ -146,7 +146,7 @@ function YouTubeVideo() {
 		
 		// Form validation check
 		const isValid = validateInputFields();
-
+		
 		if(!isValid) {
 			//const tagsTextBox = document
 			return;
@@ -235,7 +235,7 @@ function YouTubeVideo() {
 			}
 		} else {
 			const isValid2 = validateInputFields2();
-
+			
 			if(!isValid2) {
 				//const tagsTextBox = document
 				return;
@@ -306,18 +306,17 @@ function YouTubeVideo() {
 		
 		//check tags field
 		const lastTag = tags[tags.length - 1];
-		if(tags.length === 0 && tagInputValue === ''){
-			return true;
-		}
-		if ((!(tagInputValue === lastTag) && tagInputValue !== '') || tags.length === 0) {
-			Swal.fire({
-				width: '30rem',
-				title: 'Oops...',
-				text: 'Please press enter or delete your current tag.',
-				icon: 'error',
-			});
-			//alert('Please enter at least one tag.');
-			return false;
+		if(!(tags.length === 0 && tagInputValue === '')){
+			if ((!(tagInputValue === lastTag) && tagInputValue !== '') || tags.length === 0) {
+				Swal.fire({
+					width: '30rem',
+					title: 'Oops...',
+					text: 'Please press enter or delete your current tag.',
+					icon: 'error',
+				});
+				//alert('Please enter at least one tag.');
+				return false;
+			}
 		}
 
 		//check operating system
