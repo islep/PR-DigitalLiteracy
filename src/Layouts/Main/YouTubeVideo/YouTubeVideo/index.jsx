@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';//temp added useRef remove if removed
+import React, { useState, useEffect, useRef } from 'react'; 
 import { addVideoData } from '../../../../firebase/firebaseReadWrite';
 import { Colors } from '../../../../constants/Colors';
 import { inputStyle, multiLineInputStyle } from '../../ResumeBuilder/styles.js';
@@ -36,9 +36,9 @@ function YouTubeVideo() {
 		if (e.key !== 'Enter') {
 			setTagInputValue(e.target.value);
 		}
-	}
-	
-	const [count, setCount] = useState(0); // as far as i can tell this variable does like actually nothing?
+	};
+
+	const [count, setCount] = useState(0); // we were not sure what this does but didnt want to remove it incase it does something
 
 	// adding for checkbox
 	const [isChecked, setIsChecked] = useState(false);
@@ -55,11 +55,11 @@ function YouTubeVideo() {
 		setUrl(newurl);
 		setVideoId(getVideoId(newurl));
 
-		// here check if can have default checkbox (later might be good idea to consolidate this so we dont have to make fetch calls twice)
 		// first is check if chapters
 		try {
 			const response = await fetch(
-				`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
+				`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(newurl)}&key=${
+					process.env.REACT_APP_YOUTUBE_API_KEY
 				}`,
 			);
 			const data = await response.json();
@@ -71,29 +71,24 @@ function YouTubeVideo() {
 
 			// if there are chapter then make isChapter true which will unhide the checkbox
 			if (filteredLines.length > 0) {
-				//alert("HAS CHAPTERS");
 				setIsChapter(true);
 			} else {
-				//alert("Thinks has no chapters?");
 				setIsChapter(false);
 			}
 
 			//make another call for the duration
 			const response2 = await fetch(
-				`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${getVideoId(newurl)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
+				`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${getVideoId(newurl)}&key=${
+					process.env.REACT_APP_YOUTUBE_API_KEY
 				}`,
 			);
 			const data2 = await response2.json();
 			const duration2 = data2.items[0].contentDetails.duration;
 			const match = duration2.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-			const min = (parseInt(match[2]) || 0);
-			const sec = (parseInt(match[3]) || 0);
-			let temp = min*60 + sec;
-			console.log(temp);
+			const min = parseInt(match[2]) || 0;
+			const sec = parseInt(match[3]) || 0;
+			let temp = min * 60 + sec;
 			setDuration(temp);
-			//console.log("Duration: " + duration + "\nMin: " + min + "\nSec: " + sec);
-
-
 		} catch (e) {
 			console.log(e);
 		}
@@ -143,39 +138,15 @@ function YouTubeVideo() {
 	}
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		// Form validation check
 		const isValid = validateInputFields();
-		
-		if(!isValid) {
-			//const tagsTextBox = document
+
+		if (!isValid) {
 			return;
 		}
 
-		// Check if any confirmation message is empty or only contains whitespace
-		/*
-		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg.messages));
-		if (hasEmptyMessage) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Please ensure all confirmation messages are filled out.',
-			});
-			return // Stop the form submission
-		}
-
-		const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time.stopTimes));
-		if (hasInvalidTimestamp) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Please ensure all stop times are in a valid MM:SS format.',
-			});
-			return; // Stop the form submission
-		}*/
-
 		if (isChecked) {
-			// alert("CHECKED");
 			e.preventDefault();
 			setVideoId('');
 
@@ -183,7 +154,8 @@ function YouTubeVideo() {
 
 			try {
 				const response = await fetch(
-					`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${process.env.REACT_APP_YOUTUBE_API_KEY
+					`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${getVideoId(url)}&key=${
+						process.env.REACT_APP_YOUTUBE_API_KEY
 					}`,
 				);
 				const data = await response.json();
@@ -219,7 +191,6 @@ function YouTubeVideo() {
 					// set checked to false
 					setIsChecked(false);
 					setIsChapter(false);
-					console.log("isChecked: " + isChecked + "\nisChapter: " + isChapter);
 
 					Swal.fire({
 						width: '30rem',
@@ -235,9 +206,8 @@ function YouTubeVideo() {
 			}
 		} else {
 			const isValid2 = validateInputFields2();
-			
-			if(!isValid2) {
-				//const tagsTextBox = document
+
+			if (!isValid2) {
 				return;
 			}
 
@@ -286,13 +256,11 @@ function YouTubeVideo() {
 				console.log('Error adding video:', e);
 			}
 		}
-
 	};
 
-
-	// Validate the necessary input fields. 
+	// Validate the necessary input fields.
 	const validateInputFields = () => {
-		//check youtube url field
+		// check youtube url field
 		if (url === '') {
 			Swal.fire({
 				width: '30rem',
@@ -300,13 +268,12 @@ function YouTubeVideo() {
 				text: 'Please enter a Youtube video URL.',
 				icon: 'error',
 			});
-			//alert('Please enter a Youtube video URL.');
 			return false;
 		}
-		
-		//check tags field
+
+		// check tags field
 		const lastTag = tags[tags.length - 1];
-		if(!(tags.length === 0 && tagInputValue === '')){
+		if (!(tags.length === 0 && tagInputValue === '')) {
 			if ((!(tagInputValue === lastTag) && tagInputValue !== '') || tags.length === 0) {
 				Swal.fire({
 					width: '30rem',
@@ -314,7 +281,6 @@ function YouTubeVideo() {
 					text: 'Please press enter or delete your current tag.',
 					icon: 'error',
 				});
-				//alert('Please enter at least one tag.');
 				return false;
 			}
 		}
@@ -327,45 +293,38 @@ function YouTubeVideo() {
 				text: 'Please select an Operating System.',
 				icon: 'error',
 			});
-			//alert('Please select an operating system.');
 			return false;
 		}
 
 		//check category
-		if(category === '') {
+		if (category === '') {
 			Swal.fire({
 				width: '30rem',
 				title: 'Oops...',
 				text: 'Please select a video category.',
 				icon: 'error',
 			});
-			//alert('Please select a video category.');
 			return false;
 		}
 
-
-
-	
 		return true;
-	}
+	};
 
 	const validateInputFields2 = () => {
 		// Checks if a string is empty or contains only whitespace
 		const isEmptyOrSpaces = (str) => {
-			if(typeof str != "string")
-				return true;
+			if (typeof str != 'string') return true;
 			return !str || str.trim() === '';
 		};
 
-
 		// Check if any confirmation message is empty or only contains whitespace
-		
+
 		const hasEmptyMessage = messages.some((msg) => isEmptyOrSpaces(msg));
-		
-		console.log("messages size: " + messages.length);
-		console.log("first message" + messages[0]);
-		console.log("has empty message?" + messages.some((msg) => isEmptyOrSpaces(msg)))
-		
+
+		//console.log('messages size: ' + messages.length);
+		//console.log('first message' + messages[0]);
+		//console.log('has empty message?' + messages.some((msg) => isEmptyOrSpaces(msg)));
+
 		if (hasEmptyMessage) {
 			Swal.fire({
 				icon: 'error',
@@ -375,55 +334,22 @@ function YouTubeVideo() {
 			return false;
 		}
 
-		/*
-		The code below is correct, but there are two issues about validating timestamp format:
-		1. the time stamp has already been converted to the seconds, and if we move this part in the convertToSecond, it needs admin to input the right timestamp all at once
-		2. We need to have the maximum time of the video!
-		*/
-
-		// Validates timestamp format
-		// const isValidTimestamp = (timestamp) => {
-		// 	const regex = /^[0-5]?[0-9]:[0-5][0-9]$/; //validate MM:SS or M:SSformat
-		// 	return regex.test(timestamp);
-		// };
-
-		// const hasInvalidTimestamp = stopTimes.some((time) => !isValidTimestamp(time));
-		// console.log("timestamp size: "+stopTimes.length);
-		// console.log("first timestamp: "+stopTimes[0]);
-		// console.log("has invalid message?" + stopTimes.some((time) => !isValidTimestamp(time)))
-		// if (hasInvalidTimestamp) {
-		// 	Swal.fire({
-		// 		icon: 'error',
-		// 		title: 'Oops...',
-		// 		text: 'Please ensure all stop times are in a valid MM:SS format.',
-		// 	});
-		// 	return false; // Stop the form submission
-		// }
-
-
-		//console.log("Duration: " + duration + "\nMin: " + duration.minutes + "\nSec: " + duration.seconds);
-
 		for (let i = 0; i < messages.length; i++) {
-			let textField = document.getElementById(`stopTimeTextField_${(i)}`);
-			//console.log("stoptime: " + textField.value)
+			let textField = document.getElementById(`stopTimeTextField_${i}`);
 			if (textField) {
-				const regex = /^[0-5]?[0-9]:[0-5][0-9]$/; //validate MM:SS or M:SSformat
+				const regex = /^[0-5]?[0-9]:[0-5][0-9]$/; // validate MM:SS or M:SSformat
 				let temp = regex.test(textField.value);
 
-				
-				console.log("text value: " + textField.value + "\ntemp: " + temp);
-				//const hasInvalidTimestamp = !isValidTimestamp(textField.value);
-				
 				if (!temp) {
 					Swal.fire({
 						icon: 'error',
 						title: 'Oops...',
 						text: 'Please ensure all stop times are in a valid MM:SS format.',
 					});
-					return false; // Stop the form submission
+					return false;
 				}
 				//check that the min and seconds inputted are less than the max
-				console.log("stopTimes[" + i + "]: " + stopTimes[i] + "\nduration: " + duration);
+				//console.log('stopTimes[' + i + ']: ' + stopTimes[i] + '\nduration: ' + duration);
 				if (stopTimes[i] > duration) {
 					Swal.fire({
 						icon: 'error',
@@ -435,72 +361,52 @@ function YouTubeVideo() {
 			}
 		}
 		return true;
-	}
-	
-
+	};
 
 	const playerRef = useRef(null);
 	const handleClickTime = async (index) => {
 		if (playerRef.current) {
 			const currentTime = await playerRef.current.internalPlayer.getCurrentTime();
 			const formattedTime = `${Math.floor(currentTime / 60)}:${String(Math.floor(currentTime % 60)).padStart(2, '0')}`;
-			const reverseIndex = (messages.length - index - 1);
+			const reverseIndex = messages.length - index - 1;
 			stopTimes[reverseIndex] = convertToSeconds(formattedTime);
 
-			// Assuming you have the id stored in a variable called textFieldId
-			const textField = document.getElementById(`stopTimeTextField_${(reverseIndex)}`);
+			const textField = document.getElementById(`stopTimeTextField_${reverseIndex}`);
 			if (textField) {
 				textField.value = formattedTime;
 			}
 		}
-
 	};
 
-	
 	const onAddBtnClick = () => {
 		const newField = {
-			
 			messages: '',
 			stopTimes: '',
 		};
 		//You have to be specific of which field of newField to solve the previous commenting messages issue.
 		setMessage([...messages, newField.messages]);
 		setStopTimes([...stopTimes, newField.stopTimes]);
-		
-		// alert("Messages are: " + messages + "\nStop times are: " + stopTimes);
 	};
-	
+
 	const remove = (index) => {
-		console.log("start of the remove and the index passed in is: " + index + "\nThe messages array is: " + messages)
-		console.log("removing segemnt at index:", index);
 		const messagedata = [...messages];
 		messagedata.splice(index, 1);
-		
 		setMessage(messagedata);
 		const stopdata = [...stopTimes];
 		stopdata.splice(index, 1);
 		setStopTimes(stopdata);
-		//so it removes the spot in the array but messageInput just updates on leangth always removing the top one rn
 		setCount(count + 1);
-		console.log("end of the remove and the index passed in is: " + index + "\nThe messages array is: " + messagedata)
-		// testing, try get index to remove
-		//const textField = document.getElementById(`experience-form-${index}`);
-		//console.log("trying to print the textField: " + textField);
-		//could possibly write a for loop where after cutting out the message and stop time i just put the remaining ones in their spot.
+
 		for (let i = 0; i < messagedata.length; i++) {
-			//
-			let textField = document.getElementById(`stopTimeTextField_${(i)}`);
-			//console.log("stoptime: " + textField.value)
+			let textField = document.getElementById(`stopTimeTextField_${i}`);
 			if (textField) {
 				textField.value = `${Math.floor(stopdata[i] / 60)}:${String(stopdata[i] % 60).padStart(2, '0')}`;
 			}
-			textField = document.getElementById(`confirmationTextField_${(i)}`);
-			//console.log("message: " + textField.value)
+			textField = document.getElementById(`confirmationTextField_${i}`);
 			if (textField) {
 				textField.value = messagedata[i];
 			}
 		}
-
 	};
 
 	const convertToSeconds = (time) => {
@@ -523,10 +429,8 @@ function YouTubeVideo() {
 		setCount(count + 1);
 	};
 
-
 	const messageInput = messages.map((input, index) => (
 		<Box key={messages.length - index - 1}>
-		
 			<Grid
 				container
 				spacing={2}
@@ -560,7 +464,6 @@ function YouTubeVideo() {
 							cursor: 'pointer',
 						}}
 						onClick={() => {
-							
 							remove(messages.length - index - 1);
 						}}
 					>
@@ -611,28 +514,27 @@ function YouTubeVideo() {
 								}}
 								name="stopTimes"
 								InputProps={{
-									id: `stopTimeTextField_${(messages.length - index - 1)}`,
+									id: `stopTimeTextField_${messages.length - index - 1}`,
 									disableUnderline: true,
 								}}
 							/>
 						</Box>
 					</Grid>
 					<Grid item md={2} sm={3} xs={12}>
-						<button 
-						onClick={(e) => handleClickTime(index, e)}
-						style={{
-							width: '100%',
-							height: '100%',
-							//padding: '10px 20px',
-							fontSize: '16px',
-							backgroundColor: Colors.primaryColor, // Gray background color
-							color: '#fff',
-							//border: '1px solid #007bff',
-							//borderRadius: '5px',
-							cursor: 'pointer',
-							fontWeight: 'bold' // Bold text
-						}}
-						>Get Timestamp</button>
+						<button
+							onClick={(e) => handleClickTime(index, e)}
+							style={{
+								width: '100%',
+								height: '100%',
+								fontSize: '16px',
+								backgroundColor: Colors.primaryColor, 
+								color: '#fff',
+								cursor: 'pointer',
+								fontWeight: 'bold', 
+							}}
+						>
+							Get Timestamp
+						</button>
 					</Grid>
 				</Grid>
 
@@ -668,7 +570,7 @@ function YouTubeVideo() {
 								value={input.messages}
 								name="messages"
 								InputProps={{
-									id: `confirmationTextField_${(messages.length - index - 1)}`,
+									id: `confirmationTextField_${messages.length - index - 1}`,
 									disableUnderline: true,
 								}}
 								onChange={(e) => {
@@ -688,7 +590,6 @@ function YouTubeVideo() {
 			<Box>
 				<Box
 					sx={{
-
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
@@ -698,20 +599,12 @@ function YouTubeVideo() {
 							top: '50%',
 							right: '0',
 							transform: 'translateY(-50%)',
-							zIndex: 1000, // Ensure it's above other content
+							zIndex: 1000, // makes video float. may need to change so it is different with different resolutions
 							boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-						}
-
+						},
 					}}
 				>
-					{videoId && (
-						<YouTube
-							videoId={videoId}
-							opts={opts}
-							ref={playerRef}
-							sx={{ margin: 'auto' }}
-						/>
-					)}
+					{videoId && <YouTube videoId={videoId} opts={opts} ref={playerRef} sx={{ margin: 'auto' }} />}
 				</Box>
 				<Box
 					sx={{
@@ -725,15 +618,13 @@ function YouTubeVideo() {
 						width: '90%',
 						'@media screen and (min-width: 1444px)': {
 							display: 'flex',
-							flexDirection: 'column', // Change to column layout
-							justifyContent: 'flex-start', // Align items to the start (left)
-							alignItems: 'flex-start', // Align items to the start (left)
+							flexDirection: 'column', 
+							justifyContent: 'flex-start', 
+							alignItems: 'flex-start', 
 							marginTop: '2rem',
-							marginLeft: '2rem', // Add margin to the left
-							width: '53%', // Take up half of the page width
-						}
-
-
+							marginLeft: '2rem', 
+							width: '53%', 
+						},
 					}}
 				>
 					<Grid container spacing={2} sx={{ margin: 'auto', width: '97%', paddingRight: '0.5rem' }}>
@@ -918,13 +809,13 @@ function YouTubeVideo() {
 					marginTop: '2rem',
 					'@media screen and (min-width: 1444px)': {
 						display: 'flex',
-						flexDirection: 'column', // Change to column layout
-						justifyContent: 'flex-start', // Align items to the start (left)
-						alignItems: 'flex-start', // Align items to the start (left)
+						flexDirection: 'column', 
+						justifyContent: 'flex-start', 
+						alignItems: 'flex-start', 
 						marginTop: '2rem',
-						marginLeft: '2rem', // Add margin to the left
-						width: '53%', // Take up half of the page width
-					}
+						marginLeft: '2rem', 
+						width: '53%', 
+					},
 				}}
 			>
 				<Grid container spacing={2} sx={{ margin: 'auto', width: '97%' }}>
