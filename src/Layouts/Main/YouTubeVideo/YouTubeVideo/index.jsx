@@ -211,6 +211,9 @@ function YouTubeVideo() {
 				return;
 			}
 
+			sortStopTimes();
+
+
 			e.preventDefault();
 			setVideoId('');
 
@@ -257,6 +260,26 @@ function YouTubeVideo() {
 			}
 		}
 	};
+
+	const sortStopTimes= () => {
+		//console.log("before stopTimes: " + stopTimes + "\nmessages: " + messages);
+		for (let i = 0; i < messages.length - 1; i++) {
+			for (let j = i + 1; j < messages.length; j++) {
+				if (stopTimes[i] > stopTimes[j]) {
+					// Swap elements if they are in the wrong order
+					const temp = stopTimes[i];
+					stopTimes[i] = stopTimes[j];
+					stopTimes[j] = temp;
+					const temp2 = messages[i];
+					messages[i] = messages[j];
+					messages[j] = temp2;
+				}
+			}
+		}
+		setStopTimes(stopTimes);
+		setMessage(messages);
+		//console.log("after stopTimes: " + stopTimes + "\nmessages: " + messages);
+	}
 
 	// Validate the necessary input fields.
 	const validateInputFields = () => {
