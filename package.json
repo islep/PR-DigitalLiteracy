@@ -39,7 +39,8 @@
 		"eject": "react-scripts eject",
 		"lint": "eslint --ext .js,.jsx . --fix",
 		"predeploy": "DISABLE_ESLINT_PLUGIN=true npm run build",
-		"deploy": "firebase deploy"
+		"deploy": "firebase deploy",
+		"format": "prettier --write ./src"
 	},
 	"browserslist": {
 		"production": [
