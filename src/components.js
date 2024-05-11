@@ -16,7 +16,6 @@ import Quiz from './pages/Quiz';
 import Help from './pages/QuestionsPage';
 import QuestionDisplay from './Layouts/Main/FAQ/QuestionDisplay/index';
 
-
 const components = {
 	home: Home,
 	login: Login,
@@ -36,6 +35,5 @@ const components = {
 	addYoutubeVideos: AddYoutubeVideos,
 	helpManager: HelpManager,
 };
-
 
 export default components;

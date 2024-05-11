@@ -1,10 +1,8 @@
-import { React} from 'react';
-import { Box, Grid} from '@mui/material';
+import { React } from 'react';
+import { Box, Grid } from '@mui/material';
 import { Colors } from '../../../constants/Colors';
 
-
 export function Intro({ introText }) {
-
 	return (
 		<>
 			<Box
