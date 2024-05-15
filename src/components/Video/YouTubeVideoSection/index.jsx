@@ -59,8 +59,14 @@ export default function YouTubeVideoSection({ osvalue, subtopicValue, tags, appl
 				}
 				const currentTimeIndex = video.stopTimes.indexOf(currentTime);
 				const text = currentTimeIndex !== -1 ? video.messages[currentTimeIndex] : ''; 
+				
+				let prevSegmentTime = 0; // Default to null if there's no previous segment
+				if (currentTimeIndex > 0 && video.stopTimes[currentTimeIndex - 1]) {
+					prevSegmentTime = video.stopTimes[currentTimeIndex - 1];
+				}
 				setPopup({
 					text,
+					prevSegmentTime,
 					visible: true,
 					playerRef
 				});
@@ -95,10 +101,20 @@ export default function YouTubeVideoSection({ osvalue, subtopicValue, tags, appl
 				{popup && popup.visible && (
 					<Popup 
 						text={popup.text} 
-						handleClose={() => {
+						handleResume={() => {
 							setPopup(null);
 							popup.playerRef.current.getInternalPlayer().playVideo();
-						}} 
+						}}
+						handleRestart={() => {
+							setPopup(null);
+							popup.playerRef.current.getInternalPlayer().seekTo(0);
+							popup.playerRef.current.getInternalPlayer().playVideo();
+						}}
+						handleRestartFrom={() => {
+							setPopup(null);
+							popup.playerRef.current.getInternalPlayer().seekTo(popup.prevSegmentTime+1); // +1 is so that the video doesn't have an immediate popup from the same segment
+							popup.playerRef.current.getInternalPlayer().playVideo();
+						}}
 					/>
 				)}
 			</div>
