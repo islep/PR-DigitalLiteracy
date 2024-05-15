@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-export function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
+export default function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
 	return (
 		<div
 			style={{
@@ -17,7 +18,9 @@ export function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
 			{subtopicValue.length > 0 ? (
 				<>
 					<span className="mx-1.5"> {'>'} </span>
-					<button onClick={handleResetSubtopic}>{subtopicValue}</button>
+					<button type="button" onClick={handleResetSubtopic}>
+						{subtopicValue}
+					</button>
 				</>
 			) : (
 				subtopics.length > 0 && (
@@ -28,7 +31,7 @@ export function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
 				)
 			)}
 
-			{(subtopics.length == 0 || subtopicValue.length > 0) && (
+			{(subtopics.length === 0 || subtopicValue.length > 0) && (
 				<>
 					<span className="mx-1.5"> {'>'} </span>
 					<div className="font-bold">Videos</div>
@@ -38,4 +41,8 @@ export function Breadcrumb({ subtopicValue, handleResetSubtopic, subtopics }) {
 	);
 }
 
-export default Breadcrumb;
+Breadcrumb.propTypes = {
+	subtopicValue: PropTypes.arrayOf(PropTypes.string).isRequired,
+	handleResetSubtopic: PropTypes.func.isRequired,
+	subtopics: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

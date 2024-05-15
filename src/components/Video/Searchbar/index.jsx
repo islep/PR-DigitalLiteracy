@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Box, Grid } from '@mui/material';
 import { TagsInput } from 'react-tag-input-component';
 
-export function SearchBar({ tags, tagsFromSearchBar }) {
+export default function SearchBar({ tags, tagsFromSearchBar }) {
 	return (
 		<Box
 			sx={{
@@ -41,4 +42,7 @@ export function SearchBar({ tags, tagsFromSearchBar }) {
 	);
 }
 
-export default SearchBar;
+SearchBar.propTypes = {
+	tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+	tagsFromSearchBar: PropTypes.func.isRequired,
+};

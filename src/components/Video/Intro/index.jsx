@@ -1,8 +1,9 @@
 import { React } from 'react';
+import PropTypes from 'prop-types';
 import { Box, Grid } from '@mui/material';
 import { Colors } from '../../../constants/Colors';
 
-export function Intro({ introText }) {
+export default function Intro({ introText }) {
 	return (
 		<>
 			<Box
@@ -48,4 +49,6 @@ export function Intro({ introText }) {
 	);
 }
 
-export default Intro;
+Intro.propTypes = {
+	introText: PropTypes.string.isRequired,
+};
