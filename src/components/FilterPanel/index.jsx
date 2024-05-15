@@ -88,7 +88,7 @@ const FilterPanelContent = ({ filterGroups, onSave, appliedFilterTags }) => {
 											if (isChecked) {
 												setFormValue((prevValue) => [...prevValue, f[1]]);
 											} else {
-												setFormValue((prevValue) => prevValue.filter(value => value !== f[1]));
+												setFormValue((prevValue) => prevValue.filter((value) => value !== f[1]));
 											}
 										}}
 									/>
@@ -150,6 +150,5 @@ FilterPanelContent.propTypes = {
 	onSave: PropTypes.func.isRequired,
 	appliedFilterTags: PropTypes.array.isRequired,
 };
-
 
 export default FilterPanel;

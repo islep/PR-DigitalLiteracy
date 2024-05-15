@@ -1,10 +1,9 @@
-
 import cardImage1 from './assets/images/card-image-1.png';
 import cardImage2 from './assets/images/card-image-2.png';
 import cardImage3 from './assets/images/card-image-3.png';
 import cardImage4 from './assets/images/card-image-4.png';
 import cardImage5 from './assets/images/card-image-5.png';
-import PATHS from './paths'
+import PATHS from './paths';
 
 const cardData = [
 	{

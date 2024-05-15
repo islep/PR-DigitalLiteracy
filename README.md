@@ -18,3 +18,9 @@ Optional google analytics:
 npm install
 npm run start
 ```
+
+optional
+
+```bash
+npm run format # runs prettier to automatically fix formatting issues
+```

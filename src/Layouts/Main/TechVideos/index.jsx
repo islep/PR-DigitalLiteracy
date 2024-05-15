@@ -6,7 +6,7 @@ import { db } from '../../../firebase/firebase';
 
 import Breadcrumb from '../../../components/Video/Breadcrumb';
 import FilterPanel from '../../../components/FilterPanel';
-import Searchbar from '../../../components/Video/Searchbar';
+import SearchBar from '../../../components/Video/Searchbar';
 import SubtopicSelection from '../../../components/Video/SubtopicSelection';
 import YouTubeVideoSection from '../../../components/Video/YouTubeVideoSection';
 import getVideosFromFirebaseData from '../../../utils/Firebase/getVideosFromFirebaseData';
@@ -100,7 +100,7 @@ function TechVideos({ initialPageContent, introText }) {
 				</Box>
 
 				<Box className="mx-32" style={{ paddingBottom: '2rem' }}>
-					<Searchbar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
+					<SearchBar tagsFromSearchBar={tagsFromSearchBar} tags={tags} />
 					<Breadcrumb
 						subtopicValue={subtopicValue}
 						handleResetSubtopic={handleResetSubtopic}

@@ -1,7 +1,7 @@
 import React from 'react';
-import placeholderImage from '../../../assets/images/card-image-1.png';
+import PropTypes from 'prop-types';
 
-export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
+export default function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 	const handleSubtopicSelection = (subtopicName) => {
 		if (subtopicName) {
 			dataFromSubtopicSelector(subtopicName);
@@ -16,11 +16,14 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 
 	return (
 		<div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-screen-xl">
-			{subtopics.map((subtopic, index) => (
+			{subtopics.map((subtopic) => (
 				<div
 					className="h-72 w-full rounded-xl cursor-pointer shadow-1 hover:shadow-12 hover:scale-105 duration-150 p-8 justify-center items-center place-items-center grid "
 					onClick={() => handleSubtopicSelection(subtopic)}
-					key={index}
+					onKeyDown={() => handleSubtopicSelection(subtopic)}
+					tabIndex="0"
+					role="button"
+					key={subtopic}
 					style={{ backgroundColor: getRandomColor(subtopic) }}
 				>
 					<h3 className="text-2xl font-bold py-4 bg-white p-3 text-center rounded">{subtopic}</h3>
@@ -30,4 +33,7 @@ export function SubtopicSelector({ subtopics, dataFromSubtopicSelector }) {
 	);
 }
 
-export default SubtopicSelector;
+SubtopicSelector.propTypes = {
+	subtopics: PropTypes.arrayOf(PropTypes.string).isRequired,
+	dataFromSubtopicSelector: PropTypes.func.isRequired,
+};

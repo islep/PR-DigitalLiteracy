@@ -2,110 +2,52 @@
 	"videoData": [
 		{
 			"url": "UiEBoH3qesk",
-			"tags": [
-				"google",
-				"search",
-				"google search",
-				"tips",
-				"tricks",
-				"tips and tricks"
-			],
+			"tags": ["google", "search", "google search", "tips", "tricks", "tips and tricks"],
 			"operating_system": "iOS"
 		},
 		{
 			"url": "a0oa3Qiz5tw",
-			"tags": [
-				"google",
-				"search",
-				"google search",
-				"chrome"
-			],
+			"tags": ["google", "search", "google search", "chrome"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=9lIMSzrjUrU",
-			"tags": [
-				"chrome",
-				"settings",
-				"chrome settings"
-			],
+			"tags": ["chrome", "settings", "chrome settings"],
 			"operating_system": "iOS"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=-D6kbyTFlnc",
-			"tags": [
-				"chrome",
-				"chrome settings",
-				"security",
-				"privacy",
-				"chrome privacy and security"
-			],
+			"tags": ["chrome", "chrome settings", "security", "privacy", "chrome privacy and security"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=gdrxAoqfvbA",
-			"tags": [
-				"google",
-				"drive",
-				"google drive"
-			],
+			"tags": ["google", "drive", "google drive"],
 			"operating_system": "iOS"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=tbphPD_uzYw",
-			"tags": [
-				"google",
-				"drive",
-				"tips",
-				"tricks",
-				"tips and tricks",
-				"google drive tips and tricks"
-			],
+			"tags": ["google", "drive", "tips", "tricks", "tips and tricks", "google drive tips and tricks"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=g6zYF7fbJk8",
-			"tags": [
-				"google",
-				"gmail",
-				"tips",
-				"tricks",
-				"tips and tricks",
-				"gmail tips and tricks"
-			],
+			"tags": ["google", "gmail", "tips", "tricks", "tips and tricks", "gmail tips and tricks"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=IyHvKYeeuB8",
-			"tags": [
-				"google",
-				"calendar",
-				"google calendar",
-				"tutorial"
-			],
+			"tags": ["google", "calendar", "google calendar", "tutorial"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=2TKOyxY2DW4",
-			"tags": [
-				"google",
-				"calendar",
-				"google calendar",
-				"tips and tricks",
-				"tips",
-				"tricks"
-			],
+			"tags": ["google", "calendar", "google calendar", "tips and tricks", "tips", "tricks"],
 			"operating_system": "Android"
 		},
 		{
 			"url": "https://www.youtube.com/watch?v=uZpCYJoYNo4",
-			"tags": [
-				"google",
-				"calendar",
-				"google calendar",
-				"tutorial",
-				"google calendar tutorial"
-			],
+			"tags": ["google", "calendar", "google calendar", "tutorial", "google calendar tutorial"],
 			"operating_system": "Android"
 		}
 	]
